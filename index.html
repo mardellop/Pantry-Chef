@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantry Chef - Smart Kitchen</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="phone-frame">
+        <div class="notch"></div>
+
+        <div class="app-container">
+            <!-- Screen 1: Dashboard -->
+            <section id="screen-home" class="screen active">
+                <div class="header">
+                    <p>¡Hola de nuevo, Chef!</p>
+                    <h1>¿Qué hay en tu nevera?</h1>
+                </div>
+
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h3 style="color: var(--primary);">Magic Match AI</h3>
+                            <p style="font-size: 14px; color: var(--text-dim);">3 recetas listas con lo que tienes</p>
+                        </div>
+                        <i class="fas fa-wand-magic-sparkles" style="font-size: 24px; color: var(--accent);"></i>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom: 15px;">Inspiración hoy</h3>
+                <div class="recipe-card" onclick="openRecipe('Pasta al Pesto Express')">
+                    <img src="https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80"
+                        alt="Pasta" class="recipe-image">
+                    <div class="recipe-overlay">
+                        <span class="recipe-tag"><i class="fas fa-bolt"></i> 12 MIN</span>
+                        <h2>Pasta al Pesto Express</h2>
+                        <div class="recipe-info">
+                            <p style="font-size: 14px; color: var(--text-dim);">Usa: Pasta, Albahaca, Nueces</p>
+                            <div style="color: var(--accent);">
+                                <i class="fas fa-star"></i> 4.8
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recipe-card" onclick="openRecipe('Bowl de Quinoa y Aguacate')">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80"
+                        alt="Salad" class="recipe-image">
+                    <div class="recipe-overlay">
+                        <span class="recipe-tag" style="background: var(--secondary);"><i class="fas fa-leaf"></i>
+                            SALUDABLE</span>
+                        <h2>Bowl de Quinoa y Aguacate</h2>
+                        <div class="recipe-info">
+                            <p style="font-size: 14px; color: var(--text-dim);">Usa: Quinoa, Aguacate, Limón</p>
+                            <div style="color: var(--accent);">
+                                <i class="fas fa-star"></i> 4.9
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Screen 2: Pantry -->
+            <section id="screen-pantry" class="screen">
+                <div class="header">
+                    <h1>Tu Despensa</h1>
+                    <p>8 ingredientes activos</p>
+                </div>
+
+                <div class="pantry-grid" id="pantry-items">
+                    <!-- Dynamic Items -->
+                    <div class="pantry-item expiring">
+                        <span class="icon">🍅</span>
+                        <span class="name">Tomates</span>
+                        <span class="days">2 días restantes</span>
+                    </div>
+                    <div class="pantry-item">
+                        <span class="icon">🥑</span>
+                        <span class="name">Aguacate</span>
+                        <span class="days">4 días restantes</span>
+                    </div>
+                    <div class="pantry-item">
+                        <span class="icon">🍝</span>
+                        <span class="name">Pasta Penne</span>
+                        <span class="days">30+ días</span>
+                    </div>
+                    <div class="pantry-item">
+                        <span class="icon">🥚</span>
+                        <span class="name">Huevos</span>
+                        <span class="days">5 días restantes</span>
+                    </div>
+                    <div class="pantry-item">
+                        <span class="icon">🍋</span>
+                        <span class="name">Limón</span>
+                        <span class="days">7 días restantes</span>
+                    </div>
+                    <div class="pantry-item">
+                        <span class="icon">🫒</span>
+                        <span class="name">Aceite Oliva</span>
+                        <span class="days">Agregado ayer</span>
+                    </div>
+                </div>
+
+                <button class="btn-primary" style="margin-top: 30px;"
+                    onclick="document.getElementById('ticket-scanner').click()">
+                    <i class="fas fa-camera"></i> Escanear Ticket
+                </button>
+                <input type="file" id="ticket-scanner" accept="image/*" capture="environment" style="display: none;">
+            </section>
+
+            <!-- Screen 3: Cart -->
+            <section id="screen-cart" class="screen">
+                <div class="header">
+                    <h1>Smart Cart</h1>
+                    <p>Sugerencias para la semana</p>
+                </div>
+
+                <div class="card" style="background: rgba(91, 192, 142, 0.1); border-color: var(--primary);">
+                    <h4>🪄 IA Suggestion</h4>
+                    <p style="font-size: 13px; color: var(--text-dim); margin-top: 5px;">
+                        Compra **Salmón** y **Espárragos**. Desbloquearás 5 nuevas recetas saludables.
+                    </p>
+                    <button class="btn-primary"
+                        style="height: 40px; padding: 0; font-size: 14px; margin-top: 10px;">Añadir Pack (+12€)</button>
+                </div>
+
+                <div class="shopping-list">
+                    <div
+                        style="display: flex; align-items: center; gap: 15px; padding: 15px 0; border-bottom: 1px solid var(--glass-border);">
+                        <input type="checkbox">
+                        <span>Leche de avena (2.50€)</span>
+                    </div>
+                    <div
+                        style="display: flex; align-items: center; gap: 15px; padding: 15px 0; border-bottom: 1px solid var(--glass-border);">
+                        <input type="checkbox">
+                        <span>Pechuga de pollo (6.20€)</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <h3>Tiendas Cercanas</h3>
+                    <div style="display: flex; gap: 10px; margin-top: 15px; overflow-x: auto; padding-bottom: 10px;">
+                        <div class="card" style="min-width: 120px; margin: 0; text-align: center; padding: 15px;">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Mercadona_logo.svg"
+                                height="20" style="margin-bottom: 10px;">
+                            <p style="font-size: 10px;">En 15 min</p>
+                        </div>
+                        <div class="card" style="min-width: 120px; margin: 0; text-align: center; padding: 15px;">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Lidl_logo.svg" height="20"
+                                style="margin-bottom: 10px;">
+                            <p style="font-size: 10px;">En 25 min</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Screen 4: Recipe Detail (Hidden by default) -->
+            <section id="screen-recipe" class="screen">
+                <div style="position: absolute; top: 60px; left: 20px; z-index: 10;" onclick="showScreen('home')">
+                    <i class="fas fa-chevron-left" style="font-size: 24px;"></i>
+                </div>
+
+                <h1 id="recipe-title" style="margin-bottom: 20px; margin-top: 20px;">Pasta al Pesto</h1>
+
+                <div class="video-player">
+                    <img src="https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80"
+                        style="width: 100%; height: 100%; object-fit: cover; opacity: 0.6;">
+                    <div class="play-btn">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="timer-pill">
+                        <i class="fas fa-clock"></i> <span id="main-timer">08:00</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <div class="card" style="flex: 1; text-align: center; margin: 0; padding: 10px;">
+                        <i class="fas fa-fire" style="color: var(--secondary);"></i>
+                        <p style="font-size: 12px; margin-top: 5px;">450 kcal</p>
+                    </div>
+                    <div class="card" style="flex: 1; text-align: center; margin: 0; padding: 10px;">
+                        <i class="fas fa-clock" style="color: var(--primary);"></i>
+                        <p style="font-size: 12px; margin-top: 5px;">12 min</p>
+                    </div>
+                    <div class="card" style="flex: 1; text-align: center; margin: 0; padding: 10px;">
+                        <i class="fas fa-thumbs-up" style="color: var(--accent);"></i>
+                        <p style="font-size: 12px; margin-top: 5px;">Fácil</p>
+                    </div>
+                </div>
+
+                <h3>Ingredientes Necesarios</h3>
+                <ul style="list-style: none; margin-top: 15px; padding-bottom: 100px;">
+                    <li
+                        style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--glass-border);">
+                        <span>150g Pasta Penne</span>
+                        <span style="color: var(--primary);"><i class="fas fa-check-circle"></i> En stock</span>
+                    </li>
+                    <li
+                        style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--glass-border);">
+                        <span>Albahaca fresca</span>
+                        <span style="color: var(--primary);"><i class="fas fa-check-circle"></i> En stock</span>
+                    </li>
+                    <li
+                        style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--glass-border);">
+                        <span>Queso Parmesano</span>
+                        <span style="color: var(--secondary);"><i class="fas fa-circle-exclamation"></i> Casi
+                            terminado</span>
+                    </li>
+                </ul>
+            </section>
+        </div>
+
+        <!-- Navigation Bar -->
+        <nav class="nav-bar">
+            <div class="nav-item active" onclick="showScreen('home')">
+                <i class="fas fa-utensils"></i>
+                <span>Cocinar</span>
+            </div>
+            <div class="nav-item" onclick="showScreen('pantry')">
+                <i class="fas fa-box-open"></i>
+                <span>Despensa</span>
+            </div>
+            <div class="nav-item" onclick="showScreen('cart')">
+                <i class="fas fa-shopping-basket"></i>
+                <span>Carrito</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-user"></i>
+                <span>Perfil</span>
+            </div>
+        </nav>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
