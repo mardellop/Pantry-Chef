@@ -4,235 +4,683 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pantry Chef - Smart Kitchen</title>
+    <title>Pantry Chef App</title>
+    <link rel="icon" type="image/png"
+        href="https://github.com/mardellop/Pantry-Chef/blob/main/PantryChef%20Logo.png?raw=true">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
 </head>
 
 <body>
     <div class="phone-frame">
-        <div class="notch"></div>
-
-        <div class="app-container">
-            <!-- Screen 1: Dashboard -->
-            <section id="screen-home" class="screen active">
-                <div class="header">
-                    <p>¡Hola de nuevo, Chef!</p>
-                    <h1>¿Qué hay en tu nevera?</h1>
-                </div>
-
-                <div class="card">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <h3 style="color: var(--primary);">Magic Match AI</h3>
-                            <p style="font-size: 14px; color: var(--text-dim);">3 recetas listas con lo que tienes</p>
-                        </div>
-                        <i class="fas fa-wand-magic-sparkles" style="font-size: 24px; color: var(--accent);"></i>
-                    </div>
-                </div>
-
-                <h3 style="margin-bottom: 15px;">Inspiración hoy</h3>
-                <div class="recipe-card" onclick="openRecipe('Pasta al Pesto Express')">
-                    <img src="https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80"
-                        alt="Pasta" class="recipe-image">
-                    <div class="recipe-overlay">
-                        <span class="recipe-tag"><i class="fas fa-bolt"></i> 12 MIN</span>
-                        <h2>Pasta al Pesto Express</h2>
-                        <div class="recipe-info">
-                            <p style="font-size: 14px; color: var(--text-dim);">Usa: Pasta, Albahaca, Nueces</p>
-                            <div style="color: var(--accent);">
-                                <i class="fas fa-star"></i> 4.8
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="recipe-card" onclick="openRecipe('Bowl de Quinoa y Aguacate')">
-                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80"
-                        alt="Salad" class="recipe-image">
-                    <div class="recipe-overlay">
-                        <span class="recipe-tag" style="background: var(--secondary);"><i class="fas fa-leaf"></i>
-                            SALUDABLE</span>
-                        <h2>Bowl de Quinoa y Aguacate</h2>
-                        <div class="recipe-info">
-                            <p style="font-size: 14px; color: var(--text-dim);">Usa: Quinoa, Aguacate, Limón</p>
-                            <div style="color: var(--accent);">
-                                <i class="fas fa-star"></i> 4.9
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Screen 2: Pantry -->
-            <section id="screen-pantry" class="screen">
-                <div class="header">
-                    <h1>Tu Despensa</h1>
-                    <p>8 ingredientes activos</p>
-                </div>
-
-                <div class="pantry-grid" id="pantry-items">
-                    <!-- Dynamic Items -->
-                    <div class="pantry-item expiring">
-                        <span class="icon">🍅</span>
-                        <span class="name">Tomates</span>
-                        <span class="days">2 días restantes</span>
-                    </div>
-                    <div class="pantry-item">
-                        <span class="icon">🥑</span>
-                        <span class="name">Aguacate</span>
-                        <span class="days">4 días restantes</span>
-                    </div>
-                    <div class="pantry-item">
-                        <span class="icon">🍝</span>
-                        <span class="name">Pasta Penne</span>
-                        <span class="days">30+ días</span>
-                    </div>
-                    <div class="pantry-item">
-                        <span class="icon">🥚</span>
-                        <span class="name">Huevos</span>
-                        <span class="days">5 días restantes</span>
-                    </div>
-                    <div class="pantry-item">
-                        <span class="icon">🍋</span>
-                        <span class="name">Limón</span>
-                        <span class="days">7 días restantes</span>
-                    </div>
-                    <div class="pantry-item">
-                        <span class="icon">🫒</span>
-                        <span class="name">Aceite Oliva</span>
-                        <span class="days">Agregado ayer</span>
-                    </div>
-                </div>
-
-                <button class="btn-primary" style="margin-top: 30px;"
-                    onclick="document.getElementById('ticket-scanner').click()">
-                    <i class="fas fa-camera"></i> Escanear Ticket
-                </button>
-                <input type="file" id="ticket-scanner" accept="image/*" capture="environment" style="display: none;">
-            </section>
-
-            <!-- Screen 3: Cart -->
-            <section id="screen-cart" class="screen">
-                <div class="header">
-                    <h1>Smart Cart</h1>
-                    <p>Sugerencias para la semana</p>
-                </div>
-
-                <div class="card" style="background: rgba(91, 192, 142, 0.1); border-color: var(--primary);">
-                    <h4>🪄 IA Suggestion</h4>
-                    <p style="font-size: 13px; color: var(--text-dim); margin-top: 5px;">
-                        Compra **Salmón** y **Espárragos**. Desbloquearás 5 nuevas recetas saludables.
-                    </p>
-                    <button class="btn-primary"
-                        style="height: 40px; padding: 0; font-size: 14px; margin-top: 10px;">Añadir Pack (+12€)</button>
-                </div>
-
-                <div class="shopping-list">
-                    <div
-                        style="display: flex; align-items: center; gap: 15px; padding: 15px 0; border-bottom: 1px solid var(--glass-border);">
-                        <input type="checkbox">
-                        <span>Leche de avena (2.50€)</span>
-                    </div>
-                    <div
-                        style="display: flex; align-items: center; gap: 15px; padding: 15px 0; border-bottom: 1px solid var(--glass-border);">
-                        <input type="checkbox">
-                        <span>Pechuga de pollo (6.20€)</span>
-                    </div>
-                </div>
-
-                <div style="margin-top: 30px;">
-                    <h3>Tiendas Cercanas</h3>
-                    <div style="display: flex; gap: 10px; margin-top: 15px; overflow-x: auto; padding-bottom: 10px;">
-                        <div class="card" style="min-width: 120px; margin: 0; text-align: center; padding: 15px;">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Mercadona_logo.svg"
-                                height="20" style="margin-bottom: 10px;">
-                            <p style="font-size: 10px;">En 15 min</p>
-                        </div>
-                        <div class="card" style="min-width: 120px; margin: 0; text-align: center; padding: 15px;">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Lidl_logo.svg" height="20"
-                                style="margin-bottom: 10px;">
-                            <p style="font-size: 10px;">En 25 min</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Screen 4: Recipe Detail (Hidden by default) -->
-            <section id="screen-recipe" class="screen">
-                <div style="position: absolute; top: 60px; left: 20px; z-index: 10;" onclick="showScreen('home')">
-                    <i class="fas fa-chevron-left" style="font-size: 24px;"></i>
-                </div>
-
-                <h1 id="recipe-title" style="margin-bottom: 20px; margin-top: 20px;">Pasta al Pesto</h1>
-
-                <div class="video-player">
-                    <img src="https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80"
-                        style="width: 100%; height: 100%; object-fit: cover; opacity: 0.6;">
-                    <div class="play-btn">
-                        <i class="fas fa-play"></i>
-                    </div>
-                    <div class="timer-pill">
-                        <i class="fas fa-clock"></i> <span id="main-timer">08:00</span>
-                    </div>
-                </div>
-
-                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <div class="card" style="flex: 1; text-align: center; margin: 0; padding: 10px;">
-                        <i class="fas fa-fire" style="color: var(--secondary);"></i>
-                        <p style="font-size: 12px; margin-top: 5px;">450 kcal</p>
-                    </div>
-                    <div class="card" style="flex: 1; text-align: center; margin: 0; padding: 10px;">
-                        <i class="fas fa-clock" style="color: var(--primary);"></i>
-                        <p style="font-size: 12px; margin-top: 5px;">12 min</p>
-                    </div>
-                    <div class="card" style="flex: 1; text-align: center; margin: 0; padding: 10px;">
-                        <i class="fas fa-thumbs-up" style="color: var(--accent);"></i>
-                        <p style="font-size: 12px; margin-top: 5px;">Fácil</p>
-                    </div>
-                </div>
-
-                <h3>Ingredientes Necesarios</h3>
-                <ul style="list-style: none; margin-top: 15px; padding-bottom: 100px;">
-                    <li
-                        style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--glass-border);">
-                        <span>150g Pasta Penne</span>
-                        <span style="color: var(--primary);"><i class="fas fa-check-circle"></i> En stock</span>
-                    </li>
-                    <li
-                        style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--glass-border);">
-                        <span>Albahaca fresca</span>
-                        <span style="color: var(--primary);"><i class="fas fa-check-circle"></i> En stock</span>
-                    </li>
-                    <li
-                        style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--glass-border);">
-                        <span>Queso Parmesano</span>
-                        <span style="color: var(--secondary);"><i class="fas fa-circle-exclamation"></i> Casi
-                            terminado</span>
-                    </li>
-                </ul>
-            </section>
+        <div class="status-bar">
+            <div class="status-left">
+                <span id="current-time">00:00</span>
+            </div>
+            <div class="notch"></div>
+            <div class="status-right">
+                <i class="fas fa-wifi"></i>
+                <span style="font-size: 11px; margin-right: 2px;">85%</span>
+                <i class="fas fa-battery-three-quarters"></i>
+            </div>
         </div>
 
-        <!-- Navigation Bar -->
-        <nav class="nav-bar">
-            <div class="nav-item active" onclick="showScreen('home')">
-                <i class="fas fa-utensils"></i>
-                <span>Cocinar</span>
+        <!-- Auth / Welcome Flow -->
+        <div id="auth-screen" class="splash-screen">
+            <img src="https://raw.githubusercontent.com/mardellop/Pantry-Chef/main/PantryChef%20Logo.png"
+                alt="Pantry Chef Logo" class="auth-logo">
+
+            <div class="auth-text">
+                <h1>Pantry Chef App</h1>
+                <p>Prep, Dish & Go</p>
             </div>
-            <div class="nav-item" onclick="showScreen('pantry')">
-                <i class="fas fa-box-open"></i>
-                <span>Despensa</span>
+
+            <div class="auth-buttons" id="auth-actions">
+                <button class="btn-primary" onclick="showLoginForm()">Iniciar Sesión</button>
+                <div class="btn-secondary" onclick="showLoginForm()">Registrarse</div>
             </div>
-            <div class="nav-item" onclick="showScreen('cart')">
-                <i class="fas fa-shopping-basket"></i>
-                <span>Carrito</span>
+
+            <div class="auth-form" id="auth-fields"
+                style="display: none; width: 100%; opacity: 0; transition: opacity 0.4s ease;">
+                <input type="email" id="user-email" placeholder="Correo electrónico" class="auth-input">
+                <input type="password" id="user-pass" placeholder="Contraseña" class="auth-input">
+                <button class="btn-primary" onclick="handleAuth()" style="margin-top: 10px;">Entrar</button>
+                <p onclick="resetAuth()"
+                    style="color: #000; font-size: 13px; margin-top: 15px; cursor: pointer; text-align: center;">
+                    Volver</p>
             </div>
-            <div class="nav-item">
-                <i class="fas fa-user"></i>
-                <span>Perfil</span>
+        </div>
+
+        <!-- Main App Content (Hidden until Auth) -->
+        <div id="main-app-content" class="app-content-container">
+
+            <div class="app-container">
+                <!-- Screen 1: Dashboard -->
+                <!-- Screen 1: Dish (Social Kitchen) -->
+                <section id="screen-home" class="screen active">
+                    <div class="header">
+                        <p>¡Hola, Chef! 🌍</p>
+                        <h1>Inspírate y Cocina</h1>
+                    </div>
+
+                    <!-- Sustainable Challenges Horizontal Scroll -->
+                    <div class="challenges-ribbon">
+                        <div class="challenge-card" onclick="openChallenge('Zero Waste Week')">
+                            <div class="challenge-icon">📉</div>
+                            <div class="challenge-info">
+                                <span>RETO SEMANAL</span>
+                                <h4>Zero Waste</h4>
+                            </div>
+                        </div>
+                        <div class="challenge-card highlight" onclick="openChallenge('Pantry Party')">
+                            <div class="challenge-icon">🥳</div>
+                            <div class="challenge-info">
+                                <span>NUEVO</span>
+                                <h4>Pantry Party</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Discovery Filters -->
+                    <div class="filter-pills">
+                        <div class="pill active">Todo</div>
+                        <div class="pill"><i class="fas fa-bolt"></i>
+                            < 15 min</div>
+                                <div class="pill"><i class="fas fa-clock"></i> 30 min</div>
+                                <div class="pill"><i class="fas fa-leaf"></i> Eco-Match</div>
+                        </div>
+
+                        <h3 style="margin: 20px 0 15px; font-size: 18px; color: #000;">Feed de la Comunidad</h3>
+
+                        <!-- UGC Social Recipe Cards -->
+                        <div class="social-feed">
+                            <div class="dish-card" onclick="openRecipeDetail('Pasta PrimavIA', '@ChefCarlos', 'Baja')">
+                                <div class="dish-media">
+                                    <img src="https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80"
+                                        alt="Pasta">
+                                    <div class="eco-impact-tag">
+                                        <i class="fas fa-leaf"></i> -0.4kg CO2
+                                    </div>
+                                </div>
+                                <div class="dish-content">
+                                    <div class="dish-user">
+                                        <img src="https://i.pravatar.cc/150?u=carlos" class="avatar">
+                                        <span>@ChefCarlos</span>
+                                    </div>
+                                    <h2>Pasta PrimavIA</h2>
+                                    <div class="dish-meta">
+                                        <span><i class="fas fa-signal"></i> Fácil</span>
+                                        <span><i class="fas fa-fire"></i> 12 min</span>
+                                        <div class="dish-social">
+                                            <i class="far fa-heart"></i> 124
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="dish-card"
+                                onclick="openRecipeDetail('Vegan Bowl Pro', '@SostenibleAna', 'Media')">
+                                <div class="dish-media">
+                                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80"
+                                        alt="Salad">
+                                    <div class="eco-impact-tag">
+                                        <i class="fas fa-leaf"></i> -0.8kg CO2
+                                    </div>
+                                </div>
+                                <div class="dish-content">
+                                    <div class="dish-user">
+                                        <img src="https://i.pravatar.cc/150?u=ana" class="avatar">
+                                        <span>@SostenibleAna</span>
+                                    </div>
+                                    <h2>Vegan Bowl Pro</h2>
+                                    <div class="dish-meta">
+                                        <span><i class="fas fa-signal"></i> Media</span>
+                                        <span><i class="fas fa-fire"></i> 20 min</span>
+                                        <div class="dish-social">
+                                            <i class="far fa-heart"></i> 89
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </section>
+
+                <!-- Screen 2: Pantry (The Core) -->
+                <section id="screen-pantry" class="screen">
+                    <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h1>Mi Despensa</h1>
+                            <p>Gestiona y ahorra comida</p>
+                        </div>
+                        <div class="savings-badge">
+                            <i class="fas fa-leaf"></i> <span id="eco-score">2.4kg</span>
+                        </div>
+                    </div>
+
+                    <!-- Sustainability Metrics Card -->
+                    <div class="card eco-card">
+                        <div style="display: flex; gap: 15px; align-items: center;">
+                            <div class="eco-chart">
+                                <span>85%</span>
+                            </div>
+                            <div>
+                                <h4 style="color: #fff;">Impacto Semanal</h4>
+                                <p style="font-size: 11px; color: rgba(255,255,255,0.7);">Has evitado desperdiciar 3
+                                    limones y 1 pollo.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 style="margin-bottom: 12px; font-size: 16px;">Selecciona para cocinar (Prep)</h3>
+                    <div class="pantry-grid-scroll" id="pantry-items">
+                        <!-- Items dynamically toggleable -->
+                        <div class="smart-item active" onclick="toggleItem(this)">
+                            <span class="icon">🍅</span>
+                            <span class="name">Tomates</span>
+                            <span class="expiry-tag urgent">2d</span>
+                        </div>
+                        <div class="smart-item active" onclick="toggleItem(this)">
+                            <span class="icon">🍗</span>
+                            <span class="name">Pollo</span>
+                            <span class="expiry-tag urgent">1d</span>
+                        </div>
+                        <div class="smart-item" onclick="toggleItem(this)">
+                            <span class="icon">🥑</span>
+                            <span class="name">Aguacate</span>
+                            <span class="expiry-tag">4d</span>
+                        </div>
+                        <div class="smart-item active" onclick="toggleItem(this)">
+                            <span class="icon">🍋</span>
+                            <span class="name">Limón</span>
+                            <span class="expiry-tag">7d</span>
+                        </div>
+                        <div class="smart-item" onclick="toggleItem(this)">
+                            <span class="icon">🍝</span>
+                            <span class="name">Pasta</span>
+                            <span class="expiry-tag">30d</span>
+                        </div>
+                        <div class="smart-item" onclick="toggleItem(this)">
+                            <span class="icon">🧀</span>
+                            <span class="name">Queso</span>
+                            <span class="expiry-tag">12d</span>
+                        </div>
+                    </div>
+
+                    <div class="magic-action-container">
+                        <button class="btn-cook-now" onclick="generateSmartRecipe()">
+                            <i class="fas fa-magic"></i> COOK NOW
+                        </button>
+                    </div>
+
+                    <!-- Floating Action Button (FAB) -->
+                    <div class="fab-scanner" onclick="toggleFABMenu()">
+                        <i class="fas fa-plus"></i>
+                    </div>
+
+                    <!-- FAB Backdrop -->
+                    <div id="fab-overlay" class="fab-backdrop" onclick="toggleFABMenu()"></div>
+
+                    <!-- Scanner Menu (Hidden) -->
+                    <div id="scanner-menu" class="fab-menu">
+                        <div class="fab-item-wrapper" onclick="document.getElementById('ticket-scanner').click()">
+                            <span class="fab-label">Ticket de Compra</span>
+                            <button class="fab-item" style="background: #5BC08E;">
+                                <i class="fas fa-file-invoice"></i>
+                            </button>
+                        </div>
+                        <div class="fab-item-wrapper" onclick="document.getElementById('food-scanner').click()">
+                            <span class="fab-label">Cámara IA</span>
+                            <button class="fab-item" style="background: #FFD25A;">
+                                <i class="fas fa-camera"></i>
+                            </button>
+                        </div>
+                        <div class="fab-item-wrapper" onclick="simulateVoiceInput()">
+                            <span class="fab-label">Dictar Compra</span>
+                            <button class="fab-item" style="background: #54a0ff;">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <input type="file" id="ticket-scanner" accept="image/*" capture="environment"
+                        style="display: none;">
+                    <input type="file" id="food-scanner" accept="image/*" capture="environment" style="display: none;">
+
+                    <!-- Scan Overlay -->
+                    <div id="scan-overlay"
+                        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 20px;">
+                        <div class="scanning-line"></div>
+                        <img id="scanned-preview"
+                            style="max-width: 80%; max-height: 40%; border-radius: 20px; border: 2px solid var(--accent); margin-bottom: 20px; object-fit: cover;">
+                        <h2 id="scanning-status" style="color: var(--accent); margin-bottom: 10px;">Analizando...</h2>
+                        <div id="ai-reasoning"
+                            style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; width: 100%; max-width: 320px; text-align: left;">
+                            <p id="thought-1" style="font-size: 11px; color: var(--accent); margin-bottom: 8px;"></p>
+                            <p id="thought-2" style="font-size: 11px; color: var(--text-main); margin-bottom: 8px;"></p>
+                            <p id="thought-3"
+                                style="font-size: 13px; font-weight: 600; color: #fff; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Screen 3: Go (Plan & Shop) -->
+                <section id="screen-cart" class="screen">
+                    <div class="header">
+                        <p>Planifica y ahorra 🛒</p>
+                        <h1>Go: Tu Semana</h1>
+                    </div>
+
+                    <!-- 1. Interactive Batch Cooking Calendar -->
+                    <div class="calendar-module">
+                        <h3 style="font-size: 16px; margin-bottom: 15px;">Calendario Batch Cooking</h3>
+                        <div class="calendar-days">
+                            <div class="day-slot"><span>L</span></div>
+                            <div class="day-slot"><span>M</span></div>
+                            <div class="day-slot active"><span>X</span>
+                                <div class="meal-tag">Pasta</div>
+                            </div>
+                            <div class="day-slot"><span>J</span></div>
+                            <div class="day-slot"><span>V</span></div>
+                            <div class="day-prio"><span>S</span></div>
+                            <div class="day-prio highlight"><span>D</span>
+                                <div class="batch-label">PREP DAY</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Smart Smart Shopping List -->
+                    <div class="shopping-list-module">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin: 25px 0 15px;">
+                            <h3 style="font-size: 16px;">Lista de Faltantes</h3>
+                            <button class="btn-sync" onclick="syncWithPantry()"><i class="fas fa-sync-alt"></i>
+                                Auto-Sync</button>
+                        </div>
+                        <div class="list-container">
+                            <div class="list-item">
+                                <label class="check-container">
+                                    <input type="checkbox" checked>
+                                    <span class="checkmark"></span>
+                                    <span class="item-text">Albahaca Fresca <small>Para Pasta</small></span>
+                                </label>
+                            </div>
+                            <div class="list-item">
+                                <label class="check-container">
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                    <span class="item-text">Parmesano <small>Urgent: Casí agotado</small></span>
+                                </label>
+                            </div>
+                            <div class="list-item">
+                                <label class="check-container">
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                    <span class="item-text">Limones <small>Para Bowl Vegano</small></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Local Marketplace "Sin Fricciones" -->
+                    <div class="marketplace-module">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin: 25px 0 15px;">
+                            <h3 style="font-size: 16px;">Tiendas Cercanas</h3>
+                            <button class="btn-route-opt" onclick="calculateOptimizedRoute()">
+                                <i class="fas fa-route"></i> Ruta Optimizada
+                            </button>
+                        </div>
+                        <div class="stores-scroll">
+                            <div class="store-card clickable" onclick="openStore('Mercadona')">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Mercadona_logo.svg"
+                                    alt="Mercadona" class="store-logo">
+                                <div class="store-badge">A 300m</div>
+                                <p>Pack Oferta: Pasta + Queso</p>
+                                <button class="btn-add-cart">Añadir todo</button>
+                            </div>
+                            <div class="store-card clickable" onclick="openStore('Lidl')">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Lidl_logo.svg" alt="Lidl"
+                                    class="store-logo">
+                                <div class="store-badge">A 800m</div>
+                                <p>Frescos de Temporada</p>
+                                <button class="btn-add-cart">Añadir todo</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Optimized Route Modal/Overlay (Hidden) -->
+                    <div id="route-overlay" class="route-overlay" style="display: none;">
+                        <div class="route-card-full">
+                            <div class="route-header">
+                                <h2>Ruta Inteligente</h2>
+                                <i class="fas fa-times" onclick="closeRoute()"></i>
+                            </div>
+                            <div class="route-map-sim">
+                                <div class="map-path"></div>
+                                <div class="marker m1"><i class="fas fa-home"></i></div>
+                                <div class="marker m2"><i class="fas fa-store"></i></div>
+                                <div class="marker m3"><i class="fas fa-store"></i></div>
+                            </div>
+                            <div class="route-steps">
+                                <div class="r-step">
+                                    <span class="r-time">17:40</span>
+                                    <div class="r-info">
+                                        <h4>Mercadona (3 min pie)</h4>
+                                        <p>Comprar: Pasta, Albahaca</p>
+                                    </div>
+                                </div>
+                                <div class="r-step">
+                                    <span class="r-time">17:55</span>
+                                    <div class="r-info">
+                                        <h4>Frutería Paco (5 min pie)</h4>
+                                        <p>Comprar: Limones (Oferta proximidad)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn-primary" onclick="closeRoute()"
+                                style="margin-top: 20px;">ENTENDIDO</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Screen 4: Dish Player (Interactive Tutorial) -->
+                <section id="screen-recipe" class="screen">
+                    <div class="player-header">
+                        <div class="back-pill" onclick="showScreen('home')">
+                            <i class="fas fa-arrow-left"></i>
+                        </div>
+                        <div class="author-pill">
+                            <img src="https://i.pravatar.cc/150?u=carlos" class="avatar-small">
+                            <span id="player-author">@ChefCarlos</span>
+                        </div>
+                    </div>
+
+                    <div class="dish-video-container">
+                        <video id="recipe-video"
+                            poster="https://preview.redd.it/pasta-is-so-photogenic-v0-u48v2394vunb1.jpg?width=640&crop=smart&auto=webp&s=f73909786a5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f"
+                            style="width: 100%; border-radius: 25px;">
+                        </video>
+                        <div class="video-controls">
+                            <div class="sync-timer" id="player-timer">
+                                <i class="fas fa-clock"></i> 00:00
+                            </div>
+                            <div class="play-trigger"><i class="fas fa-play"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="stepper-container">
+                        <div class="stepper-progress">
+                            <div class="progress-bar" style="width: 30%;"></div>
+                        </div>
+                        <div class="step-content">
+                            <span class="step-num">PASO 1 DE 5</span>
+                            <h2 id="player-title">Pasta PrimavIA</h2>
+                            <p id="step-desc">Hierve 2L de agua con una pizca de sal. La IA detectará el hervor para
+                                iniciar el cronómetro.</p>
+                        </div>
+
+                        <div class="stepper-actions">
+                            <button class="btn-step prev" disabled><i class="fas fa-chevron-left"></i></button>
+                            <!-- Sustainable Shared Achievement -->
+                            <div class="share-achievement">
+                                <p>¿Has completado el reto?</p>
+                                <button class="btn-share-social"><i class="fas fa-camera"></i> Compartir
+                                    Impacto</button>
+                            </div>
+                </section>
+
+                <!-- Screen 5: Profile (Personal Impact Hub) -->
+                <section id="screen-profile" class="screen">
+                    <div class="profile-header" style="text-align: center; margin-bottom: 30px;">
+                        <div class="avatar-container">
+                            <img src="https://i.pravatar.cc/150?u=me" class="profile-avatar">
+                            <div class="level-badge" id="chef-level">Chef Nivel 12</div>
+                        </div>
+                        <div class="xp-bar-container">
+                            <div class="xp-bar-progress" style="width: 65%;"></div>
+                            <span class="xp-text">1.250 / 2.000 XP</span>
+                        </div>
+                        <h1 style="margin-top: 15px;">Marc D.</h1>
+                        <p style="color: #888;">Cocinando por un planeta mejor 🌱</p>
+                    </div>
+
+                    <!-- Sustainability Impact Dashboard -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="fas fa-wallet" style="color: #f5d263;"></i>
+                            <h3>124€</h3>
+                            <p>Ahorrados</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-recycle" style="color: var(--primary);"></i>
+                            <h3>14.2kg</h3>
+                            <p>Rescatados</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-cloud-sun" style="color: #54a0ff;"></i>
+                            <h3>-8.5kg</h3>
+                            <p>CO2 Evitado</p>
+                        </div>
+                    </div>
+
+                    <!-- Community Medals & Badges -->
+                    <div class="profile-module">
+                        <h3 style="margin-bottom: 15px;">Mis Medallas</h3>
+                        <div class="badges-scroll">
+                            <div class="badge-item earned" onclick="addXP(500)">
+                                <i class="fas fa-award"></i>
+                                <span>Zero Waste Hero</span>
+                            </div>
+                            <div class="badge-item earned" onclick="addXP(500)">
+                                <i class="fas fa-seedling"></i>
+                                <span>Prep Master</span>
+                            </div>
+                            <div class="badge-item"
+                                onclick="alert('Completa 5 recetas para desbloquear esta medalla y 500 XP.')">
+                                <i class="fas fa-globe-europe"></i>
+                                <span>Eco Global</span>
+                            </div>
+                            <div class="badge-item"
+                                onclick="alert('Compra en 3 tiendas locales para desbloquear esta medalla y 500 XP.')">
+                                <i class="fas fa-shopping-bag"></i>
+                                <span>Local Supporter</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dietary Preferences & Health -->
+                    <div class="profile-module">
+                        <h3 style="margin-bottom: 15px;">Mi Salud y Gustos</h3>
+                        <div class="diet-pills">
+                            <div class="diet-pill active" onclick="this.classList.toggle('active')">Vegano</div>
+                            <div class="diet-pill" onclick="this.classList.toggle('active')">Keto</div>
+                            <div class="diet-pill active" onclick="this.classList.toggle('active')">Sin Gluten</div>
+                            <div class="diet-pill" onclick="this.classList.toggle('active')">Low Carb</div>
+                        </div>
+                        <div class="allergy-alert">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Alergia a los frutos secos configurada.</span>
+                        </div>
+                    </div>
+
+                    <!-- My Creations Portfolio -->
+                    <div class="profile-module">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h3>Mis Creaciones</h3>
+                            <span style="font-size: 11px; font-weight: 700; color: var(--primary);">VER TODO</span>
+                        </div>
+                        <div class="creations-grid">
+                            <div class="creation-item">
+                                <img
+                                    src="https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=300&q=80">
+                                <span class="rating">⭐ 4.8</span>
+                            </div>
+                            <div class="creation-item">
+                                <img
+                                    src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=300&q=80">
+                                <span class="rating">⭐ 5.0</span>
+                            </div>
+                            <div class="creation-item">
+                                <img
+                                    src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=300&q=80">
+                                <span class="rating">⭐ 4.5</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Actions -->
+                    <div class="profile-module" style="padding-bottom: 40px;">
+                        <button class="btn-secondary" onclick="showScreen('settings')"
+                            style="width: 100%; text-align: left; display: flex; justify-content: space-between;">
+                            <span>Ajustes de Cuenta</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Screen 6: Account Settings -->
+                <section id="screen-settings" class="screen">
+                    <div class="player-header">
+                        <div class="back-pill" onclick="showScreen('profile')">
+                            <i class="fas fa-arrow-left"></i>
+                        </div>
+                        <h2 style="color: #000; font-weight: 800;">Ajustes</h2>
+                    </div>
+
+                    <div class="settings-group">
+                        <div class="settings-item clickable" onclick="showScreen('profile-edit')">
+                            <div class="item-icon" style="background: rgba(84, 160, 255, 0.1); color: #54a0ff;">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <div class="item-label">
+                                <h4>Información Personal</h4>
+                                <p>Nombre, Email, Teléfono</p>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+
+                        <div class="settings-item clickable">
+                            <div class="item-icon" style="background: rgba(255, 118, 117, 0.1); color: #ff7675;">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <div class="item-label">
+                                <h4>Notificaciones</h4>
+                                <p>Alertas de caducidad y retos</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+
+                        <div class="settings-item clickable">
+                            <div class="item-icon" style="background: rgba(91, 192, 142, 0.1); color: var(--primary);">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="item-label">
+                                <h4>Privacidad y Seguridad</h4>
+                                <p>Contraseña, Visibilidad social</p>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+
+                        <div class="settings-item clickable">
+                            <div class="item-icon" style="background: #2d3436; color: #fff;">
+                                <i class="fas fa-moon"></i>
+                            </div>
+                            <div class="item-label">
+                                <h4>Modo Oscuro</h4>
+                                <p>Descanso visual para la noche</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="dark-mode-toggle" onclick="toggleDarkMode()">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+
+                        <div class="settings-item clickable">
+                            <div class="item-icon" style="background: #f0f0f0; color: #666;">
+                                <i class="fas fa-language"></i>
+                            </div>
+                            <div class="item-label">
+                                <h4>Idioma</h4>
+                                <p>Español (ES)</p>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+
+                    <div class="settings-group" style="margin-top: 30px;">
+                        <button class="btn-logout" onclick="handleLogout()">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </button>
+                    </div>
+
+                    <p style="text-align: center; font-size: 10px; color: #888; margin-top: 30px;">
+                        Pantry Chef v2.0.4 | Hecho con 🌱 para el mundo
+                    </p>
+                </section>
+
+                <!-- Screen 7: Profile Edit -->
+                <section id="screen-profile-edit" class="screen">
+                    <div class="player-header">
+                        <div class="back-pill" onclick="showScreen('settings')">
+                            <i class="fas fa-arrow-left"></i>
+                        </div>
+                        <h2 style="color: #000; font-weight: 800;">Editar Perfil</h2>
+                    </div>
+
+                    <div class="edit-form">
+                        <div class="input-group-edit">
+                            <label>Nombre Completo</label>
+                            <input type="text" id="edit-name-val" value="Marc D." class="auth-input">
+                        </div>
+                        <div class="input-group-edit">
+                            <label>Email</label>
+                            <input type="email" id="edit-email-val" value="marc.d@pantrychef.com" class="auth-input">
+                        </div>
+                        <div class="input-group-edit">
+                            <label>Teléfono</label>
+                            <input type="tel" id="edit-phone-val" value="+34 600 XXX XXX" class="auth-input">
+                        </div>
+                        <div class="input-group-edit">
+                            <label>Biografía</label>
+                            <textarea id="edit-bio-val" class="auth-input"
+                                style="height: 100px; padding-top: 15px;">Cocinando por un planeta mejor 🌱</textarea>
+                        </div>
+
+                        <button class="btn-primary" onclick="saveProfile()" style="margin-top: 20px;">
+                            <i class="fas fa-save"></i> Guardar Cambios
+                        </button>
+                    </div>
+                </section>
             </div>
-        </nav>
+
+            <!-- Navigation Bar -->
+            <nav class="nav-bar">
+                <div class="nav-item active" onclick="showScreen('home')">
+                    <i class="fas fa-utensils"></i>
+                    <span>Cocinar</span>
+                </div>
+                <div class="nav-item" onclick="showScreen('pantry')">
+                    <i class="fas fa-box-open"></i>
+                    <span>Despensa</span>
+                </div>
+                <div class="nav-item" onclick="showScreen('cart')">
+                    <i class="fas fa-shopping-basket"></i>
+                    <span>Carrito</span>
+                </div>
+                <div class="nav-item" onclick="showScreen('profile')">
+                    <i class="fas fa-user"></i>
+                    <span>Perfil</span>
+                </div>
+            </nav>
+        </div>
     </div>
 
     <script src="app.js"></script>
