@@ -24,7 +24,7 @@
 }
 
 .auth-logo {
-    width: 220px;
+    max-width: 60%;
     height: auto;
     margin-bottom: 20px;
     animation: floatingLogo 4s ease-in-out infinite, fadeInScale 0.8s ease-out forwards;
@@ -156,6 +156,7 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    width: 100%;
 }
 
 .app-content-container.visible {
