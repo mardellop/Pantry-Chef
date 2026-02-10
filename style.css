@@ -22,6 +22,11 @@
     -webkit-tap-highlight-color: transparent;
 }
 
+img {
+    max-width: 100%;
+    height: auto;
+}
+
 body {
     background: radial-gradient(circle at top left, #818181, #fff);
     color: #fff;
@@ -34,8 +39,10 @@ body {
 
 /* Phone Frame & Status Bar */
 .phone-frame {
-    width: 375px;
     height: 812px;
+    max-height: 92vh;
+    width: auto;
+    aspect-ratio: 375 / 812;
     background: #fff;
     border: 12px solid #1a1a1a;
     border-radius: 55px;
@@ -90,11 +97,14 @@ body {
 /* App Container */
 .app-container {
     flex: 1;
+    width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    padding-bottom: 90px;
+    padding-bottom: 20px;
+    /* Reduced since nav is no longer overlapping */
     scrollbar-width: none;
     color: #000;
+    box-sizing: border-box;
 }
 
 .app-container::-webkit-scrollbar {
@@ -103,20 +113,16 @@ body {
 
 /* Navigation */
 .nav-bar {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    right: 20px;
-    height: 70px;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(15px);
-    border: 1px solid #eee;
-    border-radius: 35px;
+    height: 80px;
+    background: #fff;
+    border-top: 1px solid #f0f0f0;
     display: flex;
     justify-content: space-around;
     align-items: center;
     z-index: 1000;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.03);
+    padding-bottom: 15px;
+    /* Extra space for bottom safe area mimicry */
 }
 
 .nav-item {
@@ -143,8 +149,10 @@ body {
 /* Screens */
 .screen {
     display: none;
+    width: 100%;
     padding: 60px 20px 20px;
     animation: fadeIn 0.5s ease-out;
+    box-sizing: border-box;
 }
 
 .screen.active {
@@ -604,8 +612,9 @@ body {
     display: flex;
     gap: 15px;
     overflow-x: auto;
-    padding: 10px 0;
+    padding: 5px 0 20px;
     scrollbar-width: none;
+    width: 100%;
 }
 
 .badges-scroll::-webkit-scrollbar {
@@ -1411,8 +1420,9 @@ input:checked+.slider:before {
 }
 
 .dark-mode .nav-bar {
-    background: rgba(30, 30, 30, 0.9);
-    border-color: var(--border-color);
+    background: #1a1a1a;
+    border-top-color: #333;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .dark-mode .nav-item {
