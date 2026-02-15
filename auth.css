@@ -64,12 +64,12 @@
 
 .auth-text h1 {
     font-size: 32px;
-    color: #333;
+    color: #452900;
     margin-bottom: 8px;
 }
 
 .auth-text p {
-    color: #666;
+    color: #d24313;
     font-size: 16px;
 }
 
@@ -140,7 +140,7 @@
 }
 
 .auth-input:focus {
-    border-color: var(--primary);
+    border-color: #f5d263;
 }
 
 .auth-form {
