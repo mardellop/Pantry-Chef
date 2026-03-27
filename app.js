@@ -1,11 +1,11 @@
-
-﻿// --- Pantry Chef: UI & Logic Engine (v2.0 Prep Edition) ---
+// --- Pantry Chef: UI & Logic Engine (v2.0 Prep Edition) ---
 
 let net; // Global placeholder for AI Model (TensorFlow.js)
 
 // --- 1. AutenticaciÃ³n y Flujo de Entrada ---
 
 function showLoginForm() {
+    SoundEngine.click();
     const actions = document.getElementById('auth-actions');
     const fields = document.getElementById('auth-fields');
 
@@ -17,6 +17,7 @@ function showLoginForm() {
 }
 
 function resetAuth() {
+    SoundEngine.back();
     const actions = document.getElementById('auth-actions');
     const fields = document.getElementById('auth-fields');
 
@@ -28,6 +29,7 @@ function resetAuth() {
 }
 
 function handleAuth() {
+    startTaylorSwiftSong();
     const email = document.getElementById('user-email').value;
     const pass = document.getElementById('user-pass').value;
 
@@ -39,10 +41,14 @@ function handleAuth() {
     const authScreen = document.getElementById('auth-screen');
     const mainApp = document.getElementById('main-app-content');
 
+    SoundEngine.welcome();
     authScreen.classList.add('hidden');
 
     setTimeout(() => {
         mainApp.classList.add('visible');
+        // Start ambient kitchen sounds when entering the app
+        // setTimeout(() => SoundEngine.startAmbient(), 800); // Ambient sound disabled per user request
+        setTimeout(() => startTaylorSwiftSong(), 800);
     }, 400);
 }
 
@@ -136,6 +142,7 @@ let currentRecipeTime = 0;
 let timerInterval;
 
 function openRecipeDetail(title, author, difficulty) {
+    SoundEngine.confirm();
     const data = recipesDB[title] || recipesDB['Pasta PrimavIA']; // Fallback
 
     // Populate Data
@@ -194,6 +201,7 @@ function openRecipeDetail(title, author, difficulty) {
 }
 
 function startCooking() {
+    SoundEngine.confirm();
     const btn = document.getElementById('btn-prepare-now');
 
     // UI Updates
@@ -248,6 +256,7 @@ function openStore(name) {
 }
 
 function openChallenge(name) {
+    SoundEngine.click();
     const modal = document.getElementById('challenge-modal');
     const title = document.getElementById('ch-title');
     const desc = document.getElementById('ch-desc');
@@ -270,10 +279,12 @@ function openChallenge(name) {
 }
 
 function closeChallenge() {
+    SoundEngine.back();
     document.getElementById('challenge-modal').style.display = 'none';
 }
 
 function acceptChallenge() {
+    SoundEngine.confirm();
     alert("Reto aceptado");
     closeChallenge();
 }
@@ -318,13 +329,15 @@ function simulateSocialUpdates() {
 // --- 3. LÃ³gica de "La Despensa" (Smart Prep) ---
 
 function toggleItem(element) {
+    SoundEngine.tick();
     element.classList.toggle('active');
-    // Actualizar dinÃ¡micamente el mensaje de recetas disponibles
+    // Actualizar dinámicamente el mensaje de recetas disponibles
     const activeCount = document.querySelectorAll('.smart-item.active').length;
     console.log(`Ingredientes activos para cocinar: ${activeCount}`);
 }
 
 function toggleFABMenu() {
+    SoundEngine.click();
     const menu = document.getElementById('scanner-menu');
     const fab = document.querySelector('.fab-scanner');
     const backdrop = document.getElementById('fab-overlay');
@@ -352,6 +365,7 @@ function simulateVoiceInput() {
 }
 
 async function generateSmartRecipe() {
+    SoundEngine.magic();
     const activeItems = Array.from(document.querySelectorAll('.smart-item.active')).map(el => {
         return {
             name: el.querySelector('.name').innerText,
@@ -509,6 +523,7 @@ function startClock() {
 }
 
 function filterRecipes(type, element) {
+    SoundEngine.click();
     // Update active pill
     if (element) {
         document.querySelectorAll('.filter-pills .pill').forEach(p => p.classList.remove('active'));
@@ -582,6 +597,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function addXP(amount) {
+    SoundEngine.confirm();
     const xpBar = document.querySelector('.xp-bar-progress');
     const xpText = document.querySelector('.xp-text');
     const levelBadge = document.getElementById('chef-level');
@@ -617,7 +633,9 @@ function toggleDarkMode() {
 }
 
 function handleLogout() {
-    if (confirm("Â¿EstÃ¡s seguro de que quieres cerrar sesiÃ³n?")) {
+    SoundEngine.back();
+    if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+        SoundEngine.stopAmbient();
         document.getElementById('main-app-content').classList.remove('visible');
         setTimeout(() => {
             document.getElementById('auth-screen').classList.remove('hidden');
@@ -648,6 +666,7 @@ function saveProfile() {
 // --- 8. SMART CART & COOKING MODE LOGIC ---
 
 function switchCartTab(tab) {
+    SoundEngine.click();
     const shopContent = document.getElementById('cart-content-shop');
     const cookContent = document.getElementById('cart-content-cook');
     const tabs = document.querySelectorAll('.cart-tab');
@@ -677,6 +696,7 @@ let cmTimerInterval = null;
 let activeCookingRecipe = ''; // Tracking the current active recipe
 
 function openCookingMode(recipeTitle) {
+    SoundEngine.confirm();
     const overlay = document.getElementById('cooking-mode-overlay');
     const data = recipesDB[recipeTitle] || recipesDB['Pasta con setas y salvia'];
 
@@ -691,6 +711,7 @@ function openCookingMode(recipeTitle) {
 }
 
 function closeCookingMode() {
+    SoundEngine.back();
     document.getElementById('cooking-mode-overlay').style.display = 'none';
     if (cmTimerInterval) clearInterval(cmTimerInterval);
 }
@@ -708,6 +729,7 @@ function updateCMStep(data) {
 }
 
 function changeStep(delta) {
+    SoundEngine.ding();
     const data = recipesDB[activeCookingRecipe] || recipesDB['Pasta con setas y salvia'];
 
     cmCurrentStep += delta;
@@ -757,3 +779,151 @@ function updateClock() {
 // Start the clock and update periodically
 setInterval(updateClock, 1000);
 updateClock();
+
+
+
+// --- 10. KITCHEN SOUND TOGGLE CONTROLLER ---
+
+/**
+ * Handles the floating sound toggle button.
+ * Syncs visual state (waveform / mute icon / badge) with SoundEngine.
+ */
+function handleSoundToggle() {
+    var btn   = document.getElementById('sound-toggle-btn');
+    var badge = document.getElementById('sound-badge');
+    var isNowOn = SoundEngine.toggleAmbient();
+
+    if (isNowOn) {
+        btn.classList.remove('muted');
+        if (badge) badge.textContent = 'ON';
+    } else {
+        btn.classList.add('muted');
+        if (badge) badge.textContent = 'OFF';
+    }
+}
+
+/**
+ * Keeps the sound-toggle button hidden on the auth screen,
+ * then reveals it once the user is inside the app.
+ */
+document.addEventListener('DOMContentLoaded', function() {
+    var soundBtn = document.getElementById('sound-toggle-btn');
+    if (soundBtn) soundBtn.style.display = 'none';
+
+    var mainApp = document.getElementById('main-app-content');
+    var observer = new MutationObserver(function() {
+        if (mainApp && mainApp.classList.contains('visible')) {
+            setTimeout(function() {
+                if (soundBtn) soundBtn.style.display = 'flex';
+            }, 950);
+        } else {
+            if (soundBtn) soundBtn.style.display = 'none';
+        }
+    });
+    if (mainApp) observer.observe(mainApp, { attributes: true, attributeFilter: ['class'] });
+});
+
+
+// --- 11. TAYLOR SWIFT NATIVE MUSIC PLAYER (The Fate of Ophelia) ---
+
+var tsAudio = null;
+var tsProgressInterval = null;
+
+function initTSAudio() {
+    if (!tsAudio) {
+        tsAudio = document.getElementById('ts-audio-element');
+        if (tsAudio) {
+            // Force unmuted and full volume
+            tsAudio.muted = false;
+            tsAudio.volume = 1.0;
+            
+            tsAudio.addEventListener('playing', function() {
+                var btn = document.getElementById('ts-play-btn');
+                var img = document.querySelector('.ts-album-art img');
+                if (btn) btn.textContent = '⏸';
+                if (img) img.classList.remove('paused');
+                startTSProgress();
+            });
+            tsAudio.addEventListener('pause', function() {
+                var btn = document.getElementById('ts-play-btn');
+                var img = document.querySelector('.ts-album-art img');
+                if (btn) btn.textContent = '▶';
+                if (img) img.classList.add('paused');
+                stopTSProgress();
+            });
+            tsAudio.addEventListener('ended', function() {
+                closeTSPlayer();
+            });
+        }
+    }
+}
+
+function startTaylorSwiftSong() {
+    initTSAudio();
+    var wrap = document.getElementById('ts-player-wrap');
+    if (wrap) wrap.style.display = 'block';
+
+    if (tsAudio) {
+        tsAudio.muted = false;
+        tsAudio.volume = 1.0;
+        console.log("Attempting to play ophelia.mp3...");
+        var playPromise = tsAudio.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.then(function() {
+                console.log("Playback started successfully");
+            }).catch(function(error) {
+                console.warn("Autoplay blocked:", error);
+                // The player is already visible, user can click Play manually
+            });
+        }
+    }
+}
+
+function toggleTSPlayer() {
+    initTSAudio();
+    if (!tsAudio) return;
+    if (tsAudio.paused) {
+        tsAudio.play();
+    } else {
+        tsAudio.pause();
+    }
+}
+
+function closeTSPlayer() {
+    if (tsAudio) {
+        tsAudio.pause();
+        tsAudio.currentTime = 0;
+    }
+    stopTSProgress();
+    var wrap = document.getElementById('ts-player-wrap');
+    if (wrap) {
+        var player = document.getElementById('ts-mini-player');
+        if (player) {
+            player.style.animation = 'none';
+            player.style.transition = 'opacity 0.3s, transform 0.3s';
+            player.style.opacity = '0';
+            player.style.transform = 'translateX(-50%) translateY(20px)';
+        }
+        setTimeout(function() { wrap.style.display = 'none'; }, 350);
+    }
+}
+
+function startTSProgress() {
+    stopTSProgress();
+    tsProgressInterval = setInterval(function() {
+        if (!tsAudio) return;
+        var current = tsAudio.currentTime || 0;
+        var duration = tsAudio.duration || 1;
+        var pct = (current / duration) * 100;
+        var bar = document.getElementById('ts-progress');
+        if (bar) bar.style.width = pct + '%';
+    }, 500);
+}
+
+function stopTSProgress() {
+    if (tsProgressInterval) {
+        clearInterval(tsProgressInterval);
+        tsProgressInterval = null;
+    }
+}
