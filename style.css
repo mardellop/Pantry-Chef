@@ -2363,3 +2363,243 @@ input:checked+.slider {
     color: #000 !important;
 }
 
+/* ── Sound Toggle FAB ─────────────────────────────────────── */
+.sound-toggle-fab {
+    position: absolute;
+    bottom: 98px;           /* sits just above the nav bar */
+    right: 14px;
+    width: 46px;
+    height: 46px;
+    background: #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 2px;
+    cursor: pointer;
+    z-index: 1500;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+    transition: transform 0.2s ease, background 0.3s ease;
+    user-select: none;
+    overflow: visible;
+}
+
+.sound-toggle-fab:hover  { transform: scale(1.1); }
+.sound-toggle-fab:active { transform: scale(0.94); }
+
+/* Muted state */
+.sound-toggle-fab.muted {
+    background: #e0e0e0;
+}
+.sound-toggle-fab.muted .sound-waves { display: none; }
+.sound-toggle-fab.muted #sound-icon-muted { display: flex !important; color: #888; font-size: 18px; }
+.sound-toggle-fab.muted .sound-badge { background: #bbb; }
+
+/* Animated waveform bars */
+.sound-waves {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 20px;
+}
+
+.sound-waves span {
+    display: block;
+    width: 3px;
+    border-radius: 3px;
+    background: #fff;
+    animation: waveBar 1.1s ease-in-out infinite;
+    transform-origin: bottom;
+}
+
+.sound-waves span:nth-child(1) { height: 8px;  animation-delay: 0s;    animation-duration: 0.9s; }
+.sound-waves span:nth-child(2) { height: 18px; animation-delay: 0.15s; animation-duration: 1.1s; }
+.sound-waves span:nth-child(3) { height: 13px; animation-delay: 0.3s;  animation-duration: 0.8s; }
+.sound-waves span:nth-child(4) { height: 7px;  animation-delay: 0.45s; animation-duration: 1.3s; }
+
+@keyframes waveBar {
+    0%, 100% { transform: scaleY(0.4); opacity: 0.7; }
+    50%       { transform: scaleY(1);   opacity: 1;   }
+}
+
+/* Paused state — bars freeze */
+.sound-toggle-fab.muted .sound-waves span {
+    animation-play-state: paused;
+}
+
+/* Small badge label */
+.sound-badge {
+    position: absolute;
+    top: -5px;
+    right: -3px;
+    background: var(--primary);
+    color: #fff;
+    font-size: 7px;
+    font-weight: 900;
+    padding: 2px 5px;
+    border-radius: 50px;
+    letter-spacing: 0.5px;
+    border: 1.5px solid #fff;
+    transition: background 0.3s ease;
+}
+
+/* ── Dark-mode awareness ──────────────────────────────────── */
+.dark-mode .sound-toggle-fab {
+    background: #222;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.6);
+}
+.dark-mode .sound-toggle-fab.muted {
+    background: #333;
+}
+
+
+/* ══ Taylor Swift Mini Music Player ══════════════════════════ */
+.ts-mini-player {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    width: calc(100% - 28px);
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    border-radius: 20px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 2000;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
+    animation: playerSlideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    overflow: hidden;
+}
+
+.ts-mini-player::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(192,57,43,0.15) 0%, rgba(142,68,173,0.15) 100%);
+    border-radius: 20px;
+    pointer-events: none;
+}
+
+@keyframes playerSlideUp {
+    from { opacity: 0; transform: translateX(-50%) translateY(30px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.ts-album-art {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+}
+
+.ts-album-art img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255,255,255,0.2);
+    animation: vinylSpin 4s linear infinite;
+}
+
+@keyframes vinylSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+.ts-vinyl-spin {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.1);
+    pointer-events: none;
+}
+
+.ts-album-art img.paused { animation-play-state: paused; }
+
+.ts-info {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.ts-song-title {
+    display: block;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ts-artist {
+    display: block;
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 6px;
+}
+
+.ts-progress-bar {
+    width: 100%;
+    height: 3px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.ts-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #c0392b, #8e44ad);
+    border-radius: 3px;
+    transition: width 1s linear;
+}
+
+.ts-controls {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.ts-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #fff;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    line-height: 1;
+}
+
+.ts-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
+.ts-btn:active { transform: scale(0.9); }
+
+.ts-close-btn {
+    background: rgba(192,57,43,0.3);
+    border-color: rgba(192,57,43,0.5);
+    font-size: 11px;
+}
+
+/* Shimmer animation on player load */
+.ts-mini-player::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0%   { left: -100%; }
+    100% { left: 200%; }
+}
