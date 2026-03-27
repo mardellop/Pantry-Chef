@@ -174,7 +174,7 @@
                             </div>
                         </div>
 
-                        <div class="dish-card" onclick="openRecipeDetail('Buddha Bowl', '@YoungChef', 'Media')">
+                        <div class="dish-card" onclick="openRecipeDetail('Ensalada de Quinoa', '@YoungChef', 'Media')">
                             <div class="dish-media">
                                 <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80"
                                     alt="Quinoa Salad">
@@ -199,7 +199,8 @@
                         </div>
 
 
-                        <div class="dish-card" onclick="openRecipeDetail('Espaguetis con salsa pomodoro', '@VeggieVibes', 'Fácil')">
+                        <div class="dish-card"
+                            onclick="openRecipeDetail('Espaguetis con salsa pomodoro', '@VeggieVibes', 'Fácil')">
                             <div class="dish-media">
                                 <img src="https://images.unsplash.com/photo-1551892374-ecf8754cf8b0?auto=format&fit=crop&w=800&q=80"
                                     alt="Zucchini Noodles">
@@ -223,7 +224,8 @@
                             </div>
                         </div>
 
-                        <div class="dish-card" onclick="openRecipeDetail('Freakshake de chocolate', '@SweetFit', 'Fácil')">
+                        <div class="dish-card"
+                            onclick="openRecipeDetail('Freakshake de chocolate', '@SweetFit', 'Fácil')">
                             <div class="dish-media">
                                 <img src="https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80"
                                     alt="Smoothie Bowl">
@@ -428,7 +430,7 @@
                                     <input type="checkbox">
                                     <span class="checkmark"></span>
                                     <span class="item-text">Albahaca fresca <small>
-Km 0 - Cooperativa
+                                            Km 0 - Cooperativa
                                             Local</small></span>
                                 </label>
                             </div>
@@ -836,23 +838,32 @@ Km 0 - Cooperativa
 
             <!-- Navigation Bar -->
             <nav class="nav-bar">
-                <div class="nav-item active" onclick="showScreen('home')">
+                <div class="nav-item active" onclick="SoundEngine.click(); showScreen('home')">
                     <i class="fas fa-utensils"></i>
                     <span>Comunidad</span>
                 </div>
-                <div class="nav-item" onclick="showScreen('pantry')">
+                <div class="nav-item" onclick="SoundEngine.click(); showScreen('pantry')">
                     <i class="fas fa-box-open"></i>
                     <span>Despensa</span>
                 </div>
-                <div class="nav-item" onclick="showScreen('cart')">
+                <div class="nav-item" onclick="SoundEngine.click(); showScreen('cart')">
                     <i class="fas fa-shopping-basket"></i>
                     <span>Carrito</span>
                 </div>
-                <div class="nav-item" onclick="showScreen('profile')">
+                <div class="nav-item" onclick="SoundEngine.click(); showScreen('profile')">
                     <i class="fas fa-user"></i>
                     <span>Perfil</span>
                 </div>
             </nav>
+
+            <!-- Ambient Sound Toggle Button -->
+            <div id="sound-toggle-btn" class="sound-toggle-fab" onclick="handleSoundToggle()" title="Sonidos de cocina">
+                <div class="sound-waves" id="sound-wave-anim">
+                    <span></span><span></span><span></span><span></span>
+                </div>
+                <i class="fas fa-volume-mute sound-icon-muted" id="sound-icon-muted" style="display:none;"></i>
+                <div class="sound-badge" id="sound-badge">ON</div>
+            </div>
         </div>
 
         <!-- FULL SCREEN COOKING MODE OVERLAY -->
@@ -942,7 +953,35 @@ Km 0 - Cooperativa
         </div>
     </div>
 
+    <!-- ══ Taylor Swift Music Player (The Fate of Ophelia) ══ -->
+    <div id="ts-player-wrap" style="display:none;">
+        <!-- Native Audio Element -->
+        <audio id="ts-audio-element" preload="auto">
+            <source src="ophelia.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
 
+        <!-- Mini player UI -->
+        <div id="ts-mini-player" class="ts-mini-player">
+            <div class="ts-album-art">
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/e/e6/Taylor_Swift_-_The_Life_of_a_Showgirl.png/220px-Taylor_Swift_-_The_Life_of_a_Showgirl.png"
+                     onerror="this.style.background='linear-gradient(135deg,#c0392b,#8e44ad)';this.removeAttribute('src');"
+                     alt="The Life of a Showgirl">
+                <div class="ts-vinyl-spin"></div>
+            </div>
+            <div class="ts-info">
+                <span class="ts-song-title">The Fate of Ophelia</span>
+                <span class="ts-artist">Taylor Swift (Official)</span>
+                <div class="ts-progress-bar"><div class="ts-progress-fill" id="ts-progress"></div></div>
+            </div>
+            <div class="ts-controls">
+                <button class="ts-btn" id="ts-play-btn" onclick="toggleTSPlayer()">⏸</button>
+                <button class="ts-btn ts-close-btn" onclick="closeTSPlayer()">✕</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="sounds.js"></script>
     <script src="app.js"></script>
 </body>
 
