@@ -2,7 +2,7 @@
 
 let net; // Global placeholder for AI Model (TensorFlow.js)
 
-// --- 1. Autenticación y Flujo de Entrada ---
+// --- 1. AutenticaciÃ³n y Flujo de Entrada ---
 
 function showLoginForm() {
     SoundEngine.click();
@@ -34,7 +34,7 @@ function handleAuth() {
     const pass = document.getElementById('user-pass').value;
 
     if (!email || !pass) {
-        alert("Por favor, rellena tu correo y contraseña.");
+        alert("Por favor, rellena tu correo y contraseÃ±a.");
         return;
     }
 
@@ -53,7 +53,7 @@ function handleAuth() {
     }, 400);
 }
 
-// --- 2. Navegación Principal & "Dish" Logic ---
+// --- 2. NavegaciÃ³n Principal & "Dish" Logic ---
 
 function showScreen(screenId) {
     document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
@@ -79,7 +79,7 @@ const recipesDB = {
         authorImg: 'https://i.pravatar.cc/150?u=carlos',
         time: 12, // minutes
         ingredients: ['200g Pasta', '100g Setas', 'Hojas de salvia', 'Aceite de oliva', 'Ajo'],
-        utensils: ['Olla grande', 'Sartén', 'Escurridor'],
+        utensils: ['Olla grande', 'SartÃ©n', 'Escurridor'],
         steps: ['Hervir agua y cocer pasta durante 10 min.', 'Saltear setas con ajo y salvia.', 'Mezclar la pasta con las setas.', 'Servir caliente.']
     },
     'Pasta PrimavIA': { // Fallback for differing names
@@ -87,40 +87,40 @@ const recipesDB = {
         authorImg: 'https://i.pravatar.cc/150?u=carlos',
         time: 12,
         ingredients: ['200g Pasta', 'Verduras Varias', 'Aceite', 'Queso'],
-        utensils: ['Olla', 'Sartén'],
+        utensils: ['Olla', 'SartÃ©n'],
         steps: ['Cocer pasta.', 'Saltear verduras.', 'Mezclar todo.']
     },
     'Vegan Bowl': {
         image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
         authorImg: 'https://i.pravatar.cc/150?u=ana',
         time: 20,
-        ingredients: ['Tofu marinado', 'Huevos de codorniz', 'Edamame', 'Tomates cherry', 'Maíz dulce', 'Pepino', 'Lechuga', 'Cebollino fresco'],
+        ingredients: ['Tofu marinado', 'Huevos de codorniz', 'Edamame', 'Tomates cherry', 'MaÃ­z dulce', 'Pepino', 'Lechuga', 'Cebollino fresco'],
         utensils: ['Bol', 'Cuchillo'],
-        steps: ['Pon una capa generosa de lechuga en el fondo del bowl.', 'Imagina que el bowl es un reloj. Ve colocando cada ingrediente en su "franja": el maíz a las 3, el pepino a las 5, los tomates a las 9 y el edamame a las 11.', 'Coloca el tofu justo en el medio.', 'Añade los huevos a un lado y espolvorea cebollino picado y, si tienes, unas semillas de sésamo negro por encima.']
+        steps: ['Pon una capa generosa de lechuga en el fondo del bowl.', 'Imagina que el bowl es un reloj. Ve colocando cada ingrediente en su "franja": el maÃ­z a las 3, el pepino a las 5, los tomates a las 9 y el edamame a las 11.', 'Coloca el tofu justo en el medio.', 'AÃ±ade los huevos a un lado y espolvorea cebollino picado y, si tienes, unas semillas de sÃ©samo negro por encima.']
     },
     'Tostada de aguacate': {
         image: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=800&q=80',
         authorImg: 'https://i.pravatar.cc/150?u=marta',
         time: 10,
-        ingredients: ['Pan integral', '1 Aguacate', 'Semillas', 'Limón', 'Sal al gusto', 'Pimienta al gusto'],
+        ingredients: ['Pan integral', '1 Aguacate', 'Semillas', 'LimÃ³n', 'Sal al gusto', 'Pimienta al gusto'],
         utensils: ['Tostadora', 'Cuchillo'],
-        steps: ['Tostar el pan.', 'Chafar el aguacate con limón.', 'Untar y decorar.']
+        steps: ['Tostar el pan.', 'Chafar el aguacate con limÃ³n.', 'Untar y decorar.']
     },
     'Buddha Bowl': {
         image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80',
         authorImg: 'https://i.pravatar.cc/150?u=green',
         time: 25,
-        ingredients: ['1 Aguacate', 'Garbanzos', 'Boniato', 'Rábano', 'Tomates cherry', 'Pimiento amarillo', 'Col lombarda'],
+        ingredients: ['1 Aguacate', 'Garbanzos', 'Boniato', 'RÃ¡bano', 'Tomates cherry', 'Pimiento amarillo', 'Col lombarda'],
         utensils: ['Cuchillo', 'Bol grande'],
-        steps: ['Pon una base generosa de lechuga rizada y brotes tiernos.', 'Coloca el aguacate en el centro-inferior.', 'Ve distribuyendo los ingredientes por secciones, dejando los tomates en rama arriba.', 'Añade los garbanzos en el centro.']
+        steps: ['Pon una base generosa de lechuga rizada y brotes tiernos.', 'Coloca el aguacate en el centro-inferior.', 'Ve distribuyendo los ingredientes por secciones, dejando los tomates en rama arriba.', 'AÃ±ade los garbanzos en el centro.']
     },
     'Espaguetis con salsa pomodoro': {
         image: 'https://images.unsplash.com/photo-1551892374-ecf8754cf8b0?auto=format&fit=crop&w=800&q=80',
         authorImg: 'https://i.pravatar.cc/150?u=veggie',
         time: 15,
-        ingredients: ['Espaguetis (preferiblemente de sésamo o de grano duro)', 'Tomates maduros', '1 diente de ajo', 'Aceite de oliva virgen extra', 'Sal', 'Albahaca fresca', 'Queso parmesano o pecorino rallado (opcional)'],
-        utensils: ['Olla grande', 'Sartén amplia', 'Colador'],
-        steps: ['En la sartén, calienta un buen chorro de aceite de oliva y añade el tomate triturado o troceado y deja que se cocine a fuego lento unos 15-20 minutos hasta que la salsa espese y cambie a un rojo más intenso. Añade la sal y la albahaca al final.', 'Mientras cuece los espaguetis en agua hirviendo con sal. Sácalos 1 minuto antes de lo que diga el paquete. Antes de escurrir, guarda una taza del agua de la cocción.', 'Echa los espaguetis directamente a la sartén con la salsa. Añade un chorrito del agua de cocción que guardaste. Remueve con energía a fuego fuerte durante 1 minuto.']
+        ingredients: ['Espaguetis (preferiblemente de sÃ©samo o de grano duro)', 'Tomates maduros', '1 diente de ajo', 'Aceite de oliva virgen extra', 'Sal', 'Albahaca fresca', 'Queso parmesano o pecorino rallado (opcional)'],
+        utensils: ['Olla grande', 'SartÃ©n amplia', 'Colador'],
+        steps: ['En la sartÃ©n, calienta un buen chorro de aceite de oliva y aÃ±ade el tomate triturado o troceado y deja que se cocine a fuego lento unos 15-20 minutos hasta que la salsa espese y cambie a un rojo mÃ¡s intenso. AÃ±ade la sal y la albahaca al final.', 'Mientras cuece los espaguetis en agua hirviendo con sal. SÃ¡calos 1 minuto antes de lo que diga el paquete. Antes de escurrir, guarda una taza del agua de la cocciÃ³n.', 'Echa los espaguetis directamente a la sartÃ©n con la salsa. AÃ±ade un chorrito del agua de cocciÃ³n que guardaste. Remueve con energÃ­a a fuego fuerte durante 1 minuto.']
     },
     'Freakshake de chocolate': {
         image: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80',
@@ -128,7 +128,7 @@ const recipesDB = {
         time: 5,
         ingredients: ['Leche', '3 bolas de helado de chocolate', 'Sirope de chocolate', 'Chocolate fundido o Nutella (para decorar)', 'Nata montada (opcional)', '1 Barrita de chocolate (opcional)', 'Cacao en polvo'],
         utensils: ['Batidora', 'Tarro de cristal'],
-        steps: ['Funde un poco de chocolate. Con una cuchara, deja que caiga por el borde interior y exterior del tarro. Mételo en la nevera un par de minutos para que el chocolate se asiente y no se escurra del todo al echar el batido.', 'Pon en la batidora el helado, la leche y un chorrito de sirope. Bate a máxima potencia, lo ideal es que quede espeso, tipo "smoothie".', 'Saca el vaso de la nevera y vierte el batido con cuidado. Deja un dedo de espacio arriba para la nata.', 'Pon una montaña generosa de nata montada. Clava la barrita de chocolate de forma diagonal. Para el toque final, coge un colador pequeño con cacao en polvo y golpéalo suavemente sobre el batido para que caiga esa "lluvia" de chocolate.']
+        steps: ['Funde un poco de chocolate. Con una cuchara, deja que caiga por el borde interior y exterior del tarro. MÃ©telo en la nevera un par de minutos para que el chocolate se asiente y no se escurra del todo al echar el batido.', 'Pon en la batidora el helado, la leche y un chorrito de sirope. Bate a mÃ¡xima potencia, lo ideal es que quede espeso, tipo "smoothie".', 'Saca el vaso de la nevera y vierte el batido con cuidado. Deja un dedo de espacio arriba para la nata.', 'Pon una montaÃ±a generosa de nata montada. Clava la barrita de chocolate de forma diagonal. Para el toque final, coge un colador pequeÃ±o con cacao en polvo y golpÃ©alo suavemente sobre el batido para que caiga esa "lluvia" de chocolate.']
     },
     'Sopa de Lentejas': {
         image: 'https://images.unsplash.com/photo-1547592166-23acbe346499?auto=format&fit=crop&w=800&q=80',
@@ -136,7 +136,7 @@ const recipesDB = {
         time: 45,
         ingredients: ['Lentejas', 'Zanahoria', 'Cebolla', 'Caldo de Verduras', 'Laurel'],
         utensils: ['Olla Express', 'Cuchara'],
-        steps: ['Sofreír verduras.', 'Añadir lentejas y caldo.', 'Cocer 30 min.']
+        steps: ['SofreÃ­r verduras.', 'AÃ±adir lentejas y caldo.', 'Cocer 30 min.']
     }
 };
 
@@ -224,9 +224,9 @@ function startCooking() {
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
             btn.style.background = 'var(--primary)';
-            btn.innerHTML = `<i class="fas fa-check"></i> ¡LISTO!`;
+            btn.innerHTML = `<i class="fas fa-check"></i> Â¡LISTO!`;
             btn.disabled = false;
-            alert("⏰ ¡Tiempo terminado! ¡A disfrutar!");
+            alert("â° Â¡Tiempo terminado! Â¡A disfrutar!");
         }
         timeLeft--;
     };
@@ -237,14 +237,14 @@ function startCooking() {
 }
 
 function syncWithPantry() {
-    alert("🔄 Sincronizando con 'La Despensa'...\n\nHecho: Se han eliminado de la lista 2 artículos que ya tienes. Se han actualizado las cantidades necesarias para tus recetas de la semana.");
+    alert("ð Sincronizando con 'La Despensa'...\n\nHecho: Se han eliminado de la lista 2 artÃ­culos que ya tienes. Se han actualizado las cantidades necesarias para tus recetas de la semana.");
 }
 
 function calculateOptimizedRoute() {
     const overlay = document.getElementById('route-overlay');
     if (overlay) {
         overlay.style.display = 'flex';
-        console.log("Calculando ruta de mínima huella de carbono...");
+        console.log("Calculando ruta de mÃ­nima huella de carbono...");
     }
 }
 
@@ -254,7 +254,7 @@ function closeRoute() {
 }
 
 function openStore(name) {
-    alert(`🏪 Abriendo Marketplace de ${name}...\n\nAquí puedes ver el pasillo exacto de cada producto para ahorrar tiempo.`);
+    alert(`ðª Abriendo Marketplace de ${name}...\n\nAquÃ­ puedes ver el pasillo exacto de cada producto para ahorrar tiempo.`);
 }
 
 function openChallenge(name) {
@@ -267,13 +267,13 @@ function openChallenge(name) {
 
     if (name === 'Zero Waste Week') {
         title.innerText = "Zero Waste Week";
-        desc.innerText = "Utiliza todos los ingredientes a punto de caducar de tu despensa esta semana. ¡Reduce el desperdicio al mínimo!";
-        emoji.innerText = "📉";
+        desc.innerText = "Utiliza todos los ingredientes a punto de caducar de tu despensa esta semana. Â¡Reduce el desperdicio al mÃ­nimo!";
+        emoji.innerText = "ð";
         tag.innerText = "RETO SEMANAL";
     } else if (name === 'Pantry Party') {
         title.innerText = "Pantry Party";
-        desc.innerText = "¡Cocina con amigos! Comparte una receta usando solo ingredientes básicos y gana puntos de comunidad dobles.";
-        emoji.innerText = "🥳";
+        desc.innerText = "Â¡Cocina con amigos! Comparte una receta usando solo ingredientes bÃ¡sicos y gana puntos de comunidad dobles.";
+        emoji.innerText = "ð¥³";
         tag.innerText = "EVENTO ESPECIAL";
     }
 
@@ -297,7 +297,7 @@ function nextStep() {
         currentStep++;
         updateStepper();
     } else {
-        alert("🎉 ¡Plato completado! Has ahorrado 0.4kg de CO2. ¡Comparte tu logro!");
+        alert("ð Â¡Plato completado! Has ahorrado 0.4kg de CO2. Â¡Comparte tu logro!");
     }
 }
 
@@ -307,11 +307,11 @@ function updateStepper() {
     const progress = document.querySelector('.progress-bar');
 
     const steps = [
-        "Hierve 2L de agua con sal. La IA detectará el hervor.",
-        "Añade la pasta y activa el temporizador sincronizado (8min).",
-        "Saltea los ingredientes rescatados en una sartén con AOVE.",
-        "Escurre la pasta y mézclala con la base IA-PrimavIA.",
-        "Emplata y decora con albahaca fresca. ¡Listo!"
+        "Hierve 2L de agua con sal. La IA detectarÃ¡ el hervor.",
+        "AÃ±ade la pasta y activa el temporizador sincronizado (8min).",
+        "Saltea los ingredientes rescatados en una sartÃ©n con AOVE.",
+        "Escurre la pasta y mÃ©zclala con la base IA-PrimavIA.",
+        "Emplata y decora con albahaca fresca. Â¡Listo!"
     ];
 
     if (stepNum) stepNum.innerText = `PASO ${currentStep} DE 5`;
@@ -325,15 +325,15 @@ function resetStepper() {
 }
 
 function simulateSocialUpdates() {
-    console.log("Actualizando feed social con métricas dinámicas...");
+    console.log("Actualizando feed social con mÃ©tricas dinÃ¡micas...");
 }
 
-// --- 3. Lógica de "La Despensa" (Smart Prep) ---
+// --- 3. LÃ³gica de "La Despensa" (Smart Prep) ---
 
 function toggleItem(element) {
     SoundEngine.tick();
     element.classList.toggle('active');
-    // Actualizar dinámicamente el mensaje de recetas disponibles
+    // Actualizar dinÃ¡micamente el mensaje de recetas disponibles
     const activeCount = document.querySelectorAll('.smart-item.active').length;
     console.log(`Ingredientes activos para cocinar: ${activeCount}`);
 }
@@ -357,11 +357,11 @@ function toggleFABMenu() {
 
 function simulateVoiceInput() {
     toggleFABMenu();
-    const voiceInput = prompt("Dile a Pantry Chef qué has comprado (ej: 'He comprado 2 kilos de manzanas y un cartón de leche'):");
+    const voiceInput = prompt("Dile a Pantry Chef quÃ© has comprado (ej: 'He comprado 2 kilos de manzanas y un cartÃ³n de leche'):");
     if (voiceInput) {
-        alert("Procesando nota de voz con NLP... 🎙️\n\nIdentificado: Manzanas (14 días), Leche (7 días).");
-        addPantryItem("Manzanas", "🍎", "14d");
-        addPantryItem("Leche", "🥛", "7d");
+        alert("Procesando nota de voz con NLP... ðï¸\n\nIdentificado: Manzanas (14 dÃ­as), Leche (7 dÃ­as).");
+        addPantryItem("Manzanas", "ð", "14d");
+        addPantryItem("Leche", "ð¥", "7d");
         updateEcoScore(0.5); // Feedback de ahorro
     }
 }
@@ -377,7 +377,7 @@ async function generateSmartRecipe() {
     });
 
     if (activeItems.length === 0) {
-        alert("¡Eh, Chef! Selecciona al menos un ingrediente para hacer magia. ✨");
+        alert("Â¡Eh, Chef! Selecciona al menos un ingrediente para hacer magia. â¨");
         return;
     }
 
@@ -400,7 +400,7 @@ async function generateSmartRecipe() {
         t2.innerHTML = `<i class="fas fa-magic"></i> Optimizando recetas para reducir desperdicio...`;
         setTimeout(() => {
             const urgentNames = activeItems.filter(i => i.isUrgent).map(i => i.name);
-            t3.innerHTML = `¡RECETA GENERADA! Prioridad: ${urgentNames.length > 0 ? urgentNames[0] : activeItems[0].name}`;
+            t3.innerHTML = `Â¡RECETA GENERADA! Prioridad: ${urgentNames.length > 0 ? urgentNames[0] : activeItems[0].name}`;
 
             setTimeout(() => {
                 if (overlay) overlay.style.display = 'none';
@@ -416,12 +416,12 @@ async function generateSmartRecipe() {
                     authorImg: 'https://i.pravatar.cc/150?u=aichef',
                     time: 20,
                     ingredients: activeItems.map(i => `${i.icon} ${i.name}`).concat(['Salsa de la casa', 'Especias']),
-                    utensils: ['Wok o sartén grande', 'Cuchara de madera', 'Bol'],
+                    utensils: ['Wok o sartÃ©n grande', 'Cuchara de madera', 'Bol'],
                     steps: [
-                        `Prepara tu área de trabajo y lava los ingredientes: ${activeItems.map(i => i.name).join(', ')}.`,
-                        `Saltea el pollo a fuego alto con un chorrito de aceite hasta que esté dorado.`,
+                        `Prepara tu Ã¡rea de trabajo y lava los ingredientes: ${activeItems.map(i => i.name).join(', ')}.`,
+                        `Saltea el pollo a fuego alto con un chorrito de aceite hasta que estÃ© dorado.`,
                         `Incorpora el resto de ingredientes uno a uno.`,
-                        `Añade la salsa de la casa y deja que reduzca 2 minutos.`,
+                        `AÃ±ade la salsa de la casa y deja que reduzca 2 minutos.`,
                         `Sirve inmediatamente y disfruta.`
                     ]
                 };
@@ -442,7 +442,7 @@ function updateEcoScore(kg) {
     }
 }
 
-// --- 4. Visión Artificial Refinada ---
+// --- 4. VisiÃ³n Artificial Refinada ---
 
 async function loadAI() {
     try {
@@ -478,16 +478,16 @@ async function handleScan(type, file) {
             const rawLabel = predictions[0].className.toLowerCase();
 
             setTimeout(() => {
-                t1.innerHTML = `<i class="fas fa-check"></i> Visión Computacional: ${type === 'ticket' ? 'Texto' : 'Objeto'} detectado`;
+                t1.innerHTML = `<i class="fas fa-check"></i> VisiÃ³n Computacional: ${type === 'ticket' ? 'Texto' : 'Objeto'} detectado`;
                 t2.innerText = "Razonando: Aplicando base de datos de caducidad para " + rawLabel.split(',')[0];
 
                 setTimeout(() => {
                     const name = rawLabel.split(',')[0].toUpperCase();
-                    t3.innerHTML = `Identificado: <b>${name}</b> | Caducidad Est: 5 días`;
+                    t3.innerHTML = `Identificado: <b>${name}</b> | Caducidad Est: 5 dÃ­as`;
 
                     setTimeout(() => {
                         overlay.style.display = 'none';
-                        addPantryItem(name, "📦", "5d");
+                        addPantryItem(name, "ð¦", "5d");
                         updateEcoScore(0.1);
                     }, 2000);
                 }, 1500);
@@ -510,7 +510,7 @@ function addPantryItem(name, icon, days) {
     pantryGrid.prepend(item);
 }
 
-// --- 5. Inicialización ---
+// --- 5. InicializaciÃ³n ---
 
 function startClock() {
     const timeDisplay = document.getElementById('current-time');
@@ -613,8 +613,8 @@ function addTuppersitos(amount) {
 
         if (newWidth >= 100) {
             newWidth = 10; 
-            levelBadge.innerText = `Próximo Nivel Desbloqueado`;
-            alert(`🎊 ¡NIVEL COMPLETADO! Has ganado ${amount} Tuppersitos. Tu impacto es increíble.`);
+            levelBadge.innerText = `PrÃ³ximo Nivel Desbloqueado`;
+            alert(`ð Â¡NIVEL COMPLETADO! Has ganado ${amount} Tuppersitos. Tu impacto es increÃ­ble.`);
         }
 
         xpBar.style.width = newWidth + '%';
@@ -632,7 +632,7 @@ function toggleDarkMode() {
 
 function handleLogout() {
     SoundEngine.back();
-    if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+    if (confirm('Â¿EstÃ¡s seguro de que quieres cerrar sesiÃ³n?')) {
         SoundEngine.stopAmbient();
         const phoneFrame = document.querySelector('.phone-frame');
         const mainApp = document.getElementById('main-app-content');
@@ -659,7 +659,7 @@ function saveProfile() {
     if (profileName) profileName.innerText = newName;
     if (profileBio) profileBio.innerText = newBio;
 
-    alert("✨ Perfil actualizado correctamente.");
+    alert("â¨ Perfil actualizado correctamente.");
     showScreen('profile');
 }
 
@@ -725,7 +725,7 @@ function updateCMStep(data) {
     stepNum.innerText = 'PASO ' + cmCurrentStep + ' DE ' + steps.length;
 
     stepTitle.innerText = steps[cmCurrentStep - 1];
-    stepDesc.innerText = 'Asistencia en tiempo real activada. La IA está monitoreando tus gestos para guiarte manos libres.';
+    stepDesc.innerText = 'Asistencia en tiempo real activada. La IA estÃ¡ monitoreando tus gestos para guiarte manos libres.';
 }
 
 function changeStep(delta) {
@@ -752,7 +752,7 @@ function startCMTimer(seconds) {
 
         if (timeLeft <= 0) {
             clearInterval(cmTimerInterval);
-            alert('⏰ ¡Tiempo del paso terminado!');
+            alert('â° Â¡Tiempo del paso terminado!');
         }
         timeLeft--;
     }, 1000);
@@ -828,14 +828,14 @@ function initTSAudio() {
             tsAudio.addEventListener('playing', function() {
                 var btn = document.getElementById('ts-play-btn');
                 var img = document.querySelector('.ts-album-art img');
-                if (btn) btn.textContent = '⏸';
+                if (btn) btn.textContent = 'â¸';
                 if (img) img.classList.remove('paused');
                 startTSProgress();
             });
             tsAudio.addEventListener('pause', function() {
                 var btn = document.getElementById('ts-play-btn');
                 var img = document.querySelector('.ts-album-art img');
-                if (btn) btn.textContent = '▶';
+                if (btn) btn.textContent = 'â¶';
                 if (img) img.classList.add('paused');
                 stopTSProgress();
             });
@@ -929,19 +929,19 @@ function showIOSNotification(title, message, delay = 0) {
         
         setTimeout(() => {
             notif.classList.remove('show');
-        }, 5500); // Ocultar después de 5.5s
+        }, 5500); // Ocultar despuÃ©s de 5.5s
     }, delay);
 }
 
 function simulateSmartNotifications() {
     showIOSNotification(
-        "Pantry Chef 🌱", 
-        "¡Ojo! Tus espinacas están a punto de ponerse malas. Haz este smoothie de 2 min.", 
+        "Pantry Chef ð±", 
+        "Â¡Ojo! Tus espinacas estÃ¡n a punto de ponerse malas. Haz este smoothie de 2 min.", 
         8000
     );
     showIOSNotification(
-        "Pantry Chef 👨‍🍳", 
-        "¿Día duro? Aquí tienes 3 cenas de Pantry Chef que se hacen en menos de 15 min.", 
+        "Pantry Chef ð¨âð³", 
+        "Â¿DÃ­a duro? AquÃ­ tienes 3 cenas de Pantry Chef que se hacen en menos de 15 min.", 
         23000
     );
     showIOSNotification(
@@ -1018,22 +1018,36 @@ function unlockPhone() {
     }
 }
 
-function updateLockTime() {
+
+function openCamera() {
+    SoundEngine.click();
+    alert('Cámara desactivada en esta simulación.');
+}
+
+
+function showPasscode() {
+    const cover = document.getElementById('ios-cover-screen');
+    if (cover) {
+        cover.classList.add('hidden');
+        SoundEngine.click();
+    }
+}
+
+// Actualizar ambos relojes
+function updateBothClocks() {
     const now = new Date();
     const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-    const lockTime = document.querySelector('.lock-time');
-    if (lockTime) lockTime.innerText = timeStr;
+    const day = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'][now.getDay()];
+    const date = now.getDate();
+    const month = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'][now.getMonth()];
     
-    // Update status bar time too
+    document.querySelectorAll('.lock-time').forEach(el => el.innerText = timeStr);
+    document.querySelectorAll('.lock-date').forEach(el => el.innerText = `${day}, ${date} de ${month}`);
+    
     const statusTime = document.querySelector('.status-left span');
     if (statusTime) statusTime.innerText = timeStr;
 }
 
-setInterval(updateLockTime, 60000);
-updateLockTime();
-
-function openCamera() {
-    SoundEngine.click();
-    alert('C mara desactivada en esta simulaci n.');
-}
+setInterval(updateBothClocks, 60000);
+updateBothClocks();
 
