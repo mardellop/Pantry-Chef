@@ -206,7 +206,6 @@ body {
     min-width: 0;
 }
 
-/* Let's actually follow "ponlo de la forma en la que mejor quede". Vertical stack inside card might be better for 2-col grid */
 .challenge-card {
     display: flex;
     flex-direction: column;
