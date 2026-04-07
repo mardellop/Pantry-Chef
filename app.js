@@ -2,7 +2,7 @@
 
 let net; // Global placeholder for AI Model (TensorFlow.js)
 
-// --- 1. AutenticaciÃ³n y Flujo de Entrada ---
+// --- 1. Autenticación y Flujo de Entrada ---
 
 function showLoginForm() {
     SoundEngine.click();
