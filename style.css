@@ -3204,7 +3204,7 @@ input:checked+.slider {
     position: absolute;
     inset: 0;
     z-index: 10000;
-    background: url("../../brain/fac403e3-a91e-4e64-9e2d-1abfd1e98c6c/ios_wallpaper_clean_mountain_1775582002396.png") no-repeat center center;
+    background: url("wallpaper.png") no-repeat center center;
     background-size: cover;
     display: flex;
     flex-direction: column;
@@ -3352,7 +3352,7 @@ input:checked+.slider {
     position: absolute;
     inset: 0;
     z-index: 10001;
-    background: url("../../brain/fac403e3-a91e-4e64-9e2d-1abfd1e98c6c/ios_wallpaper_clean_mountain_1775582002396.png") no-repeat center center;
+    background: url("wallpaper.png") no-repeat center center;
     background-size: cover;
     display: flex;
     flex-direction: column;
