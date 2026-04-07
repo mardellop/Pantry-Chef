@@ -760,24 +760,41 @@ function startCMTimer(seconds) {
 
 // --- 9. REAL-TIME CLOCK LOGIC (Madrid Time) ---
 
-function updateClock() {
+function updateBothClocks() {
     const timeElement = document.getElementById("current-time");
-    if (!timeElement) return;
+    const lockTimes = document.querySelectorAll('.lock-time');
+    const lockDates = document.querySelectorAll('.lock-date');
 
-    // Use Madrid timezone as requested
-    const madridTime = new Date().toLocaleTimeString("es-ES", {
+    const now = new Date();
+    
+    // Madrid Timezone
+    const timeOptions = {
         timeZone: "Europe/Madrid",
         hour: "2-digit",
         minute: "2-digit",
         hour12: false
-    });
+    };
 
-    timeElement.innerText = madridTime;
+    const dateOptions = {
+        timeZone: "Europe/Madrid",
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long'
+    };
+
+    const timeStr = now.toLocaleTimeString("es-ES", timeOptions);
+    const dateStrRaw = now.toLocaleDateString("es-ES", dateOptions);
+    const dateStr = dateStrRaw.charAt(0).toUpperCase() + dateStrRaw.slice(1);
+
+    if (timeElement) timeElement.innerText = timeStr;
+    lockTimes.forEach(el => el.innerText = timeStr);
+    lockDates.forEach(el => el.innerText = dateStr);
 }
 
-// Start the clock and update periodically
-setInterval(updateClock, 1000);
-updateClock();
+// Initial update and interval
+updateBothClocks();
+setInterval(updateBothClocks, 1000);
+
 
 // --- 10. KITCHEN SOUND TOGGLE CONTROLLER ---
 
@@ -1034,20 +1051,6 @@ function showPasscode() {
 }
 
 // Actualizar ambos relojes
-function updateBothClocks() {
-    const now = new Date();
-    const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-    const day = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'][now.getDay()];
-    const date = now.getDate();
-    const month = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'][now.getMonth()];
-    
-    document.querySelectorAll('.lock-time').forEach(el => el.innerText = timeStr);
-    document.querySelectorAll('.lock-date').forEach(el => el.innerText = `${day}, ${date} de ${month}`);
-    
-    const statusTime = document.querySelector('.status-left span');
-    if (statusTime) statusTime.innerText = timeStr;
-}
+// End of Script
 
-setInterval(updateBothClocks, 60000);
-updateBothClocks();
 
