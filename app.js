@@ -2,7 +2,7 @@
 
 let net; // Global placeholder for AI Model (TensorFlow.js)
 
-// --- 1. AutenticaciÃ³n y Flujo de Entrada ---
+// --- 1. Autenticación y Flujo de Entrada ---
 
 function showLoginForm() {
     SoundEngine.click();
@@ -34,25 +34,26 @@ function handleAuth() {
     const pass = document.getElementById('user-pass').value;
 
     if (!email || !pass) {
-        alert("Por favor, rellena tu correo y contraseÃ±a.");
+        alert("Por favor, rellena tu correo y contraseña.");
         return;
     }
 
     const authScreen = document.getElementById('auth-screen');
     const mainApp = document.getElementById('main-app-content');
+    const phoneFrame = document.querySelector('.phone-frame');
 
     SoundEngine.welcome();
     authScreen.classList.add('hidden');
 
     setTimeout(() => {
-        mainApp.classList.add('visible');
-        // Start ambient kitchen sounds when entering the app
-        // setTimeout(() => SoundEngine.startAmbient(), 800); // Ambient sound disabled per user request
+        phoneFrame.classList.add('in-app');
+        mainApp.style.display = 'flex';
+        setTimeout(() => mainApp.classList.add('visible'), 50);
         setTimeout(() => startTaylorSwiftSong(), 800);
     }, 400);
 }
 
-// --- 2. NavegaciÃ³n Principal & "Dish" Logic ---
+// --- 2. Navegación Principal & "Dish" Logic ---
 
 function showScreen(screenId) {
     document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
@@ -60,7 +61,8 @@ function showScreen(screenId) {
     if (screenId === 'home') navItems[0].classList.add('active');
     if (screenId === 'pantry') navItems[1].classList.add('active');
     if (screenId === 'cart') navItems[2].classList.add('active');
-    if (screenId === 'profile' || screenId === 'settings' || screenId === 'profile-edit') navItems[3].classList.add('active');
+    if (screenId === 'points') navItems[3].classList.add('active');
+    if (screenId === 'profile' || screenId === 'settings' || screenId === 'profile-edit') navItems[4].classList.add('active');
 
     document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
     const target = document.getElementById('screen-' + screenId);
@@ -134,7 +136,7 @@ const recipesDB = {
         time: 45,
         ingredients: ['Lentejas', 'Zanahoria', 'Cebolla', 'Caldo de Verduras', 'Laurel'],
         utensils: ['Olla Express', 'Cuchara'],
-        steps: ['SofreÃ­r verduras.', 'AÃ±adir lentejas y caldo.', 'Cocer 30 min.']
+        steps: ['Sofreír verduras.', 'Añadir lentejas y caldo.', 'Cocer 30 min.']
     }
 };
 
@@ -222,9 +224,9 @@ function startCooking() {
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
             btn.style.background = 'var(--primary)';
-            btn.innerHTML = `<i class="fas fa-check"></i> Â¡LISTO!`;
+            btn.innerHTML = `<i class="fas fa-check"></i> ¡LISTO!`;
             btn.disabled = false;
-            alert("â° Â¡Tiempo terminado! Â¡A disfrutar!");
+            alert("⏰ ¡Tiempo terminado! ¡A disfrutar!");
         }
         timeLeft--;
     };
@@ -235,14 +237,14 @@ function startCooking() {
 }
 
 function syncWithPantry() {
-    alert("ðŸ”„ Sincronizando con 'La Despensa'...\n\nHecho: Se han eliminado de la lista 2 artÃ­culos que ya tienes. Se han actualizado las cantidades necesarias para tus recetas de la semana.");
+    alert("🔄 Sincronizando con 'La Despensa'...\n\nHecho: Se han eliminado de la lista 2 artículos que ya tienes. Se han actualizado las cantidades necesarias para tus recetas de la semana.");
 }
 
 function calculateOptimizedRoute() {
     const overlay = document.getElementById('route-overlay');
     if (overlay) {
         overlay.style.display = 'flex';
-        console.log("Calculando ruta de mÃ­nima huella de carbono...");
+        console.log("Calculando ruta de mínima huella de carbono...");
     }
 }
 
@@ -252,7 +254,7 @@ function closeRoute() {
 }
 
 function openStore(name) {
-    alert(`ðŸª Abriendo Marketplace de ${name}...\n\nAquÃ­ puedes ver el pasillo exacto de cada producto para ahorrar tiempo.`);
+    alert(`🏪 Abriendo Marketplace de ${name}...\n\nAquí puedes ver el pasillo exacto de cada producto para ahorrar tiempo.`);
 }
 
 function openChallenge(name) {
@@ -295,7 +297,7 @@ function nextStep() {
         currentStep++;
         updateStepper();
     } else {
-        alert("ðŸŽ‰ Â¡Plato completado! Has ahorrado 0.4kg de CO2. Â¡Comparte tu logro!");
+        alert("🎉 ¡Plato completado! Has ahorrado 0.4kg de CO2. ¡Comparte tu logro!");
     }
 }
 
@@ -305,11 +307,11 @@ function updateStepper() {
     const progress = document.querySelector('.progress-bar');
 
     const steps = [
-        "Hierve 2L de agua con sal. La IA detectarÃ¡ el hervor.",
-        "AÃ±ade la pasta y activa el temporizador sincronizado (8min).",
+        "Hierve 2L de agua con sal. La IA detectará el hervor.",
+        "Añade la pasta y activa el temporizador sincronizado (8min).",
         "Saltea los ingredientes rescatados en una sartén con AOVE.",
-        "Escurre la pasta y mÃ©zclala con la base IA-PrimavIA.",
-        "Emplata y decora con albahaca fresca. Â¡Listo!"
+        "Escurre la pasta y mézclala con la base IA-PrimavIA.",
+        "Emplata y decora con albahaca fresca. ¡Listo!"
     ];
 
     if (stepNum) stepNum.innerText = `PASO ${currentStep} DE 5`;
@@ -323,10 +325,10 @@ function resetStepper() {
 }
 
 function simulateSocialUpdates() {
-    console.log("Actualizando feed social con mÃ©tricas dinÃ¡micas...");
+    console.log("Actualizando feed social con métricas dinámicas...");
 }
 
-// --- 3. LÃ³gica de "La Despensa" (Smart Prep) ---
+// --- 3. Lógica de "La Despensa" (Smart Prep) ---
 
 function toggleItem(element) {
     SoundEngine.tick();
@@ -355,11 +357,11 @@ function toggleFABMenu() {
 
 function simulateVoiceInput() {
     toggleFABMenu();
-    const voiceInput = prompt("Dile a Pantry Chef quÃ© has comprado (ej: 'He comprado 2 kilos de manzanas y un cartÃ³n de leche'):");
+    const voiceInput = prompt("Dile a Pantry Chef qué has comprado (ej: 'He comprado 2 kilos de manzanas y un cartón de leche'):");
     if (voiceInput) {
-        alert("Procesando nota de voz con NLP... ðŸŽ™ï¸\n\nIdentificado: Manzanas (14 dÃ­as), Leche (7 dÃ­as).");
-        addPantryItem("Manzanas", "ðŸŽ", "14d");
-        addPantryItem("Leche", "ðŸ¥›", "7d");
+        alert("Procesando nota de voz con NLP... 🎙️\n\nIdentificado: Manzanas (14 días), Leche (7 días).");
+        addPantryItem("Manzanas", "🍎", "14d");
+        addPantryItem("Leche", "🥛", "7d");
         updateEcoScore(0.5); // Feedback de ahorro
     }
 }
@@ -375,7 +377,7 @@ async function generateSmartRecipe() {
     });
 
     if (activeItems.length === 0) {
-        alert("Â¡Eh, Chef! Selecciona al menos un ingrediente para hacer magia. âœ¨");
+        alert("¡Eh, Chef! Selecciona al menos un ingrediente para hacer magia. ✨");
         return;
     }
 
@@ -440,7 +442,7 @@ function updateEcoScore(kg) {
     }
 }
 
-// --- 4. VisiÃ³n Artificial Refinada ---
+// --- 4. Visión Artificial Refinada ---
 
 async function loadAI() {
     try {
@@ -476,16 +478,16 @@ async function handleScan(type, file) {
             const rawLabel = predictions[0].className.toLowerCase();
 
             setTimeout(() => {
-                t1.innerHTML = `<i class="fas fa-check"></i> VisiÃ³n Computacional: ${type === 'ticket' ? 'Texto' : 'Objeto'} detectado`;
+                t1.innerHTML = `<i class="fas fa-check"></i> Visión Computacional: ${type === 'ticket' ? 'Texto' : 'Objeto'} detectado`;
                 t2.innerText = "Razonando: Aplicando base de datos de caducidad para " + rawLabel.split(',')[0];
 
                 setTimeout(() => {
                     const name = rawLabel.split(',')[0].toUpperCase();
-                    t3.innerHTML = `Identificado: <b>${name}</b> | Caducidad Est: 5 dÃ­as`;
+                    t3.innerHTML = `Identificado: <b>${name}</b> | Caducidad Est: 5 días`;
 
                     setTimeout(() => {
                         overlay.style.display = 'none';
-                        addPantryItem(name, "ðŸ“¦", "5d");
+                        addPantryItem(name, "📦", "5d");
                         updateEcoScore(0.1);
                     }, 2000);
                 }, 1500);
@@ -508,7 +510,7 @@ function addPantryItem(name, icon, days) {
     pantryGrid.prepend(item);
 }
 
-// --- 5. InicializaciÃ³n ---
+// --- 5. Inicialización ---
 
 function startClock() {
     const timeDisplay = document.getElementById('current-time');
@@ -615,14 +617,13 @@ function addXP(amount) {
             let level = parseInt(levelBadge.innerText.match(/\d+/)[0]);
             levelBadge.innerText = `Chef Nivel ${level + 1}`;
             finalXP = 200;
-            alert(`ðŸŽŠ Â¡SUBIDA DE NIVEL! Ahora eres Chef Nivel ${level + 1}. Tu compromiso con el planeta es imparable.`);
+            alert(`🎊 ¡SUBIDA DE NIVEL! Ahora eres Chef Nivel ${level + 1}. Tu compromiso con el planeta es imparable.`);
         }
 
         xpBar.style.width = newWidth + '%';
         xpText.innerText = `${finalXP.toLocaleString('de-DE')} / 2.000 XP`;
     }
 }
-
 function toggleDarkMode() {
     const phoneFrame = document.querySelector('.phone-frame');
     if (phoneFrame) {
@@ -636,8 +637,12 @@ function handleLogout() {
     SoundEngine.back();
     if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
         SoundEngine.stopAmbient();
-        document.getElementById('main-app-content').classList.remove('visible');
+        const phoneFrame = document.querySelector('.phone-frame');
+        const mainApp = document.getElementById('main-app-content');
+        mainApp.classList.remove('visible');
+        phoneFrame.classList.remove('in-app');
         setTimeout(() => {
+            mainApp.style.display = 'none';
             document.getElementById('auth-screen').classList.remove('hidden');
             document.getElementById('auth-fields').style.display = 'none';
             document.getElementById('auth-actions').style.display = 'flex';
@@ -657,11 +662,9 @@ function saveProfile() {
     if (profileName) profileName.innerText = newName;
     if (profileBio) profileBio.innerText = newBio;
 
-    alert("âœ¨ Perfil actualizado correctamente.");
+    alert("✨ Perfil actualizado correctamente.");
     showScreen('profile');
 }
-
-
 
 // --- 8. SMART CART & COOKING MODE LOGIC ---
 
@@ -725,7 +728,7 @@ function updateCMStep(data) {
     stepNum.innerText = 'PASO ' + cmCurrentStep + ' DE ' + steps.length;
 
     stepTitle.innerText = steps[cmCurrentStep - 1];
-    stepDesc.innerText = 'Asistencia en tiempo real activada. La IA estÃ¡ monitoreando tus gestos para guiarte manos libres.';
+    stepDesc.innerText = 'Asistencia en tiempo real activada. La IA está monitoreando tus gestos para guiarte manos libres.';
 }
 
 function changeStep(delta) {
@@ -752,12 +755,11 @@ function startCMTimer(seconds) {
 
         if (timeLeft <= 0) {
             clearInterval(cmTimerInterval);
-            alert('â° Â¡Tiempo del paso terminado!');
+            alert('⏰ ¡Tiempo del paso terminado!');
         }
         timeLeft--;
     }, 1000);
 }
-
 
 // --- 9. REAL-TIME CLOCK LOGIC (Madrid Time) ---
 
@@ -780,14 +782,8 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-
-
 // --- 10. KITCHEN SOUND TOGGLE CONTROLLER ---
 
-/**
- * Handles the floating sound toggle button.
- * Syncs visual state (waveform / mute icon / badge) with SoundEngine.
- */
 function handleSoundToggle() {
     var btn   = document.getElementById('sound-toggle-btn');
     var badge = document.getElementById('sound-badge');
@@ -802,10 +798,6 @@ function handleSoundToggle() {
     }
 }
 
-/**
- * Keeps the sound-toggle button hidden on the auth screen,
- * then reveals it once the user is inside the app.
- */
 document.addEventListener('DOMContentLoaded', function() {
     var soundBtn = document.getElementById('sound-toggle-btn');
     if (soundBtn) soundBtn.style.display = 'none';
@@ -822,7 +814,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     if (mainApp) observer.observe(mainApp, { attributes: true, attributeFilter: ['class'] });
 });
-
 
 // --- 11. TAYLOR SWIFT NATIVE MUSIC PLAYER (The Fate of Ophelia) ---
 
@@ -926,4 +917,73 @@ function stopTSProgress() {
         clearInterval(tsProgressInterval);
         tsProgressInterval = null;
     }
+}
+
+// --- 12. PUSH NOTIFICATIONS (iOS Style) ---
+
+function showIOSNotification(title, message, delay = 0) {
+    setTimeout(() => {
+        SoundEngine.ding(); // Reproducir sonido corto
+        const notif = document.getElementById('ios-notification');
+        document.getElementById('ios-notif-title').innerText = title;
+        document.getElementById('ios-notif-msg').innerText = message;
+        
+        notif.classList.add('show');
+        
+        setTimeout(() => {
+            notif.classList.remove('show');
+        }, 5500); // Ocultar después de 5.5s
+    }, delay);
+}
+
+function simulateSmartNotifications() {
+    showIOSNotification(
+        "Pantry Chef 🌱", 
+        "¡Ojo! Tus espinacas están a punto de ponerse malas. Haz este smoothie de 2 min.", 
+        8000
+    );
+    showIOSNotification(
+        "Pantry Chef 👨‍🍳", 
+        "¿Día duro? Aquí tienes 3 cenas de Pantry Chef que se hacen en menos de 15 min.", 
+        23000
+    );
+    showIOSNotification(
+        "Comunidad Pantry Chef", 
+        "Sube una foto de los platos que has elaborado hoy y gana 500 Puntos de Sostenibilidad.", 
+        38000 
+    );
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var mainApp = document.getElementById('main-app-content');
+    var observer = new MutationObserver(function() {
+        if (mainApp && mainApp.classList.contains('visible')) {
+            if (!window.notifsTriggered) {
+                simulateSmartNotifications();
+                window.notifsTriggered = true;
+            }
+        }
+    });
+    if (mainApp) observer.observe(mainApp, { attributes: true, attributeFilter: ['class'] });
+});
+
+// --- 13. APP ENTRY TRANSITION ---
+
+function openApp() {
+    SoundEngine.click();
+    const homeScreen = document.getElementById('ios-home-screen');
+    const authScreen = document.getElementById('auth-screen');
+    const phoneFrame = document.querySelector('.phone-frame');
+
+    homeScreen.style.transform = 'scale(1.5)';
+    homeScreen.style.opacity = '0';
+    document.querySelector('.status-bar').style.color = '#000';
+
+    setTimeout(() => {
+        homeScreen.style.display = 'none';
+        authScreen.style.display = 'flex';
+        setTimeout(() => {
+            authScreen.style.opacity = '1';
+        }, 50);
+    }, 400);
 }
