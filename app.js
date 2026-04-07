@@ -597,31 +597,28 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.files.length > 0) handleScan('food', e.target.files[0]);
     });
 });
-
-function addXP(amount) {
-    SoundEngine.confirm();
+function addTuppersitos(amount) {
+    SoundEngine.click();
     const xpBar = document.querySelector('.xp-bar-progress');
     const xpText = document.querySelector('.xp-text');
     const levelBadge = document.getElementById('chef-level');
 
     if (xpBar && xpText && levelBadge) {
-        let currentWidth = parseFloat(xpBar.style.width) || 65;
-        let newWidth = currentWidth + (amount / 40); // Ajuste de sensibilidad
+        let currentWidth = parseFloat(xpBar.style.width) || 50;
+        let newWidth = currentWidth + (amount / 30); // Adjusted for Tuppersitos sensitivity
 
-        let currentXPText = xpText.innerText.split(' / ')[0].replace('.', '');
-        let currentXP = parseInt(currentXPText) || 1250;
-        let finalXP = currentXP + amount;
+        let currentPtsText = xpText.innerText.split(' / ')[0].replace('.', '');
+        let currentPts = parseInt(currentPtsText) || 750;
+        let finalPts = currentPts + amount;
 
         if (newWidth >= 100) {
-            newWidth = 10; // Reset para el siguiente nivel
-            let level = parseInt(levelBadge.innerText.match(/\d+/)[0]);
-            levelBadge.innerText = `Chef Nivel ${level + 1}`;
-            finalXP = 200;
-            alert(`🎊 ¡SUBIDA DE NIVEL! Ahora eres Chef Nivel ${level + 1}. Tu compromiso con el planeta es imparable.`);
+            newWidth = 10; 
+            levelBadge.innerText = `Próximo Nivel Desbloqueado`;
+            alert(`🎊 ¡NIVEL COMPLETADO! Has ganado ${amount} Tuppersitos. Tu impacto es increíble.`);
         }
 
         xpBar.style.width = newWidth + '%';
-        xpText.innerText = `${finalXP.toLocaleString('de-DE')} / 2.000 XP`;
+        xpText.innerText = `${finalPts.toLocaleString('de-DE')} / 1.500 Tuppersitos`;
     }
 }
 function toggleDarkMode() {
@@ -955,16 +952,7 @@ function simulateSmartNotifications() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    var mainApp = document.getElementById('main-app-content');
-    var observer = new MutationObserver(function() {
-        if (mainApp && mainApp.classList.contains('visible')) {
-            if (!window.notifsTriggered) {
-                simulateSmartNotifications();
-                window.notifsTriggered = true;
-            }
-        }
-    });
-    if (mainApp) observer.observe(mainApp, { attributes: true, attributeFilter: ['class'] });
+    simulateSmartNotifications();
 });
 
 // --- 13. APP ENTRY TRANSITION ---
@@ -987,3 +975,65 @@ function openApp() {
         }, 50);
     }, 400);
 }
+// --- 14. iOS LOCK SCREEN LOGIC ---
+let passcode = [];
+function enterDigit(digit) {
+    if (passcode.length < 4) {
+        passcode.push(digit);
+        updatePasscodeDots();
+        SoundEngine.click();
+        
+        if (passcode.length === 4) {
+            setTimeout(unlockPhone, 300);
+        }
+    }
+}
+
+function deleteDigit() {
+    passcode.pop();
+    updatePasscodeDots();
+    SoundEngine.back();
+}
+
+function updatePasscodeDots() {
+    const dots = document.querySelectorAll('#passcode-dots .dot');
+    dots.forEach((dot, index) => {
+        if (index < passcode.length) {
+            dot.classList.add('filled');
+        } else {
+            dot.classList.remove('filled');
+        }
+    });
+}
+
+function unlockPhone() {
+    const lockScreen = document.getElementById('ios-lock-screen');
+    lockScreen.classList.add('unlocked');
+    SoundEngine.confirm();
+    
+    // Al desbloquear, podemos disparar las notificaciones si es la primera vez
+    if (!window.notifsTriggered) {
+        setTimeout(simulateSmartNotifications, 2000);
+        window.notifsTriggered = true;
+    }
+}
+
+function updateLockTime() {
+    const now = new Date();
+    const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+    const lockTime = document.querySelector('.lock-time');
+    if (lockTime) lockTime.innerText = timeStr;
+    
+    // Update status bar time too
+    const statusTime = document.querySelector('.status-left span');
+    if (statusTime) statusTime.innerText = timeStr;
+}
+
+setInterval(updateLockTime, 60000);
+updateLockTime();
+
+function openCamera() {
+    SoundEngine.click();
+    alert('C mara desactivada en esta simulaci n.');
+}
+
