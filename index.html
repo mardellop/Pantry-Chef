@@ -28,8 +28,91 @@
             </div>
         </div>
 
+        <!-- iOS Style Notification -->
+        <div id="ios-notification" class="ios-notification">
+            <div class="ios-notif-header">
+                <img src="https://github.com/mardellop/Pantry-Chef/blob/main/PantryChef%20Logo.png?raw=true" alt="Icon" class="ios-notif-icon">
+                <span class="ios-notif-app">Pantry Chef</span>
+                <span class="ios-notif-time">ahora</span>
+            </div>
+            <div class="ios-notif-body">
+                <h4 id="ios-notif-title">Notificación</h4>
+                <p id="ios-notif-msg">Mensaje de notificación</p>
+            </div>
+        </div>
+
+        <!-- iOS Home Screen -->
+        <div id="ios-home-screen" class="ios-home-screen">
+            <div class="ios-home-search">
+                <i class="fas fa-search"></i> Buscar apps...
+            </div>
+            
+            <div class="ios-app-grid">
+                <!-- Row 1 -->
+                <div class="ios-app-icon">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" 
+                         onerror="this.src='https://cdn-icons-png.flaticon.com/512/733/733585.png'" alt="WhatsApp">
+                    <span>WhatsApp</span>
+                </div>
+                <div class="ios-app-icon">
+                    <img src="instagram_icon.png" alt="Instagram">
+                    <span>Instagram</span>
+                </div>
+                <div class="ios-app-icon">
+                    <img src="gmail_icon.png" alt="Gmail">
+                    <span>Gmail</span>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="ios-app-icon">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/512px-Spotify_logo_without_text.svg.png" 
+                         onerror="this.src='https://cdn-icons-png.flaticon.com/512/174/174872.png'" alt="Spotify">
+                    <span>Spotify</span>
+                </div>
+                <!-- Our App (Centered in Row 2) -->
+                <div class="ios-app-icon" onclick="openApp()" style="transform: scale(1.1); z-index: 10;">
+                    <img src="https://github.com/mardellop/Pantry-Chef/blob/main/PantryChef%20Logo.png?raw=true" 
+                         style="background:#fff; box-shadow: 0 4px 10px rgba(0,0,0,0.3); object-fit: contain; padding: 4px;" alt="Pantry Chef">
+                    <span style="font-size: 11px; font-weight: 800; color: #FFD25A; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">Pantry Chef</span>
+                </div>
+                <div class="ios-app-icon">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a9/TikTok_logo.svg/512px-TikTok_logo.svg.png" 
+                         onerror="this.src='https://cdn-icons-png.flaticon.com/512/3046/3046121.png'" alt="TikTok">
+                    <span>TikTok</span>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="ios-app-icon">
+                    <img src="foto_icon.png" alt="Fotos">
+                    <span>Fotos</span>
+                </div>
+                <div class="ios-app-icon">
+                    <img src="camara_icon.png" alt="Cámara">
+                    <span>Cámara</span>
+                </div>
+                <div class="ios-app-icon">
+                    <img src="ajustes_icon.png" alt="Ajustes">
+                    <span>Ajustes</span>
+                </div>
+            </div>
+
+
+
+            <div class="ios-dock">
+                <div class="ios-app-icon">
+                    <img src="telefono.png" alt="Teléfono">
+                </div>
+                <div class="ios-app-icon">
+                    <img src="safari-icon.png" alt="Safari">
+                </div>
+                <div class="ios-app-icon">
+                    <img src="Apple_Music_icon.svg.png" alt="Música">
+                </div>
+            </div>
+        </div>
+
         <!-- Auth / Welcome Flow -->
-        <div id="auth-screen" class="splash-screen">
+        <div id="auth-screen" class="splash-screen" style="display: none; opacity: 0;">
             <img src="https://raw.githubusercontent.com/mardellop/Pantry-Chef/main/PantryChef%20Logo.png"
                 alt="Pantry Chef Logo" class="auth-logo">
 
@@ -55,7 +138,7 @@
         </div>
 
         <!-- Main App Content (Hidden until Auth) -->
-        <div id="main-app-content" class="app-content-container">
+        <div id="main-app-content" class="app-content-container" style="display: none;">
 
             <div class="app-container">
                 <!-- Screen 1: Dashboard -->
@@ -594,6 +677,39 @@
                     </div>
                 </section>
 
+                <!-- Screen Puntos -->
+                <section id="screen-points" class="screen">
+                    <div class="header" style="text-align: center; margin-bottom: 30px;">
+                        <h1>Programa de Puntos</h1>
+                        <p style="color: #666;">Canjea tus Eco-Puntos por recompensas.</p>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card" style="grid-column: span 2; background: linear-gradient(135deg, var(--primary) 0%, #3e8e63 100%); color: white;">
+                            <i class="fas fa-star" style="font-size: 24px; margin-bottom: 10px;"></i>
+                            <h3 style="font-size: 28px; color: white;">1,250 Puntos</h3>
+                            <p style="color: rgba(255,255,255,0.8);">Nivel Actual: Chef</p>
+                        </div>
+                    </div>
+                    
+                    <h3 style="margin: 20px 0 15px;">Tus Recompensas</h3>
+                    <div class="list-container">
+                        <div class="list-item" style="display: flex; justify-content: space-between; align-items: center; padding: 15px;">
+                            <div>
+                                <h4 style="margin: 0; font-size: 16px;">Descuento 10% en Cooperativa</h4>
+                                <p style="margin: 5px 0 0; font-size: 12px; color: #888;">Cuesta: 500 Puntos</p>
+                            </div>
+                            <button class="btn-primary" style="padding: 8px 12px; font-size: 12px; width: auto;">Canjear</button>
+                        </div>
+                        <div class="list-item" style="display: flex; justify-content: space-between; align-items: center; padding: 15px;">
+                            <div>
+                                <h4 style="margin: 0; font-size: 16px;">Envío gratis Mercadona</h4>
+                                <p style="margin: 5px 0 0; font-size: 12px; color: #888;">Cuesta: 1,000 Puntos</p>
+                            </div>
+                            <button class="btn-primary" style="padding: 8px 12px; font-size: 12px; width: auto;">Canjear</button>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Screen 5: Profile (Personal Impact Hub) -->
                 <section id="screen-profile" class="screen">
                     <div class="profile-header" style="text-align: center; margin-bottom: 30px;">
@@ -836,7 +952,7 @@
                 </section>
             </div>
 
-            <!-- Navigation Bar -->
+            <!-- Navigation Bar (Bottom) -->
             <nav class="nav-bar">
                 <div class="nav-item active" onclick="SoundEngine.click(); showScreen('home')">
                     <i class="fas fa-utensils"></i>
@@ -849,6 +965,10 @@
                 <div class="nav-item" onclick="SoundEngine.click(); showScreen('cart')">
                     <i class="fas fa-shopping-basket"></i>
                     <span>Carrito</span>
+                </div>
+                <div class="nav-item" onclick="SoundEngine.click(); showScreen('points')">
+                    <i class="fas fa-star"></i>
+                    <span>Puntos</span>
                 </div>
                 <div class="nav-item" onclick="SoundEngine.click(); showScreen('profile')">
                     <i class="fas fa-user"></i>
