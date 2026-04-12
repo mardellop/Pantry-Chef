@@ -137,7 +137,7 @@ const SoundEngine = (() => {
 
         // Haptic Feedback for the ingredient tick (Increased for better feel)
         if ('vibrate' in navigator) {
-            navigator.vibrate(20); 
+            navigator.vibrate([40, 60, 40]);
         }
     }
 
