@@ -74,6 +74,16 @@ function showScreen(screenId) {
         if (screenId !== 'recipe') {
             SoundEngine.stopZen();
         }
+
+        // Pantry Disclaimer / Notification
+        if (screenId === 'pantry') {
+            showIOSNotification(
+                "Tip de Despensa ðŸŒ±", 
+                "Esa lata de garbanzos olvidada tiene potencial para convertirse en un hummus casero. Â¡Vamos a rescatarla!", 
+                600,
+                12000
+            );
+        }
     }
 }
 
@@ -966,7 +976,7 @@ function stopTSProgress() {
 
 // --- 12. PUSH NOTIFICATIONS (iOS Style) ---
 
-function showIOSNotification(title, message, delay = 0) {
+function showIOSNotification(title, message, delay = 0, duration = 5500) {
     setTimeout(() => {
         SoundEngine.ding(); // Reproducir sonido corto
         const notif = document.getElementById('ios-notification');
@@ -977,7 +987,7 @@ function showIOSNotification(title, message, delay = 0) {
         
         setTimeout(() => {
             notif.classList.remove('show');
-        }, 5500); // Ocultar despuÃ©s de 5.5s
+        }, duration); 
     }, delay);
 }
 
@@ -1087,4 +1097,5 @@ function showPasscode() {
 
 // Actualizar ambos relojes
 // End of Script
+
 
