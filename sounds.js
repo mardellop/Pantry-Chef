@@ -193,6 +193,138 @@ const SoundEngine = (() => {
         });
     }
 
+    /**
+     * Single knife chop — a sharp metallic slice and wooden thud.
+     */
+    function playChop() {
+        const ac = getCtx();
+        const now = ac.currentTime;
+        
+        // Randomize slightly for organic feel
+        const pitchVar = 0.85 + Math.random() * 0.3; 
+        const volVar = 0.9 + Math.random() * 0.2;
+
+        // 1. SHARP TRANSIENT (The blade hitting the surface)
+        const clickG = createGain(uiVolume * 0.7 * volVar);
+        const clickBuf = createNoiseBuffer(0.02);
+        const clickSrc = ac.createBufferSource();
+        clickSrc.buffer = clickBuf;
+        const clickFilter = ac.createBiquadFilter();
+        clickFilter.type = 'highpass';
+        clickFilter.frequency.value = 4000 * pitchVar;
+        clickSrc.connect(clickFilter);
+        clickFilter.connect(clickG);
+        clickG.gain.setValueAtTime(uiVolume * 0.7 * volVar, now);
+        clickG.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
+        clickSrc.start(now);
+
+        // 2. WOOD RESONANCE (The hollow sound of the board)
+        const woodG = createGain(uiVolume * 0.5 * volVar);
+        const woodBuf = createNoiseBuffer(0.06);
+        const woodSrc = ac.createBufferSource();
+        woodSrc.buffer = woodBuf;
+        const woodFilter = ac.createBiquadFilter();
+        woodFilter.type = 'bandpass';
+        woodFilter.frequency.value = 600 * pitchVar;
+        woodFilter.Q.value = 1.5;
+        woodSrc.connect(woodFilter);
+        woodFilter.connect(woodG);
+        woodG.gain.setValueAtTime(uiVolume * 0.5 * volVar, now);
+        woodG.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+        woodSrc.start(now);
+
+        // 3. METALLIC TING (The blade's steel ringing)
+        const tingG = createGain(uiVolume * 0.2 * volVar);
+        const tingOsc = ac.createOscillator();
+        tingOsc.type = 'sine';
+        tingOsc.frequency.setValueAtTime(7500 * pitchVar, now);
+        tingOsc.connect(tingG);
+        tingG.gain.setValueAtTime(uiVolume * 0.2, now);
+        tingG.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+        tingOsc.start(now);
+        tingOsc.stop(now + 0.04);
+
+        // 4. DEEP BOARD THUD (The mass of the wood)
+        const thudG = createGain(uiVolume * 0.4 * volVar);
+        const thudOsc = ac.createOscillator();
+        thudOsc.type = 'triangle';
+        thudOsc.frequency.setValueAtTime(140 * pitchVar, now);
+        thudOsc.frequency.exponentialRampToValueAtTime(80, now + 0.06);
+        thudOsc.connect(thudG);
+        thudG.gain.setValueAtTime(uiVolume * 0.4, now);
+        thudG.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+        thudOsc.start(now);
+        thudOsc.stop(now + 0.1);
+
+        // Haptic Feedback for the chop
+        if ('vibrate' in navigator) {
+            navigator.vibrate(10); // Short micro-vibration
+        }
+    }
+
+    /**
+     * Kitchen Timer Ding — Metallic, resonant chime with a vibrant tail.
+     * Simulates the "food is ready" bell.
+     */
+    function playTimerDing() {
+        const ac = getCtx();
+        const now = ac.currentTime;
+        const duration = 1.8;
+
+        // Base frequency for the chime
+        const baseFreq = 1600;
+
+        // 1. Chime Components (Additive synthesis for metallic timbre)
+        // Harmonics: Fundamental, slightly off-purity for character
+        const frequencies = [baseFreq, baseFreq * 1.5, baseFreq * 2.1, baseFreq * 2.8, baseFreq * 3.5];
+        const initialGains = [0.4, 0.2, 0.15, 0.1, 0.05];
+
+        frequencies.forEach((f, i) => {
+            const g = createGain(0);
+            const osc = ac.createOscillator();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(f, now);
+            
+            // Add slight vibration (beating) to the fundamental
+            if (i === 0) {
+                const detune = ac.createOscillator();
+                detune.type = 'sine';
+                detune.frequency.value = 8; // 8Hz vibration
+                const detuneG = ac.createGain();
+                detuneG.gain.value = 5;
+                detune.connect(detuneG);
+                detuneG.connect(osc.frequency);
+                detune.start(now);
+                detune.stop(now + duration);
+            }
+
+            osc.connect(g);
+            g.gain.setValueAtTime(0, now);
+            // Applied 20% volume multiplier
+            g.gain.linearRampToValueAtTime(initialGains[i] * uiVolume * 0.2, now + 0.005);
+            g.gain.exponentialRampToValueAtTime(0.001, now + duration * (1 - i*0.15));
+            
+            osc.start(now);
+            osc.stop(now + duration);
+        });
+
+        // 2. High metallic "ting" strike (also reduced to 20%)
+        const strikeG = createGain(uiVolume * 0.06); // 0.3 * 0.2 = 0.06
+        const strikeOsc = ac.createOscillator();
+        strikeOsc.type = 'triangle';
+        strikeOsc.frequency.setValueAtTime(5000, now);
+        strikeOsc.connect(strikeG);
+        strikeG.gain.setValueAtTime(uiVolume * 0.3, now);
+        strikeG.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+        strikeOsc.start(now);
+        strikeOsc.stop(now + 0.1);
+
+        // Haptic Feedback for the Timer (Tab Navigation)
+        if ('vibrate' in navigator) {
+            navigator.vibrate([15, 30, 20]); // Gentle vibrating pulse
+        }
+    }
+
     // ── Kitchen Ambient Sounds ────────────────────────────────
 
     /**
@@ -313,6 +445,132 @@ const SoundEngine = (() => {
     }
 
     /**
+     * Lo-Fi Cooking Ambient — Gentle pulsing patterns for focus and relaxation.
+     */
+    let lofiNodes = [];
+    let lofiActive = false;
+
+    /**
+     * Zen Cooking Ambient — Inspired by Shakuhachi flute and deep meditation pads.
+     * Replaces the former Lo-Fi for a deeper emotional connection.
+     */
+    let zenNodes = [];
+    let zenActive = false;
+
+    function startZen() {
+        if (zenActive) return;
+        zenActive = true;
+        const ac = getCtx();
+        const masterZen = createGain(0);
+        
+        // 1. Deep Earth Pad (Warm, organic floor)
+        const padG = createGain(0.08); // Subtle
+        const pad = ac.createOscillator();
+        pad.type = 'sine';
+        pad.frequency.value = 55.00; // A1
+        const padLFO = ac.createOscillator();
+        padLFO.frequency.value = 0.1;
+        const padLFOG = ac.createGain();
+        padLFOG.gain.value = 0.03;
+        padLFO.connect(padLFOG);
+        padLFOG.connect(padG.gain);
+        pad.connect(padG); padG.connect(masterZen);
+        pad.start(); padLFO.start();
+
+        // 2. Instrumental Plucks (Nylon Guitar / Koto / Guzheng)
+        const zenScale = [196.00, 220.00, 261.63, 293.66, 329.63, 392.00, 440.00]; // G, A, C, D, E pentatonic
+        const pluckInterval = setInterval(() => {
+            if (!zenActive) { clearInterval(pluckInterval); return; }
+            const now = ac.currentTime;
+            const freq = zenScale[Math.floor(Math.random() * zenScale.length)];
+
+            // String Logic
+            const stringG = ac.createGain();
+            const stringOsc = ac.createOscillator();
+            stringOsc.type = 'triangle'; // Warmer than sine for strings
+            stringOsc.frequency.setValueAtTime(freq, now);
+            
+            // Soft low-pass to make it sound like nylon, not a beep
+            const filter = ac.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = 1200;
+            filter.Q.value = 2;
+
+            stringOsc.connect(filter);
+            filter.connect(stringG);
+            stringG.connect(masterZen);
+
+            stringG.gain.setValueAtTime(0, now);
+            stringG.gain.linearRampToValueAtTime(0.12 * uiVolume, now + 0.02);
+            stringG.gain.exponentialRampToValueAtTime(0.001, now + 4);
+            
+            stringOsc.start(now);
+            stringOsc.stop(now + 4.5);
+
+            // Occasional high sparkle (Higher Octave)
+            if (Math.random() > 0.7) {
+                const bellG = ac.createGain();
+                const bellOsc = ac.createOscillator();
+                bellOsc.type = 'sine';
+                bellOsc.frequency.value = freq * 2;
+                bellOsc.connect(bellG); bellG.connect(masterZen);
+                bellG.gain.setValueAtTime(0, now + 0.1);
+                bellG.gain.linearRampToValueAtTime(0.04, now + 0.12);
+                bellG.gain.exponentialRampToValueAtTime(0.001, now + 2);
+                bellOsc.start(now + 0.1); bellOsc.stop(now + 2.5);
+            }
+        }, 5000); // Relaxed timing
+
+        // 3. Subtle Forest Elements (Soft birds and water)
+        const natureG = createGain(0.02);
+        const nBuf = createNoiseBuffer(4);
+        const nSrc = ac.createBufferSource();
+        nSrc.buffer = nBuf; nSrc.loop = true;
+        const nFilter = ac.createBiquadFilter();
+        nFilter.type = 'lowpass'; nFilter.frequency.value = 400;
+        nSrc.connect(nFilter); nFilter.connect(natureG); natureG.connect(masterZen);
+        nSrc.start();
+
+        // Generative bird chirp (very sparse)
+        const birdInterval = setInterval(() => {
+            if (!zenActive) { clearInterval(birdInterval); return; }
+            const now = ac.currentTime;
+            const bG = ac.createGain();
+            const bOsc = ac.createOscillator();
+            bOsc.type = 'sine';
+            const startF = 3000 + Math.random() * 2000;
+            bOsc.frequency.setValueAtTime(startF, now);
+            bOsc.frequency.exponentialRampToValueAtTime(startF + 1000, now + 0.1);
+            bOsc.connect(bG); bG.connect(masterZen);
+            bG.gain.setValueAtTime(0, now);
+            bG.gain.linearRampToValueAtTime(0.02, now + 0.05);
+            bG.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+            bOsc.start(now); bOsc.stop(now + 0.2);
+        }, 12000);
+
+        masterZen.connect(masterGain);
+        masterZen.gain.linearRampToValueAtTime(1.0, ac.currentTime + 4);
+
+        zenNodes = [pad, padLFO, nSrc, masterZen];
+        zenNodes._intervals = [pluckInterval, birdInterval];
+    }
+
+    function stopZen() {
+        if (!zenActive) return;
+        zenActive = false;
+        if (zenNodes._intervals) zenNodes._intervals.forEach(i => clearInterval(i));
+        
+        const ac = getCtx();
+        const m = zenNodes[zenNodes.length-1];
+        if (m && m.gain) m.gain.linearRampToValueAtTime(0.001, ac.currentTime + 2.5);
+
+        setTimeout(() => {
+            zenNodes.forEach(n => { try { n.stop(); n.disconnect(); } catch(e){} });
+            zenNodes = [];
+        }, 2800);
+    }
+
+    /**
      * Ventilation fan — very low steady hum.
      */
     function startVentilation() {
@@ -408,6 +666,10 @@ const SoundEngine = (() => {
         magic: playMagic,
         ding: playDing,
         welcome: playWelcome,
+        chop: playChop,
+        navDing: playTimerDing,
+        startZen,
+        stopZen,
 
         // Ambient
         startAmbient,
