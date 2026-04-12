@@ -214,6 +214,12 @@ function openRecipeDetail(title, author, difficulty) {
 
 function startCooking() {
     SoundEngine.confirm();
+    
+    // Haptic Feedback for starting the cooking timer
+    if ('vibrate' in navigator) {
+        navigator.vibrate([40, 60, 40]); // Stronger double pulse for starting the action
+    }
+
     const btn = document.getElementById('btn-prepare-now');
 
     // UI Updates
@@ -1081,5 +1087,4 @@ function showPasscode() {
 
 // Actualizar ambos relojes
 // End of Script
-
 
