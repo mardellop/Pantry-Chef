@@ -134,6 +134,11 @@ const SoundEngine = (() => {
         filter.connect(ng);
         ng.gain.setValueAtTime(uiVolume * 0.55, ac.currentTime);
         ng.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.06);
+
+        // Haptic Feedback for the ingredient tick
+        if ('vibrate' in navigator) {
+            navigator.vibrate(5); // Ultra-short crisp tick
+        }
     }
 
     /**
