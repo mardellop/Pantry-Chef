@@ -69,6 +69,11 @@ function showScreen(screenId) {
     if (target) {
         target.classList.add('active');
         if (screenId === 'home') simulateSocialUpdates();
+        
+        // Stop relaxing music if leaving recipe view
+        if (screenId !== 'recipe') {
+            SoundEngine.stopZen();
+        }
     }
 }
 
@@ -200,6 +205,11 @@ function openRecipeDetail(title, author, difficulty) {
 
     currentRecipeTime = data.time; // Store for timer
     showScreen('recipe');
+    
+    // Start relaxing cooking music (Zen Mode)
+    setTimeout(() => {
+        SoundEngine.startZen();
+    }, 500);
 }
 
 function startCooking() {
@@ -596,6 +606,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (foodS) foodS.addEventListener('change', (e) => {
         if (e.target.files.length > 0) handleScan('food', e.target.files[0]);
     });
+
+    // Knife chop sound on login input
+    const emailInput = document.getElementById('user-email');
+    const passInput = document.getElementById('user-pass');
+    if (emailInput) emailInput.addEventListener('input', () => SoundEngine.chop());
+    if (passInput) passInput.addEventListener('input', () => SoundEngine.chop());
 });
 function addTuppersitos(amount) {
     SoundEngine.click();
@@ -644,6 +660,15 @@ function handleLogout() {
             document.getElementById('auth-fields').style.display = 'none';
             document.getElementById('auth-actions').style.display = 'flex';
             showScreen('home'); // Reset navigation for next login
+            
+            // Reset lock screen states
+            const cover = document.getElementById('ios-cover-screen');
+            const lock = document.getElementById('ios-lock-screen');
+            if (cover) cover.classList.remove('hidden');
+            if (lock) {
+                lock.classList.remove('visible');
+                lock.classList.remove('unlocked');
+            }
         }, 500);
     }
 }
@@ -1044,9 +1069,13 @@ function openCamera() {
 
 function showPasscode() {
     const cover = document.getElementById('ios-cover-screen');
+    const lock = document.getElementById('ios-lock-screen');
     if (cover) {
         cover.classList.add('hidden');
         SoundEngine.click();
+    }
+    if (lock) {
+        lock.classList.add('visible');
     }
 }
 
