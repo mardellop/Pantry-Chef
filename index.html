@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pantry Chef App | Sostenibilidad y Cocina Inteligente</title>
+    <title>Pantry Chef App</title>
     <meta name="description" content="Simulador de aplicación móvil Pantry Chef. Prep, Dish & Go. Cocina de forma inteligente y sostenible.">
     
     <!-- Open Graph / Meta de redes sociales -->
@@ -69,7 +69,6 @@
                         <strong>Mamá:</strong> ¿A qué hora llegas?
                     </div>
                 </div>
-
             </div>
 
             <div class="swipe-hint">
@@ -222,17 +221,16 @@
                 <!-- Screen 1: Dish (Social Kitchen) -->
                 <section id="screen-home" class="screen active">
                     <div class="header">
-                        <p>¡Hola, Fran!</p>
                         <h2>Inspírate y cocina</h2>
                     </div>
 
                     <!-- Sustainable Challenges Horizontal Scroll -->
                     <div class="challenges-ribbon">
-                        <div class="challenge-card" onclick="openChallenge('Zero Waste')">
-                            <div class="challenge-icon">📉</div>
+                        <div class="challenge-card" onclick="openChallenge('Zero to Hero')">
+                            <div class="challenge-icon">🛡️</div>
                             <div class="challenge-info">
                                 <span>RETO SEMANAL</span>
-                                <h4>Zero Waste</h4>
+                                <h4>Zero to Hero</h4>
                             </div>
                         </div>
                         <div class="challenge-card highlight" onclick="openChallenge('Pantry Party')">
@@ -281,6 +279,9 @@
                                             <i class="far fa-heart"></i> 124
                                         </div>
                                     </div>
+                                    <div class="dish-social-proof">
+                                        <i class="fas fa-users"></i> 500 personas han cocinado esta receta hoy
+                                    </div>
                                 </div>
                             </div>
 
@@ -304,6 +305,9 @@
                                         <div class="dish-social">
                                             <i class="far fa-heart"></i> 89
                                         </div>
+                                    </div>
+                                    <div class="dish-social-proof">
+                                        <i class="fas fa-leaf"></i> Otros usuarios han salvado 2Kg de comida esta semana
                                     </div>
                                 </div>
                             </div>
@@ -331,6 +335,9 @@
                                         <i class="far fa-heart"></i> 210
                                     </div>
                                 </div>
+                                <div class="dish-social-proof">
+                                    <i class="fas fa-users"></i> 500 personas han cocinado esta receta hoy
+                                </div>
                             </div>
                         </div>
 
@@ -354,6 +361,9 @@
                                     <div class="dish-social">
                                         <i class="far fa-heart"></i> 156
                                     </div>
+                                </div>
+                                <div class="dish-social-proof">
+                                    <i class="fas fa-leaf"></i> Otros usuarios han salvado 2Kg de comida esta semana
                                 </div>
                             </div>
                         </div>
@@ -381,6 +391,9 @@
                                         <i class="far fa-heart"></i> 189
                                     </div>
                                 </div>
+                                <div class="dish-social-proof">
+                                    <i class="fas fa-users"></i> 500 personas han cocinado esta receta hoy
+                                </div>
                             </div>
                         </div>
 
@@ -405,6 +418,9 @@
                                     <div class="dish-social">
                                         <i class="far fa-heart"></i> 275
                                     </div>
+                                </div>
+                                <div class="dish-social-proof">
+                                    <i class="fas fa-leaf"></i> Otros usuarios han salvado 2Kg de comida esta semana
                                 </div>
                             </div>
                         </div>
@@ -792,8 +808,13 @@
                     </div>
 
                     <!-- Level Tiers Horizontal -->
-                    <div class="tier-scroll-container">
+                    <div class="tier-scroll-container" style="position: relative;">
                         <h3 style="margin-left: 20px; font-size: 16px;">Tus niveles</h3>
+                        
+                        <!-- Desktop Navigation Buttons -->
+                        <button class="desktop-scroll-btn prev" onclick="scrollTiers(-1)"><i class="fas fa-chevron-left"></i></button>
+                        <button class="desktop-scroll-btn next" onclick="scrollTiers(1)"><i class="fas fa-chevron-right"></i></button>
+
                         <div class="tier-scroll">
                             <div class="tier-card current">
                                 <span class="tier-pts">0 - 200</span>
