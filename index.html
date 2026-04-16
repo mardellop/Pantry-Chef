@@ -220,7 +220,7 @@
                 <!-- Screen 1: Dashboard -->
                 <!-- Screen 1: Dish (Social Kitchen) -->
                 <section id="screen-home" class="screen active">
-                    <div class="header">
+                    <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
                         <h2>Inspírate y cocina</h2>
                     </div>
 
@@ -253,7 +253,21 @@
                                     Eco-Match</div>
                         </div>
 
-                        <h3 style="margin: 20px 0 15px; font-size: 18px; color: #000;">Feed de la Comunidad</h3>
+                        <h3 style="margin: 20px 0 10px; font-size: 18px; color: #000;">Feed de la Comunidad</h3>
+                        
+                        <!-- Premium Share Banner -->
+                        <div class="feed-share-banner">
+                            <button class="btn-premium-share" onclick="openShareDish()">
+                                <div class="share-icon-blob">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                                <div class="share-text">
+                                    <span>¿Has cocinado algo hoy?</span>
+                                    <strong>Comparte tu creación</strong>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
 
                         <!-- UGC Social Recipe Cards -->
                         <div class="social-feed">
@@ -1270,6 +1284,34 @@
                     </div>
                 </div>
                 <button class="btn-primary challenge-btn" onclick="acceptChallenge()">¡ACEPTO EL RETO!</button>
+            </div>
+        </div>
+
+        <!-- Share Dish Modal -->
+        <div id="share-dish-modal" class="challenge-modal-overlay">
+            <div class="challenge-modal-content">
+                <div class="challenge-modal-close" onclick="closeShareDish()">
+                    <i class="fas fa-times"></i>
+                </div>
+                <div class="challenge-visual" style="background: linear-gradient(135deg, #FF8A5C, #FFD25A);">
+                    <i class="fas fa-camera" style="font-size: 50px; color: #fff; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));"></i>
+                </div>
+                <div class="challenge-body">
+                    <span class="challenge-tag">COMUNIDAD PANTRY</span>
+                    <h2>Publica tu plato</h2>
+                    <p style="font-size: 13px; color: #666; line-height: 1.4;">Solo tienes que subir una foto. <b>Pantry Chef IA</b> se encargará de identificar los ingredientes, tiempo y ahorro de CO2 automáticamente.</p>
+                    
+                    <div class="upload-area" onclick="document.getElementById('dish-image-input').click()">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 30px; color: #FF8A5C; margin-bottom: 10px;"></i>
+                        <p style="margin: 0; font-weight: 700; font-size: 12px;">Subir foto o usar cámara</p>
+                        <input type="file" id="dish-image-input" style="display: none;" accept="image/*">
+                    </div>
+                    
+                    <div id="upload-status" style="margin-top:15px; font-size: 11px; color: var(--primary); font-weight: 800; display: none;">
+                        <i class="fas fa-spinner fa-spin"></i> ANALIZANDO PLATO CON IA...
+                    </div>
+                </div>
+                <button class="btn-primary challenge-btn" onclick="submitSharedDish()">PUBLICAR AHORA</button>
             </div>
         </div>
     </div>
