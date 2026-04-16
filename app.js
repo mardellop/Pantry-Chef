@@ -55,36 +55,59 @@ function handleAuth() {
 
 // --- 2. NavegaciÃ³n Principal & "Dish" Logic ---
 
-function showScreen(screenId) {
-    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-    const navItems = document.querySelectorAll('.nav-item');
-    if (screenId === 'home') navItems[0].classList.add('active');
-    if (screenId === 'pantry') navItems[1].classList.add('active');
-    if (screenId === 'cart') navItems[2].classList.add('active');
-    if (screenId === 'points') navItems[3].classList.add('active');
-    if (screenId === 'profile' || screenId === 'settings' || screenId === 'profile-edit') navItems[4].classList.add('active');
+// Consolidated showScreen logic moved to section 12 to avoid duplication conflicts.
 
-    document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
-    const target = document.getElementById('screen-' + screenId);
-    if (target) {
-        target.classList.add('active');
-        if (screenId === 'home') simulateSocialUpdates();
-        
-        // Stop relaxing music if leaving recipe view
-        if (screenId !== 'recipe') {
-            SoundEngine.stopZen();
-        }
+function showHeatNotification() {
+    const notif = document.getElementById('ios-notification');
+    const title = document.getElementById('ios-notif-title');
+    const msg = document.getElementById('ios-notif-msg');
+    const icon = document.querySelector('.ios-notif-icon');
+    
+    if (!notif) return;
 
-        // Pantry Disclaimer / Notification
-        if (screenId === 'pantry') {
-            showIOSNotification(
-                "Tip de Despensa ðŸŒ±", 
-                "Esa lata de garbanzos olvidada tiene potencial para convertirse en un hummus casero. Â¡Vamos a rescatarla!", 
-                600,
-                12000
-            );
-        }
+    // Set content for hot day
+    title.innerText = "¡Qué calor hace hoy! ☀️";
+    msg.innerHTML = "Ideal para un <b>Salmorejo Cordobés</b> fresquito. Haz clic para ver la receta.";
+    
+    // Add image if it doesn't exist
+    let notifImg = notif.querySelector('.ios-notif-img');
+    if (!notifImg) {
+        notifImg = document.createElement('img');
+        notifImg.className = 'ios-notif-img';
+        notif.querySelector('.ios-notif-body').appendChild(notifImg);
     }
+    notifImg.src = 'salmorejo-cordobes.png';
+    notifImg.style.display = 'block';
+
+    // Forced styles to ensure visibility (bypassing potentially broken CSS)
+    notif.style.zIndex = '100000';
+    notif.style.position = 'absolute';
+    notif.style.left = '50%';
+    notif.style.transform = 'translateX(-50%)';
+    notif.style.top = '40px';
+    notif.style.opacity = '1';
+    notif.style.display = 'block';
+
+    // Show notification (class still added for transitions)
+    notif.classList.add('show');
+    
+    // Play notification sound
+    SoundEngine.ding();
+
+    // Set click handler to open recipe in new window
+    notif.onclick = (e) => {
+        e.stopPropagation();
+        console.log("Notificación pinchada, abriendo salmorejo.html");
+        window.open('salmorejo.html', '_blank');
+        notif.classList.remove('show');
+    };
+
+    // Auto hide after 8 seconds
+    setTimeout(() => {
+        notif.classList.remove('show');
+        notif.style.top = '-300px';
+        notif.style.opacity = '0';
+    }, 8000);
 }
 
 // Mock Database for Recipes (would be an API in prod)
@@ -285,22 +308,28 @@ function openStore(name) {
 
 function openChallenge(name) {
     SoundEngine.click();
+    
+    if (name === 'Zero to Hero') {
+        window.open('challenge-hero.html', '_blank');
+        return;
+    }
+
     const modal = document.getElementById('challenge-modal');
     const title = document.getElementById('ch-title');
     const desc = document.getElementById('ch-desc');
     const emoji = document.getElementById('ch-emoji');
     const tag = document.getElementById('ch-tag');
 
-    if (name === 'Zero Waste Week') {
-        title.innerText = "Zero Waste Week";
-        desc.innerText = "Utiliza todos los ingredientes a punto de caducar de tu despensa esta semana. Â¡Reduce el desperdicio al mÃ­nimo!";
-        emoji.innerText = "ð";
-        tag.innerText = "RETO SEMANAL";
-    } else if (name === 'Pantry Party') {
+    if (name === 'Pantry Party') {
         title.innerText = "Pantry Party";
         desc.innerText = "Â¡Cocina con amigos! Comparte una receta usando solo ingredientes bÃ¡sicos y gana puntos de comunidad dobles.";
-        emoji.innerText = "ð¥³";
+        emoji.innerText = "ðŸ¥³";
         tag.innerText = "EVENTO ESPECIAL";
+    } else if (name === 'Zero Waste Week') {
+        title.innerText = "Zero Waste Week";
+        desc.innerText = "Utiliza todos los ingredientes a punto de caducar de tu despensa esta semana. Â¡Reduce el desperdicio al mÃ­nimo!";
+        emoji.innerText = "ðŸ“‰";
+        tag.innerText = "RETO SEMANAL";
     }
 
     modal.style.display = 'flex';
@@ -844,6 +873,16 @@ function handleSoundToggle() {
     var badge = document.getElementById('sound-badge');
     var isNowOn = SoundEngine.toggleAmbient();
 
+    // Toggle Taylor Swift music alongside ambient sounds
+    initTSAudio();
+    if (tsAudio) {
+        if (isNowOn) {
+            tsAudio.play().catch(e => console.warn("Music play blocked:", e));
+        } else {
+            tsAudio.pause();
+        }
+    }
+
     if (isNowOn) {
         btn.classList.remove('muted');
         if (badge) badge.textContent = 'ON';
@@ -881,7 +920,7 @@ function initTSAudio() {
         if (tsAudio) {
             // Force unmuted and full volume
             tsAudio.muted = false;
-            tsAudio.volume = 1.0;
+            tsAudio.volume = 0.05;
             
             tsAudio.addEventListener('playing', function() {
                 var btn = document.getElementById('ts-play-btn');
@@ -906,23 +945,12 @@ function initTSAudio() {
 
 function startTaylorSwiftSong() {
     initTSAudio();
-    var wrap = document.getElementById('ts-player-wrap');
-    if (wrap) wrap.style.display = 'block';
-
+    // Native music player UI is now hidden per user request
     if (tsAudio) {
         tsAudio.muted = false;
-        tsAudio.volume = 1.0;
-        console.log("Attempting to play ophelia.mp3...");
-        var playPromise = tsAudio.play();
-        
-        if (playPromise !== undefined) {
-            playPromise.then(function() {
-                console.log("Playback started successfully");
-            }).catch(function(error) {
-                console.warn("Autoplay blocked:", error);
-                // The player is already visible, user can click Play manually
-            });
-        }
+        tsAudio.volume = 0.05; // Much lower volume per user request
+        console.log("Starting background music...");
+        tsAudio.play();
     }
 }
 
@@ -991,27 +1019,50 @@ function showIOSNotification(title, message, delay = 0, duration = 5500) {
     }, delay);
 }
 
-function simulateSmartNotifications() {
-    showIOSNotification(
-        "Pantry Chef ð±", 
-        "Â¡Ojo! Tus espinacas estÃ¡n a punto de ponerse malas. Haz este smoothie de 2 min.", 
-        8000
-    );
-    showIOSNotification(
-        "Pantry Chef ð¨âð³", 
-        "Â¿DÃ­a duro? AquÃ­ tienes 3 cenas de Pantry Chef que se hacen en menos de 15 min.", 
-        23000
-    );
-    showIOSNotification(
-        "Comunidad Pantry Chef", 
-        "Sube una foto de los platos que has elaborado hoy y gana 500 Puntos de Sostenibilidad.", 
-        38000 
-    );
-}
-
+// Automated notifications removed as per request
+/*
 document.addEventListener('DOMContentLoaded', function() {
     simulateSmartNotifications();
 });
+*/
+
+function showScreen(screenId) {
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    const navItems = document.querySelectorAll('.nav-item');
+    if (screenId === 'home') navItems[0].classList.add('active');
+    if (screenId === 'pantry') navItems[1].classList.add('active');
+    if (screenId === 'cart') navItems[2].classList.add('active');
+    if (screenId === 'points') navItems[3].classList.add('active');
+    if (screenId === 'profile' || screenId === 'settings' || screenId === 'profile-edit') navItems[4].classList.add('active');
+
+    document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+    const target = document.getElementById('screen-' + screenId);
+    if (target) {
+        target.classList.add('active');
+        if (screenId === 'home') simulateSocialUpdates();
+        
+        // Stop relaxing music if leaving recipe view
+        if (screenId !== 'recipe') {
+            SoundEngine.stopZen();
+        }
+
+        // Pantry Disclaimer / Notification
+        if (screenId === 'pantry') {
+            showIOSNotification(
+                "Consejo de Pantry Chef", 
+                "Esa lata de garbanzos olvidada tiene potencial para convertirse en un hummus casero. ¡Vamos a rescatarla!", 
+                600,
+                12000
+            );
+        }
+    }
+
+    // Trigger heat notification when clicking profile tab
+    if (screenId === 'profile' || screenId === 'settings' || screenId === 'profile-edit') {
+        console.log("Heat notification triggered for Profile sub-screen");
+        setTimeout(showHeatNotification, 600);
+    }
+}
 
 // --- 13. APP ENTRY TRANSITION ---
 
@@ -1069,11 +1120,7 @@ function unlockPhone() {
     lockScreen.classList.add('unlocked');
     SoundEngine.confirm();
     
-    // Al desbloquear, podemos disparar las notificaciones si es la primera vez
-    if (!window.notifsTriggered) {
-        setTimeout(simulateSmartNotifications, 2000);
-        window.notifsTriggered = true;
-    }
+    // Notifications trigger removed as per request
 }
 
 
@@ -1096,6 +1143,59 @@ function showPasscode() {
 }
 
 // Actualizar ambos relojes
+// --- 15. PREMIUM DESKTOP ACCESSIBILITY: MOUSE DRAG SCROLL ---
+function initPremiumScroll() {
+    const scrollContainers = document.querySelectorAll('.tier-scroll, .badges-scroll');
+    
+    scrollContainers.forEach(slider => {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            slider.classList.add('active-dragging');
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+        });
+
+        slider.addEventListener('mouseleave', () => {
+            isDown = false;
+            slider.classList.remove('active-dragging');
+        });
+
+        slider.addEventListener('mouseup', () => {
+            isDown = false;
+            slider.classList.remove('active-dragging');
+        });
+
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 2; // Scroll speed multiplier
+            slider.scrollLeft = scrollLeft - walk;
+        });
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Other initializations...
+    initPremiumScroll();
+});
+
+function scrollTiers(direction) {
+    const container = document.querySelector('.tier-scroll');
+    const cards = document.querySelectorAll('.tier-card');
+    
+    if (container && cards.length > 0) {
+        const cardWidth = cards[0].offsetWidth + 15; // Width + gap
+        container.scrollBy({
+            left: direction * cardWidth,
+            behavior: 'smooth'
+        });
+        SoundEngine.tick();
+    }
+}
+
 // End of Script
-
-
