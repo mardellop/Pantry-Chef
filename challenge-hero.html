@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reto: Zero to Hero - Pantry Chef</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #5BC08E;
+            --secondary: #FF8A5C;
+            --accent: #FFD25A;
+            --text: #1a1a1a;
+            --bg: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            color: var(--text);
+        }
+
+        /* Phone Frame */
+        .phone-frame {
+            height: 812px;
+            max-height: 95vh;
+            width: auto;
+            aspect-ratio: 375 / 812;
+            background: #fff;
+            border: 12px solid #1a1a1a;
+            border-radius: 60px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .status-bar {
+            height: 44px;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .notch {
+            width: 160px;
+            height: 30px;
+            background: #1a1a1a;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+
+        .app-container {
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: none;
+            background: #fff;
+        }
+
+        .app-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .challenge-hero {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary), #e4af68);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            color: #fff;
+        }
+
+        .challenge-emoji {
+            font-size: 70px;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+        }
+
+        .content {
+            padding: 30px 25px;
+            text-align: center;
+        }
+
+        .tag {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 15px;
+        }
+
+        .desc {
+            font-size: 14px;
+            color: #444;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        /* Phase Styles */
+        .phases-container {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .phase-card {
+            background: #fdfdfd;
+            border-radius: 18px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .phase-card h5 {
+            font-size: 11px;
+            color: var(--primary);
+            font-weight: 800;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .phase-card p {
+            font-size: 13px;
+            line-height: 1.4;
+            color: #333;
+        }
+
+        .rankings-box {
+            margin-top: 30px;
+            background: #fff;
+            border: 1px dashed #ccc;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: left;
+        }
+
+        .rankings-box h5 {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .rank-item {
+            font-size: 12px;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .rank-item span {
+            font-weight: 800;
+            color: var(--secondary);
+        }
+
+        .btn-accept {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 30px;
+            box-shadow: 0 10px 20px rgba(91, 192, 142, 0.2);
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 55px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1100;
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .reward-pills {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .reward-pill {
+            background: #f9f9f9;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-frame">
+        <div class="status-bar">
+            <span>18:42</span>
+            <div class="notch"></div>
+            <div style="display: flex; gap: 5px; align-items: center;">
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <a href="javascript:window.close()" class="close-btn"><i class="fas fa-times"></i></a>
+
+        <div class="app-container">
+            <div class="challenge-hero">
+                <div class="challenge-emoji">🛡️</div>
+            </div>
+
+            <div class="content">
+                <span class="tag">DUELO SEMANAL</span>
+                <h1>Zero to Hero: El Duelo de la Despensa</h1>
+                <p class="desc">Tres fases críticas para exprimir tu alacena al máximo y compartir tu talento con el mundo.</p>
+
+                <div class="reward-pills">
+                    <div class="reward-pill"><i class="fas fa-star" style="color: #f5d263;"></i> +500 XP</div>
+                    <div class="reward-pill"><i class="fas fa-award" style="color: var(--primary);"></i> Insignia Mago</div>
+                </div>
+
+                <div class="phases-container">
+                    <div class="phase-card">
+                        <h5>FASE 1: EL SORTEO</h5>
+                        <p>Elige los 3 primeros ingredientes que veas en tu despensa. Sin trampas. Incluye uno difícil para ganar más puntos.</p>
+                    </div>
+                    <div class="phase-card">
+                        <h5>FASE 2: CONVERSIÓN</h5>
+                        <p>Introduce los 3 ingredientes en la app. Prohibido usar más extras que sal, agua, aceite y pimienta.</p>
+                    </div>
+                    <div class="phase-card">
+                        <h5>FASE 3: EL VEREDICTO</h5>
+                        <p>Publica tu proceso: Ingredientes → Receta IA → Resultado Gourmet. Usa el hashtag #PantryHero.</p>
+                    </div>
+                </div>
+
+                <div class="rankings-box">
+                    <h5>¿QUÉ RANGO CONSEGUIRÁS?</h5>
+                    <div class="rank-item"><span>Pinche de Emergencia:</span> Has logrado un plato rico con lo mínimo.</div>
+                    <div class="rank-item"><span>Mago de la Alacena:</span> Has usado un ingrediente al borde de la caducidad.</div>
+                    <div class="rank-item"><span>Master de Pantry Chef:</span> Tu plato parece de estrella Michelin solo con la app.</div>
+                </div>
+
+                <a href="javascript:window.close()" class="btn-accept">¡ACEPTO EL RETO!</a>
+                
+                <p style="margin-top: 30px; color: #bbb; font-size: 11px;">Pantry Chef Challenge System v2.0</p>
+                <div style="height: 40px;"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+" ,Description:
