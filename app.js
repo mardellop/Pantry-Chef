@@ -98,7 +98,7 @@ function showHeatNotification() {
     notif.onclick = (e) => {
         e.stopPropagation();
         console.log("Notificación pinchada, abriendo salmorejo.html");
-        window.open('salmorejo.html', '_blank');
+        window.location.href = 'salmorejo.html';
         notif.classList.remove('show');
     };
 
@@ -118,7 +118,7 @@ const recipesDB = {
         time: 12, // minutes
         ingredients: ['200g Pasta', '100g Setas', 'Hojas de salvia', 'Aceite de oliva', 'Ajo'],
         utensils: ['Olla grande', 'SartÃ©n', 'Escurridor'],
-        steps: ['Hervir agua y cocer pasta durante 10 min.', 'Saltear setas con ajo y salvia.', 'Mezclar la pasta con las setas.', 'Servir caliente.']
+        steps: ['Hervir agua y cocer pasta hasta que esté perfectamente al dente.', 'Saltear setas carnosas con ajo y salvia hasta sentir su sabor profundo y umami y el aroma herbáceo.', 'Mezclar la pasta con las setas, permitiendo que el calor libere todo el perfume de la salvia en una textura sedosa.', 'Servir caliente y disfrutar del contraste de sabores.']
     },
     'Pasta PrimavIA': { // Fallback for differing names
         image: 'https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80',
@@ -126,7 +126,7 @@ const recipesDB = {
         time: 12,
         ingredients: ['200g Pasta', 'Verduras Varias', 'Aceite', 'Queso'],
         utensils: ['Olla', 'SartÃ©n'],
-        steps: ['Cocer pasta.', 'Saltear verduras.', 'Mezclar todo.']
+        steps: ['Cocer la pasta al dente para una mordida perfecta.', 'Saltear las verduras frescas hasta que estén ligeramente crujientes, con un chorrito de aceite que realce su sabor natural.', 'Mezclar todo y servir con un toque de queso inhalando su fragancia salada y disfrutando de su textura fundente.']
     },
     'Vegan Bowl': {
         image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
@@ -134,7 +134,7 @@ const recipesDB = {
         time: 20,
         ingredients: ['Tofu marinado', 'Huevos de codorniz', 'Edamame', 'Tomates cherry', 'MaÃ­z dulce', 'Pepino', 'Lechuga', 'Cebollino fresco'],
         utensils: ['Bol', 'Cuchillo'],
-        steps: ['Pon una capa generosa de lechuga en el fondo del bowl.', 'Imagina que el bowl es un reloj. Ve colocando cada ingrediente en su "franja": el maÃ­z a las 3, el pepino a las 5, los tomates a las 9 y el edamame a las 11.', 'Coloca el tofu justo en el medio.', 'AÃ±ade los huevos a un lado y espolvorea cebollino picado y, si tienes, unas semillas de sÃ©samo negro por encima.']
+        steps: ['Pon una base de lechuga refrescante en el fondo del bowl.', 'Ve colocando cada ingrediente disfrutando de la textura firme y sabor terroso del tofu marinado.', 'AÃ±ade el resto de vegetales para un festín de frescor crujiente.', 'Espolvorea cebollino picado, soltando su aroma punzante y sabor vibrante al cortarlo.']
     },
     'Tostada de aguacate': {
         image: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=800&q=80',
@@ -142,7 +142,7 @@ const recipesDB = {
         time: 10,
         ingredients: ['Pan integral', '1 Aguacate', 'Semillas', 'LimÃ³n', 'Sal al gusto', 'Pimienta al gusto'],
         utensils: ['Tostadora', 'Cuchillo'],
-        steps: ['Tostar el pan.', 'Chafar el aguacate con limÃ³n.', 'Untar y decorar.']
+        steps: ['Tuesta el pan hasta lograr un contraste crujiente e irresistible.', 'Chafar el aguacate con limón para liberar su cremosidad refrescante y frescura cítrica.', 'Untar generosamente y decorar con semillas para un toque extra de textura.']
     },
     'Buddha Bowl': {
         image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80',
@@ -150,7 +150,7 @@ const recipesDB = {
         time: 25,
         ingredients: ['1 Aguacate', 'Garbanzos', 'Boniato', 'RÃ¡bano', 'Tomates cherry', 'Pimiento amarillo', 'Col lombarda'],
         utensils: ['Cuchillo', 'Bol grande'],
-        steps: ['Pon una base generosa de lechuga rizada y brotes tiernos.', 'Coloca el aguacate en el centro-inferior.', 'Ve distribuyendo los ingredientes por secciones, dejando los tomates en rama arriba.', 'AÃ±ade los garbanzos en el centro.']
+        steps: ['Pon una base de brotes tiernos y refrescantes.', 'Corta el aguacate sintiendo su textura cremosa y suave sabor.', 'Siente el contraste crujiente de los garbanzos tostados al añadirlos al bowl.', 'La mezcla de texturas, de lo tierno a lo crocante, será un festival para tu paladar.']
     },
     'Espaguetis con salsa pomodoro': {
         image: 'https://images.unsplash.com/photo-1551892374-ecf8754cf8b0?auto=format&fit=crop&w=800&q=80',
@@ -158,7 +158,7 @@ const recipesDB = {
         time: 15,
         ingredients: ['Espaguetis (preferiblemente de sÃ©samo o de grano duro)', 'Tomates maduros', '1 diente de ajo', 'Aceite de oliva virgen extra', 'Sal', 'Albahaca fresca', 'Queso parmesano o pecorino rallado (opcional)'],
         utensils: ['Olla grande', 'SartÃ©n amplia', 'Colador'],
-        steps: ['En la sartÃ©n, calienta un buen chorro de aceite de oliva y aÃ±ade el tomate triturado o troceado y deja que se cocine a fuego lento unos 15-20 minutos hasta que la salsa espese y cambie a un rojo mÃ¡s intenso. AÃ±ade la sal y la albahaca al final.', 'Mientras cuece los espaguetis en agua hirviendo con sal. SÃ¡calos 1 minuto antes de lo que diga el paquete. Antes de escurrir, guarda una taza del agua de la cocciÃ³n.', 'Echa los espaguetis directamente a la sartÃ©n con la salsa. AÃ±ade un chorrito del agua de cocciÃ³n que guardaste. Remueve con energÃ­a a fuego fuerte durante 1 minuto.']
+        steps: ['Prepara una salsa pomodoro de sabor dulce y ácido con una textura aterciopelada que acaricie la pasta.', 'Cocer los espaguetis al dente para mantener esa firmeza característica y una mordida perfecta.', 'Mantequillar con el agua de cocción para una terminación cremosa, brillante y fundente.']
     },
     'Freakshake de chocolate': {
         image: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80',
@@ -166,7 +166,7 @@ const recipesDB = {
         time: 5,
         ingredients: ['Leche', '3 bolas de helado de chocolate', 'Sirope de chocolate', 'Chocolate fundido o Nutella (para decorar)', 'Nata montada (opcional)', '1 Barrita de chocolate (opcional)', 'Cacao en polvo'],
         utensils: ['Batidora', 'Tarro de cristal'],
-        steps: ['Funde un poco de chocolate. Con una cuchara, deja que caiga por el borde interior y exterior del tarro. MÃ©telo en la nevera un par de minutos para que el chocolate se asiente y no se escurra del todo al echar el batido.', 'Pon en la batidora el helado, la leche y un chorrito de sirope. Bate a mÃ¡xima potencia, lo ideal es que quede espeso, tipo "smoothie".', 'Saca el vaso de la nevera y vierte el batido con cuidado. Deja un dedo de espacio arriba para la nata.', 'Pon una montaÃ±a generosa de nata montada. Clava la barrita de chocolate de forma diagonal. Para el toque final, coge un colador pequeÃ±o con cacao en polvo y golpÃ©alo suavemente sobre el batido para que caiga esa "lluvia" de chocolate.']
+        steps: ['Funde chocolate para una textura líquida y pecaminosa.', 'Bate hasta conseguir un batido denso, cremoso y de dulzor intenso.', 'La nata montada aporta una ligereza aérea en contraste con el chocolate fundido.', 'El cacao en polvo añade un toque final de amargor sofisticado.']
     },
     'Sopa de Lentejas': {
         image: 'https://images.unsplash.com/photo-1547592166-23acbe346499?auto=format&fit=crop&w=800&q=80',
@@ -174,7 +174,7 @@ const recipesDB = {
         time: 45,
         ingredients: ['Lentejas', 'Zanahoria', 'Cebolla', 'Caldo de Verduras', 'Laurel'],
         utensils: ['Olla Express', 'Cuchara'],
-        steps: ['SofreÃ­r verduras.', 'AÃ±adir lentejas y caldo.', 'Cocer 30 min.']
+        steps: ['Sofreír verduras para una base de sabor profundo y textura suave.', 'Cocer las lentejas hasta que estén tiernas y la sopa tenga una consistencia reconfortante y espesa.', 'El laurel infunde un sabor amaderado sutil que completa este plato hogareño de sabor intenso.']
     }
 };
 
@@ -310,7 +310,7 @@ function openChallenge(name) {
     SoundEngine.click();
     
     if (name === 'Zero to Hero') {
-        window.open('challenge-hero.html', '_blank');
+        window.location.href = 'challenge-hero.html';
         return;
     }
 
@@ -333,6 +333,28 @@ function openChallenge(name) {
     }
 
     modal.style.display = 'flex';
+}
+
+function openShareDish() {
+    SoundEngine.click();
+    document.getElementById('share-dish-modal').style.display = 'flex';
+}
+
+function closeShareDish() {
+    document.getElementById('share-dish-modal').style.display = 'none';
+    document.getElementById('upload-status').style.display = 'none';
+}
+
+function submitSharedDish() {
+    SoundEngine.click();
+    const status = document.getElementById('upload-status');
+    status.style.display = 'block';
+    
+    // Simulate IA analysis
+    setTimeout(() => {
+        closeShareDish();
+        showHeatNotification("¡Plato publicado!", "Tu creación ya está en el feed. Pantry Chef ha detectado 3 ingredientes y un ahorro de 0.5kg de CO2.");
+    }, 2500);
 }
 
 function closeChallenge() {
@@ -473,11 +495,11 @@ async function generateSmartRecipe() {
                     ingredients: activeItems.map(i => `${i.icon} ${i.name}`).concat(['Salsa de la casa', 'Especias']),
                     utensils: ['Wok o sartÃ©n grande', 'Cuchara de madera', 'Bol'],
                     steps: [
-                        `Prepara tu Ã¡rea de trabajo y lava los ingredientes: ${activeItems.map(i => i.name).join(', ')}.`,
-                        `Saltea el pollo a fuego alto con un chorrito de aceite hasta que estÃ© dorado.`,
-                        `Incorpora el resto de ingredientes uno a uno.`,
-                        `AÃ±ade la salsa de la casa y deja que reduzca 2 minutos.`,
-                        `Sirve inmediatamente y disfruta.`
+                        `Prepara tu área de trabajo y lava los ingredientes: ${activeItems.map(i => i.name).join(', ')}.`,
+                        `Saltea los ingredientes a fuego alto con un chorrito de aceite hasta que el aroma empiece a caramelizar y llenar la cocina.`,
+                        `Incorpora el resto de ingredientes uno a uno, notando cómo cambian los matices del perfume del plato.`,
+                        `Añade la salsa de la casa y deja que reduzca 2 minutos mientras disfrutas del olor a especias calientes.`,
+                        `Sirve inmediatamente inhalando el delicioso aroma final y disfruta.`
                     ]
                 };
 
