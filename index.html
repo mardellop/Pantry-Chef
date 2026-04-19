@@ -2,1350 +2,1774 @@
 <html lang="es">
 
 <head>
+    <!-- Mapa de calor de hotjar -->
+    <script src="https://t.contentsquare.net/uxa/e65d922a3b349.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-D5P4PHPE5J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-D5P4PHPE5J');
+    </script>
+    <!-- Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-T8XFJWWH');</script>
+    <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pantry Chef App</title>
-    <meta name="description" content="Simulador de aplicación móvil Pantry Chef. Prep, Dish & Go. Cocina de forma inteligente y sostenible.">
-    
-    <!-- Open Graph / Meta de redes sociales -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Pantry Chef App - Mobile Simulator">
-    <meta property="og:description" content="Simulador móvil de alta fidelidad para la gestión de cocina sostenible y aprovechamiento de alimentos.">
-    <meta property="og:image" content="https://github.com/mardellop/Pantry-Chef/blob/main/PantryChef%20Logo.png?raw=true">
-
+    <title>Pantry Chef</title>
+    <meta name="description"
+        content="Pantry Chef te ayuda a preparar comidas saludables con lo que ya tienes en casa. Sin planificación, sin complicaciones.">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="icon" type="image/png"
         href="https://github.com/mardellop/Pantry-Chef/blob/main/PantryChef%20Logo.png?raw=true">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="auth.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary-brown: #3E2723;
+            --primary-orange: #E65100;
+            --orange-hover: #BF360C;
+            --text-main: #3E2723;
+            --text-muted: rgba(62, 39, 35, 0.7);
+            --bg-light: #FDFBF7;
+            --bg-neutral: #F5F5F0;
+            --white: #FFFFFF;
+            --border-light: #EFEBE9;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Manrope', sans-serif;
+            --container-max-width: 1200px;
+            --header-height: 81px;
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-main);
+            background-color: var(--bg-light);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            max-width: var(--container-max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Base Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border: none;
+            font-family: var(--font-body);
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-orange);
+            color: var(--white);
+            padding: 8px 24px;
+            box-shadow: 0 8px 20px rgba(230, 81, 0, 0.15);
+            will-change: transform, box-shadow;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--orange-hover);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 16px 30px rgba(230, 81, 0, 0.25);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px) scale(0.97); /* Efecto físico de pulsación */
+            box-shadow: 0 4px 10px rgba(230, 81, 0, 0.15);
+        }
+
+        .btn-large {
+            padding: 24px 32px;
+            font-size: 16px;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-brown);
+            color: var(--primary-brown);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(62, 39, 35, 0.03);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 12px 24px rgba(62, 39, 35, 0.08); /* Sutil sombra al flotar */
+            color: var(--primary-brown);
+        }
+        
+        .btn-outline:active {
+            transform: translateY(1px) scale(0.97);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: var(--header-height);
+            backdrop-filter: blur(24px);
+            background: rgba(255, 255, 255, 0.8);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-brown);
+        }
+
+        .logo img {
+            height: 48px;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav ul li a {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--primary-brown);
+        }
+
+        nav ul li a:hover {
+            color: var(--primary-orange);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding-top: calc(var(--header-height) + 0px);
+            background-color: var(--bg-light);
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero .container {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .hero-content .badge {
+            background-color: #F8EDEB;
+            color: var(--primary-orange);
+            padding: 6px 14px;
+            border-radius: 9999px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 24px;
+        }
+
+        .hero-content .badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: var(--primary-orange);
+            border-radius: 50%;
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            line-height: 72px;
+            letter-spacing: -1.8px;
+            color: var(--primary-brown);
+            margin-bottom: 24px;
+        }
+
+        .hero h1 .text-accent {
+            color: var(--primary-orange);
+            display: block;
+        }
+
+        .hero p {
+            font-size: 25px;
+            line-height: 28px;
+            color: var(--text-main);
+            margin-bottom: 32px;
+            max-width: 520px;
+            text-align: justify;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 1.25rem;
+        }
+
+        .hero-image {
+            display: flex;
+            justify-content: flex-end;
+            transform-style: preserve-3d;
+        }
+
+        @media (max-width: 992px) {
+            .hero-image {
+                justify-content: center;
+                margin-top: 2rem;
+            }
+        }
+
+        .hero-card {
+            position: relative;
+            width: 400px; /* Adaptado al hero */
+            height: 400px;
+            cursor: pointer;
+            perspective: 1200px;
+            transform-style: preserve-3d;
+            animation: floatingLogo 6s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        @keyframes floatingLogo {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .hero-card-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-style: preserve-3d;
+        }
+
+        .hero-card:hover .hero-card-container {
+            transform: rotateX(12deg) rotateY(-12deg) scale(1.05);
+        }
+
+        .hero-card img:first-child {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            z-index: 1;
+            transform: translateZ(0);
+        }
+
+        .hero-card:hover img:first-child {
+            opacity: 0.1; /* No desaparece del todo para mantener cuerpo */
+            transform: scale(0.95) translateZ(-40px);
+        }
+
+        .hero-card:hover {
+            filter: drop-shadow(0 40px 60px rgba(230, 81, 0, 0.25));
+            transition: filter 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hero-card img:last-child {
+            position: absolute;
+            width: 90%;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%) translateY(20%) translateZ(0px) scale(0.9);
+            opacity: 0;
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 2;
+            pointer-events: none;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0));
+        }
+
+        .hero-card:hover img:last-child {
+            opacity: 1;
+            transform: translateX(-45%) translateY(-10%) translateZ(120px) scale(1.05); /* Explosión 3D suave */
+            filter: drop-shadow(-20px 30px 40px rgba(0, 0, 0, 0.3));
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .scroll-indicator i {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-5px);
+            }
+
+            60% {
+                transform: translateY(-3px);
+            }
+        }
+
+        /* Section Common */
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 64px;
+        }
+
+        .section-header h2 {
+            font-size: 58px;
+            line-height: 48px;
+            margin-bottom: 24px;
+            color: var(--primary-brown);
+        }
+
+        .section-header p {
+            font-size: 18px;
+            line-height: 28px;
+            color: #000;
+        }
+
+        /* === About Section — Sticky Scroll (same mechanics as gallery-section) === */
+        .about {
+            background-color: var(--white);
+            height: 400vh; /* tall scroll canvas */
+            position: relative;
+            padding: 0;
+        }
+
+        .about-sticky {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: stretch;
+            overflow: hidden;
+        }
+
+        /* LEFT — scrolling gallery */
+        .about-gallery-side {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+            padding-top: var(--header-height);
+        }
+
+        .about-gallery-viewport {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-start;
+            /* Apple fade mask top+bottom */
+            -webkit-mask-image: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+            mask-image: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+        }
+
+        .about-gallery-grid {
+            display: flex;
+            gap: 1rem;
+            width: 100%;
+            padding: 0 1.5rem 0 0;
+            align-items: flex-start;
+        }
+
+        .about-gallery-col {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            flex: 1;
+            will-change: transform;
+        }
+
+        .about-gallery-col figure {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .about-gallery-col img {
+            width: 100%;
+            border-radius: 18px;
+            object-fit: cover;
+            aspect-ratio: 1 / 1.2;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            display: block;
+        }
+
+        .about-gallery-col figcaption {
+            font-size: 12px;
+            color: var(--primary-brown);
+            text-align: center;
+            font-family: var(--font-body);
+            font-weight: 500;
+        }
+
+        /* Stat pill */
+        .stat-pill {
+            position: absolute;
+            bottom: 2rem;
+            left: 1rem;
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid var(--border-light);
+            z-index: 10;
+        }
+
+        .stat-pill i {
+            color: var(--primary-orange);
+            background: rgba(230, 81, 0, 0.1);
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .stat-text span {
+            display: block;
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--primary-brown);
+        }
+
+        .stat-text p {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* RIGHT — pinned text */
+        .about-text-side {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: calc(var(--header-height) + 2rem) 4rem 2rem 3rem;
+            background-color: var(--white);
+        }
+
+        .about-content h4 {
+            color: var(--primary-orange);
+            background: rgba(230, 81, 0, 0.1);
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            font-family: var(--font-body);
+        }
+
+        .about-content h2 {
+            font-size: 48px;
+            line-height: 1.05;
+            margin-bottom: 32px;
+            color: var(--primary-brown);
+        }
+
+        .about-content p {
+            font-size: 20px;
+            line-height: 28px;
+            margin-bottom: 20px;
+            color: var(--text-main);
+            text-align: justify;
+        }
+
+        .about-content b {
+            color: var(--primary-brown);
+            font-weight: 600;
+        }
+
+        .highlight {
+            color: var(--primary-orange);
+            font-weight: 700;
+        }
+
+        @media (max-width: 900px) {
+            .about {
+                height: auto;
+            }
+            .about-sticky {
+                position: relative;
+                height: auto;
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+            .about-gallery-side {
+                height: 60vw;
+                min-height: 300px;
+                padding-top: 0;
+            }
+            .about-text-side {
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        /* Values Section */
+        .values {
+            padding: 50px 0;
+            background-color: var(--bg-neutral);
+        }
+
+        .values-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2.5rem;
+        }
+
+        .value-card {
+            flex: 0 0 calc((100% - 5rem) / 3);
+            background: var(--white);
+            padding: 20px;
+            border-radius: 24px;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.02);
+            transition: var(--transition);
+        }
+
+        .value-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+        }
+
+        .value-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(230, 81, 0, 0.1);
+            color: var(--primary-orange);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .value-card h3 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            color: var(--primary-brown);
+            font-family: var(--font-heading);
+        }
+
+        .value-card p {
+            color: #000;
+            font-size: 15px;
+            line-height: 24px;
+            text-align: justify;
+        }
+
+        /* Product Section */
+        .product {
+            padding: 50px 0;
+            background-color: var(--white);
+        }
+
+        .product-feature {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 6rem;
+        }
+
+        .product-feature.reverse {
+            direction: rtl;
+        }
+
+        .product-feature.reverse .feature-content {
+            direction: ltr;
+        }
+
+        .feature-image img {
+            border-radius: 32px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .feature-badge {
+            background: rgba(230, 81, 0, 0.1);
+            color: var(--primary-orange);
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .feature-content h2 {
+            font-size: 40px;
+            line-height: 40px;
+            margin-bottom: 24px;
+        }
+
+        .feature-content p {
+            font-size: 18px;
+            line-height: 28px;
+            color: #000;
+            text-align: justify;
+        }
+
+        .feature-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 40px;
+        }
+
+        .summary-item {
+            background: var(--bg-neutral);
+            padding: 24px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .summary-item i {
+            color: var(--primary-orange);
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .summary-item p {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-brown);
+        }
+
+  /* --- NUEVA SECCIÓN: INFLUENCERS --- */
+        .influencers {
+            padding: 120px 0;
+            background-color: var(--bg-neutral);
+        }
+
+        .influencers-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem;
+            margin-top: 40px;
+        }
+
+        .influencer-card {
+            background: var(--white);
+            border-radius: 32px;
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+        }
+
+        .influencer-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+        }
+
+        .influencer-img-container {
+            width: 100%;
+            height: 280px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .influencer-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .influencer-tag {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--white);
+            padding: 6px 16px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary-orange);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .influencer-body {
+            padding: 40px;
+        }
+
+        .influencer-body h3 {
+            font-size: 24px;
+            margin-bottom: 16px;
+            color: var(--primary-brown);
+            line-height: 1.2;
+        }
+
+        .influencer-body p {
+            color: var(--text-muted);
+            font-size: 16px;
+            line-height: 26px;
+            margin-bottom: 24px;
+        }
+
+        .influencer-quote {
+            padding-left: 20px;
+            border-left: 3px solid var(--primary-orange);
+            font-style: italic;
+            color: var(--primary-brown);
+            margin-top: 20px;
+        }
+
+        /* --- Reverse Scroll Gallery --- */
+        .gallery-section {
+            background-color: var(--bg-neutral);
+            height: 400vh; /* Altura gigantesca para dar mucho tiempo de scroll */
+            position: relative;
+            padding: 0;
+        }
+
+        .gallery-sticky-container {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            justify-content: center;
+            padding-top: 8vh;
+            box-sizing: border-box;
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .gallery-header h2 {
+            font-size: 48px;
+            color: var(--primary-brown);
+            margin-bottom: 12px;
+        }
+        
+        .gallery-header p {
+            font-size: 18px;
+            color: var(--text-main);
+        }
+
+        .gallery-wrapper {
+            height: 90vh; /* Altura que limita las columnas como una ventana */
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            /* Degradado de Apple para suavizar la entrada y salida de las fotos */
+            mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+            -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+        }
+
+        .gallery-grid {
+            display: flex;
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1200px;
+            padding: 0 1rem;
+            /* Eliminado height fijo para auto-ajuste según contenido */
+        }
+
+        .gallery-column {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            flex: 1;
+            will-change: transform;
+        }
+
+        .gallery-column img {
+            width: 100%;
+            border-radius: 20px;
+            object-fit: cover;
+            aspect-ratio: 1 / 1.3;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: block;
+        }
+
+        .gallery-column figure {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .gallery-column figcaption {
+            font-size: 14px;
+            color: var(--text-main);
+            text-align: center;
+            font-family: var(--font-body);
+            font-weight: 500;
+        }
+
+        .col-down { transform: translateY(0); }
+        .col-up { transform: translateY(0); }
+
+        @media (max-width: 768px) {
+            .gallery-grid { gap: 1rem; }
+            .gallery-column { gap: 1rem; }
+            /* Se ha eliminado el ocultamiento de la tercera columna para forzar siempre 3 imágenes */
+            .gallery-wrapper { height: 75vh; }
+        }
+
+        /* Download Section */
+
+        .download {
+            background: radial-gradient(circle at 71% 25%, #4E342E 0%, #3E2723 100%);
+            color: var(--white);
+            border-radius: 40px;
+            padding: 100px 80px;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            align-items: center;
+            gap: 4rem;
+            overflow: hidden;
+        }
+
+        .download h2 {
+            font-size: 64px;
+            line-height: 64px;
+            margin-bottom: 24px;
+        }
+
+        .download h2 span {
+            color: #fff;
+        }
+
+        .download p {
+            font-size: 18px;
+            opacity: 0.8;
+            margin-bottom: 40px;
+            max-width: 500px;
+        }
+
+        .download-btns {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .store-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 12px 28px;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .store-btn.apple {
+            background: var(--white);
+            color: var(--primary-brown);
+        }
+
+        .store-btn.google {
+            background: var(--primary-orange);
+            color: var(--white);
+        }
+
+        /* Newsletter */
+        .newsletter {
+            background: var(--bg-neutral);
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        .newsletter h2 {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .newsletter p {
+            font-size: 18px;
+            color: #000;
+            margin-bottom: 48px;
+        }
+
+        .newsletter-form {
+            max-width: 480px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 16px 24px;
+            border-radius: 9999px;
+            border: 1px solid var(--border-light);
+            font-family: var(--font-body);
+            font-size: 16px;
+            outline: none;
+        }
+
+        .btn-dark {
+            background: var(--primary-brown);
+            color: var(--white);
+            padding: 16px 32px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary-brown);
+            color: var(--white);
+            padding: 30px 0 40px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr repeat(3, 1fr);
+            gap: 4rem;
+            margin-bottom: 30px;
+        }
+
+        .footer-brand .logo {
+            color: var(--white);
+            margin-bottom: 24px;
+        }
+
+        .footer-brand p {
+            opacity: 0.7;
+            font-size: 15px;
+            line-height: 24px;
+        }
+
+        .footer-col h4 {
+            margin-bottom: 24px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-col ul li a {
+            opacity: 0.7;
+            font-size: 14px;
+        }
+
+        .footer-col ul li a:hover {
+            opacity: 1;
+            color: var(--primary-orange);
+        }
+
+        .footer-bottom {
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0.6;
+            font-size: 14px;
+        }
+
+        /* Animations */
+        .revealed {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero h1 {
+                font-size: 56px;
+                line-height: 56px;
+            }
+
+            .download h2 {
+                font-size: 48px;
+                line-height: 48px;
+            }
+
+            .download {
+                padding: 60px 40px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .container {
+                padding: 0 2rem;
+            }
+
+            .hero .container,
+            .download,
+            .product-feature {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 4rem;
+            }
+
+            .hero-content,
+            .download-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-image {
+                order: -1;
+            }
+
+            .values-grid {
+                gap: 2rem;
+            }
+            .value-card {
+                flex: 0 0 calc((100% - 2rem) / 2);
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 40px;
+                line-height: 40px;
+            }
+
+            .hero-btns,
+            .download-btns {
+                flex-direction: column-reverse;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .values-grid {
+                gap: 1.5rem;
+            }
+            .value-card {
+                flex: 1 1 100%;
+            }
+
+            .footer-grid {
+
+            nav {
+                display: none;
+            }
+        }
+
+        /* --- Animaciones Premium Apple Style --- */
+        .reveal-item {
+            opacity: 0;
+            transform: translateY(40px) scale(0.98);
+            filter: blur(10px);
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+                        filter 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .reveal-item.revealed {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+        }
+
+        /* Animación inicial del Hero refinada */
+        .hero-content h1, .hero-content p, .hero-content .badge, .hero-content .hero-btns, .hero-image {
+            opacity: 0;
+            will-change: transform, opacity, filter;
+            animation: heroFadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .hero-content .badge { animation-delay: 0.1s; }
+        .hero-content h1, .hero-content p { animation: none; opacity: 1; } /* Delegado a split-text de JS para unificar efectos */
+        .hero-content .hero-btns { animation-delay: 0.5s; }
+        .hero-image { animation-delay: 0.4s; }
+
+        @keyframes heroFadeUp {
+            from { opacity: 0; transform: translateY(40px); filter: blur(16px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        /* Hover dinámico y suave */
+        .value-card, .influencer-card, .summary-item {
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important; 
+        }
+        .value-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.08);
+        }
+        .influencer-card:hover {
+            transform: translateY(-12px) scale(1.015);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.08);
+        }
+        .summary-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.05);
+        }
+        
+        /* Efecto parallax suave en imágenes de características */
+        .feature-image img {
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .product-feature:hover .feature-image img {
+            transform: scale(1.04);
+        }
+        .feature-image {
+            overflow: hidden;
+            border-radius: 32px;
+            transform: translateZ(0); /* Evita bug de bordes en Webkit */
+        }
+    </style>
 </head>
 
 <body>
-    <div class="phone-frame">
-        <div class="status-bar">
-            <div class="status-left">
-                <span id="current-time">00:00</span>
-            </div>
-            <div class="status-right">
-                <i class="fas fa-wifi"></i>
-                <span style="font-size: 11px; margin-right: 2px;">85%</span>
-                <i class="fas fa-battery-three-quarters"></i>
-            </div>
-        </div>
-
-        <!-- iOS Style Notification -->
-        <div id="ios-notification" class="ios-notification">
-            <div class="ios-notif-header">
-                <img src="https://github.com/mardellop/Pantry-Chef/blob/main/PantryChef%20Logo.png?raw=true" alt="Icon" class="ios-notif-icon">
-                <span class="ios-notif-app">Pantry Chef</span>
-                <span class="ios-notif-time">ahora</span>
-            </div>
-            <div class="ios-notif-body">
-                <h4 id="ios-notif-title">Notificación</h4>
-                <p id="ios-notif-msg">Mensaje de notificación</p>
+    <!-- Header -->
+    <header>
+        <div class="containerWide container">
+            <a href="#inicio" class="logo">
+                <img src="logo.png" alt="Pantry Chef Logo">
+                Pantry Chef
+            </a>
+            <div class="header-right" style="display: flex; align-items: center; gap: 2rem;">
+                <nav>
+                    <ul>
+                        <li><a href="influencers.html">Cede el delantal</a></li>
+                        <li><a href="https://mardellop.github.io/Pantry-Chef/" target="_blank" rel="noopener noreferrer">App Pantry Chef</a></li>
+                        <li><a href="https://lp.constantcontactpages.com/ev/reg/zha446j" target="_blank" rel="noopener noreferrer">Nuestros eventos</a></li>
+                        <li><a href="blog.html">Pantry Blog</a></li>
+                        <li><a href="#contacto">Contacto</a></li>
+                    </ul>
+                </nav>
+                <a href="demo.html" class="btn btn-primary" style="margin-right:0.5rem; background: transparent; border: 2px solid var(--primary-orange); color: var(--primary-orange); box-shadow: none;">Probar demo</a>
             </div>
         </div>
-
-        <!-- iOS Cover Screen (Wallpaper + Time) -->
-        <div id="ios-cover-screen" class="ios-cover-screen" onclick="showPasscode()">
-            <div class="lock-header">
-                <i class="fas fa-lock" style="font-size: 14px; margin-bottom: 5px; opacity: 1; color: #fff;"></i>
-                <div class="lock-time" style="color: #fff;">--:--</div>
-                <div class="lock-date" style="color: #fff;">Cargando...</div>
-            </div>
-
-            <!-- Notifications Container -->
-            <div class="ios-lock-notifs-container">
-                <!-- Notification 1: WhatsApp -->
-                <div class="ios-lock-notif">
-                    <div class="notif-header">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="notif-icon">
-                        <span class="notif-app">WhatsApp</span>
-                        <span class="notif-time">ahora</span>
-                    </div>
-                    <div class="notif-body">
-                        <strong>Mamá:</strong> ¿A qué hora llegas?
-                    </div>
+    </header>
+    <main>
+        <!-- Hero Section -->
+        <section id="inicio" class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Cocina sin estrés, <span class="text-accent">come con placer</span></h1>
+                    <p>Pantry Chef te ayuda a preparar comidas saludables con lo que ya tienes en casa. Sin
+                        planificación, sin complicaciones.</p>
+                </div>
+                <div class="hero-image">
+                    <article class="hero-card">
+                        <div class="hero-card-container">
+                            <img src="logo.png" alt="Pantry Chef Background">
+                            <img src="logo-2.png" alt="Pantry Chef Character">
+                        </div>
+                    </article>
                 </div>
             </div>
+        </section>
 
-            <div class="swipe-hint">
-                <div class="swipe-bar"></div>
-                <p>Desliza hacia arriba para desbloquear</p>
-            </div>
-            
-            <div class="lock-footer">
-                <div class="footer-icon glass" style="color: #fff;"><i class="fas fa-flashlight"></i></div>
-                <div class="footer-icon glass" style="color: #fff;"><i class="fas fa-camera"></i></div>
-            </div>
-        </div>
 
-        <!-- iOS Lock Screen (Passcode) -->
-        <div id="ios-lock-screen" class="ios-lock-screen">
-            <div class="lock-header">
-                <i class="fas fa-lock" style="font-size: 14px; margin-bottom: 5px; opacity: 0.8;"></i>
-                <div class="lock-time">--:--</div>
-                <div class="lock-date">Cargando...</div>
-            </div>
-            
-            <div class="passcode-container">
-                <p>Introduce el código</p>
-                <div class="passcode-dots" id="passcode-dots">
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                </div>
-                
-                <div class="keypad">
-                    <button class="key" onclick="enterDigit(1)">1</button>
-                    <button class="key" onclick="enterDigit(2)">2</button>
-                    <button class="key" onclick="enterDigit(3)">3</button>
-                    <button class="key" onclick="enterDigit(4)">4</button>
-                    <button class="key" onclick="enterDigit(5)">5</button>
-                    <button class="key" onclick="enterDigit(6)">6</button>
-                    <button class="key" onclick="enterDigit(7)">7</button>
-                    <button class="key" onclick="enterDigit(8)">8</button>
-                    <button class="key" onclick="enterDigit(9)">9</button>
-                    <div style="width: 70px;"></div>
-                    <button class="key" onclick="enterDigit(0)">0</button>
-                    <div class="key-text-btn" onclick="deleteDigit()">Borrar</div>
-                </div>
-            </div>
-            
-        </div>
+        <!-- About Section (sticky-scroll, same mechanics as gallery-section) -->
+        <section id="nosotros" class="about">
+            <div class="about-sticky">
 
-        <!-- iOS Home Screen (Where all app icons live) -->
-        <div id="ios-home-screen" class="ios-home-screen">
-            <div class="ios-home-search">
-                <i class="fas fa-search"></i> Buscar apps...
-            </div>
-            
-            <div class="ios-app-grid">
-                <!-- Row 1 -->
-                <div class="ios-app-icon">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" 
-                         onerror="this.src='https://cdn-icons-png.flaticon.com/512/733/733585.png'" alt="WhatsApp">
-                    <span>WhatsApp</span>
-                </div>
-                <div class="ios-app-icon">
-                    <img src="instagram_icon.png" alt="Instagram">
-                    <span>Instagram</span>
-                </div>
-                <div class="ios-app-icon">
-                    <img src="gmail_icon.png" alt="Gmail">
-                    <span>Gmail</span>
+                <!-- LEFT: 3-column reverse-scroll gallery -->
+                <div class="about-gallery-side">
+                    <div class="about-gallery-viewport" id="about-gallery">
+                        <div class="about-gallery-grid">
+                            <!-- col 1: DOWN -->
+                            <div class="about-gallery-col about-col-down">
+                                <figure><img src="arroz-blanco-perfecto.png" alt="Arroz blanco"><figcaption>Arroz blanco perfecto</figcaption></figure>
+                                <figure><img src="bowl-de-aguacate-y-espinacas.png" alt="Bowl aguacate"><figcaption>Bowl de aguacate y espinacas</figcaption></figure>
+                                <figure><img src="huevos-revueltos-con-queso.png" alt="Huevos revueltos"><figcaption>Huevos revueltos con queso</figcaption></figure>
+                                <figure><img src="espinacas-al-ajillo.png" alt="Espinacas"><figcaption>Espinacas al ajillo</figcaption></figure>
+                                <figure><img src="arroz-con-espinacas.png" alt="Arroz espinacas"><figcaption>Arroz con espinacas</figcaption></figure>
+                                <figure><img src="fench-toast-con-canela.png" alt="French toast"><figcaption>French toast con canela</figcaption></figure>
+                            </div>
+                            <!-- col 2: UP -->
+                            <div class="about-gallery-col about-col-up">
+                                <figure><img src="ensalada-caprese.png" alt="Ensalada caprese"><figcaption>Ensalada caprese</figcaption></figure>
+                                <figure><img src="pasta-al-pomodoro.png" alt="Pasta pomodoro"><figcaption>Pasta al pomodoro</figcaption></figure>
+                                <figure><img src="guacamole-casero.png" alt="Guacamole"><figcaption>Guacamole casero</figcaption></figure>
+                                <figure><img src="pan-con-tomate.png" alt="Pan con tomate"><figcaption>Pan con tomate</figcaption></figure>
+                                <figure><img src="pasta-napolitana.png" alt="Pasta napolitana"><figcaption>Pasta napolitana</figcaption></figure>
+                                <figure><img src="ensalada-de-aguacate-y-tomate.png" alt="Ensalada aguacate"><figcaption>Ensalada de aguacate y tomate</figcaption></figure>
+                            </div>
+                            <!-- col 3: DOWN -->
+                            <div class="about-gallery-col about-col-down">
+                                <figure><img src="pollo-al-ajillo.png" alt="Pollo ajillo"><figcaption>Pollo al ajillo</figcaption></figure>
+                                <figure><img src="pisto-manchego.png" alt="Pisto manchego"><figcaption>Pisto manchego</figcaption></figure>
+                                <figure><img src="macarrones-con-queso.png" alt="Macarrones"><figcaption>Macarrones con queso</figcaption></figure>
+                                <figure><img src="pan-de-ajo-casero.png" alt="Pan de ajo"><figcaption>Pan de ajo casero</figcaption></figure>
+                                <figure><img src="pollo-al-tomate.png" alt="Pollo tomate"><figcaption>Pollo al tomate</figcaption></figure>
+                                <figure><img src="arroz-con-pollo.png" alt="Arroz pollo"><figcaption>Arroz con pollo</figcaption></figure>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Stat pill -->
+                    <div class="stat-pill">
+                        <i data-lucide="users"></i>
+                        <div class="stat-text">
+                            <span id="counter">+10,000</span>
+                            <p>Usuarios activos</p>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Row 2 -->
-                <div class="ios-app-icon">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/512px-Spotify_logo_without_text.svg.png" 
-                         onerror="this.src='https://cdn-icons-png.flaticon.com/512/174/174872.png'" alt="Spotify">
-                    <span>Spotify</span>
-                </div>
-                <!-- Our App (Centered in Row 2) -->
-                <div class="ios-app-icon" onclick="openApp()" style="transform: scale(1.1); z-index: 10;">
-                    <img src="https://github.com/mardellop/Pantry-Chef/blob/main/PantryChef%20Logo.png?raw=true" 
-                         style="background:#fff; box-shadow: 0 4px 10px rgba(0,0,0,0.3); object-fit: contain; padding: 4px;" alt="Pantry Chef">
-                    <span style="font-size: 11px; font-weight: 800; color: #000; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">Pantry Chef</span>
-                </div>
-                <div class="ios-app-icon">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a9/TikTok_logo.svg/512px-TikTok_logo.svg.png" 
-                         onerror="this.src='https://cdn-icons-png.flaticon.com/512/3046/3046121.png'" alt="TikTok">
-                    <span>TikTok</span>
+                <!-- RIGHT: pinned about text -->
+                <div class="about-text-side">
+                    <div class="about-content">
+                        <h2>Tu mejor compañero en la cocina</h2>
+                        <p>Somos <b>Pantry Chef</b>, una aplicación móvil diseñada para que cocinar sea una experiencia sencilla, nutritiva y, sobre todo, sin estrés.</p>
+                        <p>Está pensado <b>para ti</b>, que no tienes tiempo para planificar las comidas de la semana, pero que tampoco quieres renunciar a una alimentación saludable.</p>
+                        <p>Utilizamos la tecnología para que aproveches todo lo que tienes en casa y hacer que la cocina no se te resista. También, puedes conocer a otros miembros de <b>nuestra comunidad</b>, donde compartimos recetas. Queremos que cocinar deje de ser una tarea pendiente para convertirse en <span class="highlight">algo disfrutable y sostenible</span>.</p>
+                    </div>
                 </div>
 
-                <!-- Row 3 -->
-                <div class="ios-app-icon">
-                    <img src="foto_icon.png" alt="Fotos">
-                    <span>Fotos</span>
+            </div>
+        </section>
+
+           <!-- Values Section -->
+        <section id="valores" class="values">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Nuestros valores</h2>
                 </div>
-                <div class="ios-app-icon">
-                    <img src="camara_icon.png" alt="Cámara">
-                    <span>Cámara</span>
-                </div>
-                <div class="ios-app-icon">
-                    <img src="ajustes_icon.png" alt="Ajustes">
-                    <span>Ajustes</span>
+                <div class="values-grid">
+                    <div class="value-card">
+                        <div class="value-icon"><i data-lucide="zap"></i></div>
+                        <h3>Conveniencia</h3>
+                        <p>Si no es fácil, no nos sirve. Todo está pensado para ahorrar tiempo y no complicar la vida de nuestros clientes.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon"><i data-lucide="settings"></i></div>
+                        <h3>Personalización</h3>
+                        <p>Cada persona y cada paladar es un mundo. Nos adaptamos a los gustos y hábitos de nuestros clientes.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon"><i data-lucide="heart"></i></div>
+                        <h3>Salud y bienestar</h3>
+                        <p>Creemos firmemente que comer sano no debería ser un lujo. Por eso, proponemos recetas nutritivas y fáciles de hacer.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon"><i data-lucide="users"></i></div>
+                        <h3>Comunidad</h3>
+                        <p>Fomentamos el intercambio de ideas y recetas, porque cocinar también es compartir con otros.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon"><i data-lucide="leaf"></i></div>
+                        <h3>Sostenibilidad</h3>
+                        <p>Ayudamos a reducir el desperdicio de alimentos y cuidamos el planeta gracias a que recomendamos recetas con ingredientes que el cliente ya tiene por casa.</p>
+                    </div>
                 </div>
             </div>
-
-
-
-            <div class="ios-dock">
-                <div class="ios-app-icon">
-                    <img src="telefono.png" alt="Teléfono">
+        </section>
+        <!-- Product Section -->
+        <section id="producto" class="product">
+            <div class="container">
+                <div class="section-header">
+                    <div class="feature-badge"
+                        style="background: #FFF5F2; color: #E65100; border-radius: 9999px; padding: 4px 16px; margin-bottom: 24px;">
+                        NUESTROS SERVICIOS</div>
+                    <h2>Todo lo que necesitas para cocinar</h2>
+                    <p>Tú pones los ingredientes, Pantry Chef pone la idea</p>
                 </div>
-                <div class="ios-app-icon">
-                    <img src="safari-icon.png" alt="Safari">
-                </div>
-                <div class="ios-app-icon">
-                    <img src="Apple_Music_icon.svg.png" alt="Música">
-                </div>
-            </div>
-        </div>
-
-        <!-- Auth / Welcome Flow -->
-        <div id="auth-screen" class="splash-screen" style="display: none; opacity: 0;">
-            <img src="https://raw.githubusercontent.com/mardellop/Pantry-Chef/main/PantryChef%20Logo.png"
-                alt="Pantry Chef Logo" class="auth-logo">
-
-            <div class="auth-text">
-                <h1>Pantry Chef</h1>
-                <p>Prep, Dish & Go</p>
-            </div>
-
-            <div class="auth-buttons" id="auth-actions">
-                <button class="btn-primary" onclick="showLoginForm()">Iniciar Sesión</button>
-                <div class="btn-secondary" onclick="showLoginForm()">Registrarse</div>
-            </div>
-
-            <div class="auth-form" id="auth-fields"
-                style="display: none; width: 100%; opacity: 0; transition: opacity 0.4s ease;">
-                <input type="email" id="user-email" placeholder="Correo electrónico" class="auth-input">
-                <input type="password" id="user-pass" placeholder="Contraseña" class="auth-input">
-                <button class="btn-primary" onclick="handleAuth()" style="margin-top: 10px;">Entrar</button>
-                <p onclick="resetAuth()"
-                    style="color: #000; font-size: 13px; margin-top: 15px; cursor: pointer; text-align: center;">
-                    Volver</p>
-            </div>
-        </div>
-
-        <!-- Main App Content (Hidden until Auth) -->
-        <div id="main-app-content" class="app-content-container" style="display: none;">
-
-            <div class="app-container">
-                <!-- Screen 1: Dashboard -->
-                <!-- Screen 1: Dish (Social Kitchen) -->
-                <section id="screen-home" class="screen active">
-                    <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
-                        <h2>Inspírate y cocina</h2>
+                <!-- Feature 1 -->
+                <div class="product-feature">
+                    <div class="feature-content">
+                        <div class="feature-badge">FUNCIÓN 1</div>
+                        <h2>Recetas personalizadas</h2>
+                        <p>Dinos qué tienes en tu despensa para que Pantry Chef te proponga recetas nutritivas y fáciles de hacer.</p>
                     </div>
-
-                    <!-- Sustainable Challenges Horizontal Scroll -->
-                    <div class="challenges-ribbon">
-                        <div class="challenge-card" onclick="openChallenge('Zero to Hero')">
-                            <div class="challenge-icon">🛡️</div>
-                            <div class="challenge-info">
-                                <span>RETO SEMANAL</span>
-                                <h4>Zero to Hero</h4>
-                            </div>
-                        </div>
-                        <div class="challenge-card highlight" onclick="openChallenge('Pantry Party')">
-                            <div class="challenge-icon">🥳</div>
-                            <div class="challenge-info">
-                                <span>NUEVO</span>
-                                <h4>Pantry Party</h4>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Quick Discovery Filters -->
-                    <div class="filter-pills">
-                        <div class="pill active" onclick="filterRecipes('all', this)">Todo</div>
-                        <div class="pill" onclick="filterRecipes('fast', this)"><i class="fas fa-bolt"></i>
-                            < 15 min</div>
-                                <div class="pill" onclick="filterRecipes('medium', this)"><i class="fas fa-clock"></i>
-                                    > 20 min</div>
-                                <div class="pill" onclick="filterRecipes('eco', this)"><i class="fas fa-leaf"></i>
-                                    Eco-Match</div>
-                        </div>
-
-                        <h3 style="margin: 20px 0 10px; font-size: 18px; color: #000;">Feed de la Comunidad</h3>
-                        
-                        <!-- Premium Share Banner -->
-                        <div class="feed-share-banner">
-                            <button class="btn-premium-share" onclick="openShareDish()">
-                                <div class="share-icon-blob">
-                                    <i class="fas fa-camera"></i>
-                                </div>
-                                <div class="share-text">
-                                    <span>¿Has cocinado algo hoy?</span>
-                                    <strong>Comparte tu creación</strong>
-                                </div>
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </div>
-
-                        <!-- UGC Social Recipe Cards -->
-                        <div class="social-feed">
-                            <div class="dish-card"
-                                onclick="openRecipeDetail('Pasta con setas y salvia', '@Carlacocina', 'Baja')">
-                                <div class="dish-media">
-                                    <img src="https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80"
-                                        alt="Pasta">
-                                    <div class="eco-impact-tag">
-                                        <i class="fas fa-leaf"></i> -0.4kg CO2
-                                    </div>
-                                </div>
-                                <div class="dish-content">
-                                    <div class="dish-user">
-                                        <img src="https://i.pravatar.cc/150?u=carlos" class="avatar">
-                                        <span>@Carlacocina</span>
-                                    </div>
-                                    <h2>Pasta con setas y salvia</h2>
-                                    <div class="dish-meta">
-                                        <span><i class="fas fa-signal"></i> Fácil</span>
-                                        <span><i class="fas fa-fire"></i> 12 min</span>
-                                        <div class="dish-social">
-                                            <i class="far fa-heart"></i> 124
-                                        </div>
-                                    </div>
-                                    <div class="dish-social-proof">
-                                        <i class="fas fa-users"></i> 500 personas han cocinado esta receta hoy
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="dish-card" onclick="openRecipeDetail('Vegan Bowl', '@Willy251', 'Media')">
-                                <div class="dish-media">
-                                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80"
-                                        alt="Salad">
-                                    <div class="eco-impact-tag">
-                                        <i class="fas fa-leaf"></i> -0.8kg CO2
-                                    </div>
-                                </div>
-                                <div class="dish-content">
-                                    <div class="dish-user">
-                                        <img src="https://i.pravatar.cc/150?u=ana" class="avatar">
-                                        <span>@Willy251</span>
-                                    </div>
-                                    <h2>Vegan Bowl</h2>
-                                    <div class="dish-meta">
-                                        <span><i class="fas fa-signal"></i> Media</span>
-                                        <span><i class="fas fa-fire"></i> 25 min</span>
-                                        <div class="dish-social">
-                                            <i class="far fa-heart"></i> 89
-                                        </div>
-                                    </div>
-                                    <div class="dish-social-proof">
-                                        <i class="fas fa-leaf"></i> Otros usuarios han salvado 2Kg de comida esta semana
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="dish-card"
-                            onclick="openRecipeDetail('Tostada de aguacate', '@HealthyMarta', 'Fácil')">
-                            <div class="dish-media">
-                                <img src="https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=800&q=80"
-                                    alt="Avocado Toast">
-                                <div class="eco-impact-tag">
-                                    <i class="fas fa-leaf"></i> -0.3kg CO2
-                                </div>
-                            </div>
-                            <div class="dish-content">
-                                <div class="dish-user">
-                                    <img src="https://i.pravatar.cc/150?u=marta" class="avatar">
-                                    <span>@HealthyMarta</span>
-                                </div>
-                                <h2>Tostada de aguacate</h2>
-                                <div class="dish-meta">
-                                    <span><i class="fas fa-signal"></i> Fácil</span>
-                                    <span><i class="fas fa-fire"></i> 10 min</span>
-                                    <div class="dish-social">
-                                        <i class="far fa-heart"></i> 210
-                                    </div>
-                                </div>
-                                <div class="dish-social-proof">
-                                    <i class="fas fa-users"></i> 500 personas han cocinado esta receta hoy
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="dish-card" onclick="openRecipeDetail('Ensalada de Quinoa', '@YoungChef', 'Media')">
-                            <div class="dish-media">
-                                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80"
-                                    alt="Quinoa Salad">
-                                <div class="eco-impact-tag">
-                                    <i class="fas fa-leaf"></i> -0.6kg CO2
-                                </div>
-                            </div>
-                            <div class="dish-content">
-                                <div class="dish-user">
-                                    <img src="https://i.pravatar.cc/150?u=green" class="avatar">
-                                    <span>@YoungChef</span>
-                                </div>
-                                <h2>Buddha Bowl</h2>
-                                <div class="dish-meta">
-                                    <span><i class="fas fa-signal"></i> Media</span>
-                                    <span><i class="fas fa-fire"></i> 40 min</span>
-                                    <div class="dish-social">
-                                        <i class="far fa-heart"></i> 156
-                                    </div>
-                                </div>
-                                <div class="dish-social-proof">
-                                    <i class="fas fa-leaf"></i> Otros usuarios han salvado 2Kg de comida esta semana
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="dish-card"
-                            onclick="openRecipeDetail('Espaguetis con salsa pomodoro', '@VeggieVibes', 'Fácil')">
-                            <div class="dish-media">
-                                <img src="https://images.unsplash.com/photo-1551892374-ecf8754cf8b0?auto=format&fit=crop&w=800&q=80"
-                                    alt="Zucchini Noodles">
-                                <div class="eco-impact-tag">
-                                    <i class="fas fa-leaf"></i> -0.7kg CO2
-                                </div>
-                            </div>
-                            <div class="dish-content">
-                                <div class="dish-user">
-                                    <img src="https://i.pravatar.cc/150?u=veggie" class="avatar">
-                                    <span>@VeggieVibes</span>
-                                </div>
-                                <h2>Espaguetis con salsa pomodoro</h2>
-                                <div class="dish-meta">
-                                    <span><i class="fas fa-signal"></i> Fácil</span>
-                                    <span><i class="fas fa-fire"></i> 15 min</span>
-                                    <div class="dish-social">
-                                        <i class="far fa-heart"></i> 189
-                                    </div>
-                                </div>
-                                <div class="dish-social-proof">
-                                    <i class="fas fa-users"></i> 500 personas han cocinado esta receta hoy
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="dish-card"
-                            onclick="openRecipeDetail('Freakshake de chocolate', '@SweetFit', 'Fácil')">
-                            <div class="dish-media">
-                                <img src="https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80"
-                                    alt="Smoothie Bowl">
-                                <div class="eco-impact-tag">
-                                    <i class="fas fa-leaf"></i> -0.2kg CO2
-                                </div>
-                            </div>
-                            <div class="dish-content">
-                                <div class="dish-user">
-                                    <img src="https://i.pravatar.cc/150?u=sweet" class="avatar">
-                                    <span>@SweetFit</span>
-                                </div>
-                                <h2>Freakshake de chocolate</h2>
-                                <div class="dish-meta">
-                                    <span><i class="fas fa-signal"></i> Fácil</span>
-                                    <span><i class="fas fa-fire"></i> 10 min</span>
-                                    <div class="dish-social">
-                                        <i class="far fa-heart"></i> 275
-                                    </div>
-                                </div>
-                                <div class="dish-social-proof">
-                                    <i class="fas fa-leaf"></i> Otros usuarios han salvado 2Kg de comida esta semana
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </section>
-
-                <!-- Screen 2: Pantry (The Core) -->
-                <section id="screen-pantry" class="screen">
-                    <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <h1>Mi despensa</h1>
-                        </div>
-                    </div>
-
-                    <!-- Sustainability Metrics Card -->
-                    <div class="card eco-card" style="margin-bottom: 25px;">
-                        <div style="display: flex; gap: 15px; align-items: center; justify-content: center;">
-                            <div class="eco-chart">
-                                <span>85%</span>
-                            </div>
-                            <div>
-                                <h4 style="color: #fff;">Impacto semanal</h4>
-                                <p style="font-size: 11px; color: rgba(255,255,255,0.7);">Has evitado desperdiciar 3
-                                    limones y 1 pollo.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pantry-grid-scroll" id="pantry-items">
-                        <!-- Items dynamically toggleable -->
-                        <div class="smart-item active" onclick="toggleItem(this)">
-                            <span class="icon">🍅</span>
-                            <span class="name">Tomates</span>
-                            <span class="expiry-tag urgent">2d</span>
-                        </div>
-                        <div class="smart-item active" onclick="toggleItem(this)">
-                            <span class="icon">🍗</span>
-                            <span class="name">Pollo</span>
-                            <span class="expiry-tag urgent">1d</span>
-                        </div>
-                        <div class="smart-item" onclick="toggleItem(this)">
-                            <span class="icon">🥑</span>
-                            <span class="name">Aguacate</span>
-                            <span class="expiry-tag">4d</span>
-                        </div>
-                        <div class="smart-item active" onclick="toggleItem(this)">
-                            <span class="icon">🍋</span>
-                            <span class="name">Limón</span>
-                            <span class="expiry-tag">7d</span>
-                        </div>
-                        <div class="smart-item" onclick="toggleItem(this)">
-                            <span class="icon">🍝</span>
-                            <span class="name">Pasta</span>
-                            <span class="expiry-tag">30d</span>
-                        </div>
-                        <div class="smart-item" onclick="toggleItem(this)">
-                            <span class="icon">🧀</span>
-                            <span class="name">Queso</span>
-                            <span class="expiry-tag">12d</span>
-                        </div>
-                        <div class="smart-item" onclick="toggleItem(this)">
-                            <span class="icon">🥚</span>
-                            <span class="name">Huevos</span>
-                            <span class="expiry-tag">14d</span>
-                        </div>
-                        <div class="smart-item active" onclick="toggleItem(this)">
-                            <span class="icon">🥛</span>
-                            <span class="name">Leche</span>
-                            <span class="expiry-tag urgent">3d</span>
-                        </div>
-                        <div class="smart-item" onclick="toggleItem(this)">
-                            <span class="icon">🥕</span>
-                            <span class="name">Zanahorias</span>
-                            <span class="expiry-tag">5d</span>
-                        </div>
-                        <div class="smart-item" onclick="toggleItem(this)">
-                            <span class="icon">🍚</span>
-                            <span class="name">Arroz</span>
-                            <span class="expiry-tag">60d</span>
-                        </div>
-                        <div class="smart-item active" onclick="toggleItem(this)">
-                            <span class="icon">🌶️</span>
-                            <span class="name">Pimientos</span>
-                            <span class="expiry-tag">4d</span>
-                        </div>
-                        <div class="smart-item" onclick="toggleItem(this)">
-                            <span class="icon">🍎</span>
-                            <span class="name">Manzanas</span>
-                            <span class="expiry-tag">8d</span>
-                        </div>
-                        <div class="smart-item" onclick="toggleItem(this)">
-                            <span class="icon">🥫</span>
-                            <span class="name">Lata de<br>garbanzos</span>
-                            <span class="expiry-tag">365d</span>
-                        </div>
-                        <div class="smart-item active" onclick="toggleItem(this)">
-                            <span class="icon">🧅</span>
-                            <span class="name">Cebolla</span>
-                            <span class="expiry-tag">14d</span>
-                        </div>
-                    </div>
-
-                    <div class="magic-action-container" style="display: flex; justify-content: center; width: 100%;">
-                        <button class="btn-cook-now" onclick="generateSmartRecipe()">
-                            <i class="fas fa-magic"></i> COCINAR AHORA
-                        </button>
-                    </div>
-
-                    <!-- Floating Action Button (FAB) -->
-                    <div class="fab-scanner" onclick="toggleFABMenu()">
-                        <i class="fas fa-plus"></i>
-                    </div>
-
-                    <!-- FAB Backdrop -->
-                    <div id="fab-overlay" class="fab-backdrop" onclick="toggleFABMenu()"></div>
-
-                    <!-- Scanner Menu (Hidden) -->
-                    <div id="scanner-menu" class="fab-menu">
-                        <div class="fab-item-wrapper" onclick="document.getElementById('ticket-scanner').click()">
-                            <span class="fab-label">Ticket de compra</span>
-                            <button class="fab-item" style="background: #5BC08E;">
-                                <i class="fas fa-file-invoice"></i>
-                            </button>
-                        </div>
-                        <div class="fab-item-wrapper" onclick="document.getElementById('food-scanner').click()">
-                            <span class="fab-label">Cámara</span>
-                            <button class="fab-item" style="background: #FFD25A;">
-                                <i class="fas fa-camera"></i>
-                            </button>
-                        </div>
-                        <div class="fab-item-wrapper" onclick="simulateVoiceInput()">
-                            <span class="fab-label">Dictar compra</span>
-                            <button class="fab-item" style="background: #54a0ff;">
-                                <i class="fas fa-microphone"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <input type="file" id="ticket-scanner" accept="image/*" capture="environment"
-                        style="display: none;">
-                    <input type="file" id="food-scanner" accept="image/*" capture="environment" style="display: none;">
-
-                    <!-- Scan Overlay -->
-                    <div id="scan-overlay"
-                        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 20px;">
-                        <div class="scanning-line"></div>
-                        <img id="scanned-preview"
-                            style="max-width: 80%; max-height: 40%; border-radius: 20px; border: 2px solid var(--accent); margin-bottom: 20px; object-fit: cover;">
-                        <h2 id="scanning-status" style="color: var(--accent); margin-bottom: 10px;">Analizando...</h2>
-                        <div id="ai-reasoning"
-                            style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; width: 100%; max-width: 320px; text-align: left;">
-                            <p id="thought-1" style="font-size: 11px; color: var(--accent); margin-bottom: 8px;"></p>
-                            <p id="thought-2" style="font-size: 11px; color: var(--text-main); margin-bottom: 8px;"></p>
-                            <p id="thought-3"
-                                style="font-size: 13px; font-weight: 600; color: #fff; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
-                            </p>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Screen 3: Go (Plan & Shop) -->
-                <section id="screen-cart" class="screen">
-                    <div class="header">
-                        <h1>Mi carrito</h1>
-                    </div>
-
-                    <div class="cart-tabs">
-                        <div class="cart-tab active" onclick="switchCartTab('shop')">LISTA DE COMPRA</div>
-                        <div class="cart-tab" onclick="switchCartTab('cook')">ASISTENTE COCINA</div>
-                    </div>
-
-                    <div id="cart-content-shop">
-                        <div class="savings-insight">
-                            <div class="savings-icon"><i class="fas fa-percent"></i></div>
-                            <div class="savings-text">
-                                <h4>Ahorro de hoy: 12.45€</h4>
-                                <p>Aplicado automáticamente en comercios locales</p>
-                            </div>
-                        </div>
-
-                        <div class="category-label">🍇 Frutas y Verduras</div>
-                        <div class="list-container">
-                            <div class="list-item">
-                                <label class="check-container">
-                                    <input type="checkbox">
-                                    <span class="checkmark"></span>
-                                    <span class="item-text">Pimientos rojos <small>Oferta Mercadona</small></span>
-                                </label>
-                            </div>
-                            <div class="list-item">
-                                <label class="check-container">
-                                    <input type="checkbox">
-                                    <span class="checkmark"></span>
-                                    <span class="item-text">Albahaca fresca <small>
-                                            Km 0 - Cooperativa
-                                            Local</small></span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="category-label">🧀 Lácteos y Huevos</div>
-                        <div class="list-container">
-                            <div class="list-item">
-                                <label class="check-container">
-                                    <input type="checkbox">
-                                    <span class="checkmark"></span>
-                                    <span class="item-text">Parmesano D.O.P <small>Agotado en despensa</small></span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="category-label">🛒 Sugerencia de tiendas</div>
-                        <div class="stores-scroll">
-                            <div class="store-card clickable" onclick="openStore('Cooperativa')">
-                                <div class="store-badge">-15%</div>
-                                <i class="fas fa-store"
-                                    style="font-size: 20px; color: var(--primary); margin-bottom: 10px;"></i>
-                                <p style="font-size: 11px; font-weight: 800;">Cooperativa Local</p>
-                                <span style="font-size: 9px; color: #888;">A 200m de ti</span>
-                            </div>
-                            <div class="store-card clickable" onclick="openStore('Mercadona')">
-                                <div class="store-badge">TOP</div>
-                                <i class="fas fa-truck"
-                                    style="font-size: 20px; color: #ffae42; margin-bottom: 10px;"></i>
-                                <p style="font-size: 11px; font-weight: 800;">Mercadona</p>
-                                <span style="font-size: 9px; color: #888;">Recogida rápida</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="cart-content-cook" style="display: none;">
-                        <h3 style="font-size: 16px; margin-bottom: 15px;">Recetas para preparar ahora</h3>
-
-                        <div class="in-cart-recipe">
-                            <img src="https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=200&q=80"
-                                alt="Pasta">
-                            <div class="recipe-info">
-                                <h4>Pasta con setas y salvia</h4>
-                                <p style="font-size: 11px; color: #888;">8 min rest. • 2 pasos</p>
-                                <button class="recipe-btn" onclick="openCookingMode('Pasta con setas y salvia')">
-                                    CONTINUAR COCINANDO
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="in-cart-recipe" style="opacity: 0.6;">
-                            <img src="https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=200&q=80"
-                                alt="Toast">
-                            <div class="recipe-info">
-                                <h4>Tostada de aguacate</h4>
-                                <p style="font-size: 11px; color: #888;">Faltan ingredientes en carrito</p>
-                                <button class="recipe-btn" style="background: #ccc;" disabled>COMPRAR FALTANTES</button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Optimized Route Modal/Overlay (Hidden) -->
-                <div id="route-overlay" class="route-overlay" style="display: none;">
-                    <div class="route-card-full">
-                        <div class="route-header">
-                            <h2>Ruta Inteligente</h2>
-                            <i class="fas fa-times" onclick="closeRoute()"></i>
-                        </div>
-                        <div class="route-map-sim">
-                            <div class="map-path"></div>
-                            <div class="marker m1"><i class="fas fa-home"></i></div>
-                            <div class="marker m2"><i class="fas fa-store"></i></div>
-                            <div class="marker m3"><i class="fas fa-store"></i></div>
-                        </div>
-                        <div class="route-steps">
-                            <div class="r-step">
-                                <span class="r-time">17:40</span>
-                                <div class="r-info">
-                                    <h4>Mercadona (3 min pie)</h4>
-                                    <p>Comprar: Pasta, Albahaca</p>
-                                </div>
-                            </div>
-                            <div class="r-step">
-                                <span class="r-time">17:55</span>
-                                <div class="r-info">
-                                    <h4>Frutería Paco (5 min pie)</h4>
-                                    <p>Comprar: Limones (Oferta proximidad)</p>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="btn-primary" onclick="closeRoute()" style="margin-top: 20px;">ENTENDIDO</button>
+                    <div class="feature-image">
+                        <img src="feature-1.png" alt="Recetas personalizadas">
                     </div>
                 </div>
-                </section>
-
-                <!-- Screen 4: Recipe Detail & Player -->
-                <section id="screen-recipe" class="screen"
-                    style="flex-direction: column; height: 100%; padding: 0; background: #fff; color: #333;">
-                    <div class="player-header" style="padding: 20px; position: absolute; z-index: 10; width: 100%;">
-                        <div class="back-pill" onclick="showScreen('home')"
-                            style="background: rgba(255,255,255,0.9); backdrop-filter: blur(5px);">
-                            <i class="fas fa-arrow-left"></i>
-                        </div>
+                <!-- Feature 2 -->
+                <div class="product-feature reverse">
+                    <div class="feature-content">
+                        <div class="feature-badge">FUNCIÓN 2</div>
+                        <h2>Comunidad</h2>
+                        <p>Únete a miles de cocineros caseros, comparte tus platos, descubre nuevos sabores y conecta con personas de todo el mundo. Entra a <a href="https://chat.whatsapp.com/BEdleVvEnHx4SlwCAkDckn" target="_blank" rel="noopener noreferrer">nuestra comunidad</a></p>
                     </div>
-
-                    <div class="dish-video-container" style="margin: 0; border-radius: 0; height: 35%;">
-                        <img id="detail-image" src=""
-                            style="width: 100%; height: 100%; object-fit: cover; border-radius: 0 0 30px 30px;">
-                        <div class="video-controls">
-                            <div class="sync-timer" id="cooking-timer" style="display: none;">
-                                <i class="fas fa-clock"></i> <span id="timer-display">00:00</span>
-                            </div>
-                        </div>
+                    <div class="feature-image">
+                        <img src="feature-2.png" alt="Comunidad">
                     </div>
-
-                    <div class="recipe-content-scroll" style="flex: 1; overflow-y: auto; padding: 25px;">
-                        <div class="recipe-header">
-                            <h2 id="detail-title"
-                                style="font-size: 28px; font-weight: 800; margin-bottom: 10px; line-height: 1.2;">Título
-                                Receta</h2>
-                            <div class="dish-meta" style="margin-bottom: 25px; gap: 15px;">
-                                <span id="detail-difficulty"
-                                    style="background: #f0f0f0; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;"><i
-                                        class="fas fa-signal"></i> Fácil</span>
-                                <span id="detail-time"
-                                    style="background: #f0f0f0; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;"><i
-                                        class="fas fa-fire"></i> 12 min</span>
-                                <span
-                                    style="color: var(--primary); font-weight: 700; font-size: 12px; background: rgba(91, 192, 142, 0.1); padding: 6px 12px; border-radius: 20px;"><i
-                                        class="fas fa-leaf"></i> Eco-Friendly</span>
-                            </div>
-                        </div>
-
-                        <div class="recipe-tabs">
-                            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 15px;">Ingredientes</h3>
-                            <ul id="detail-ingredients" class="ingredient-list">
-                                <!-- Populated by JS -->
-                            </ul>
-
-                            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 15px; margin-top: 30px;">
-                                Utensilios</h3>
-                            <ul id="detail-utensils" class="utensil-list">
-                                <!-- Populated by JS -->
-                            </ul>
-
-                            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 15px; margin-top: 30px;">
-                                Preparación</h3>
-                            <div id="detail-steps" class="steps-text">
-                                <!-- Populated by JS -->
-                            </div>
-                        </div>
+                </div>
+                <!-- Feature 3 -->
+                <div class="product-feature">
+                    <div class="feature-content">
+                        <div class="feature-badge">FUNCIÓN 3</div>
+                        <h2>Lista de compra inteligente</h2>
+                        <p>Crea listas de compra automáticamente con lo que te falta, conecta con tiendas locales y obtén descuentos exclusivos.</p>
                     </div>
-
-                    <div class="floating-action-bar"
-                        style="position: sticky; bottom: 0; padding: 20px; background: linear-gradient(to top, #fff 80%, transparent); margin-top: auto;">
-                        <button id="btn-prepare-now" class="btn-primary btn-cook-now" onclick="startCooking()"
-                            style="width: 100%; box-shadow: 0 10px 25px rgba(91, 192, 142, 0.4);">
-                            <i class="fas fa-play"></i> PREPARAR AHORA
-                        </button>
+                    <div class="feature-image">
+                        <img src="feature-3.png" alt="Listas de compra">
                     </div>
-                </section>
-
-                <!-- Screen Puntos -->
-                <section id="screen-points" class="screen">
-                    <div class="header">
-                        <h1>Mis tuppersitos</h1>
-                        <p style="color: #888;">Gana puntos cuidando el mundo y comiendo bien.</p>
+                </div>
+                <!-- Feature Summary -->
+                <div class="feature-summary-grid">
+                    <div class="summary-item">
+                        <i data-lucide="video"></i>
+                        <p>Videotutoriales paso a paso</p>
                     </div>
-
-                    <!-- Main Points Score -->
-                    <div class="tuppersitos-main-card">
-                        <div class="tupper-count">
-                            <i class="fas fa-box-open" style="color: var(--accent); font-size: 32px;"></i>
-                            <div>
-                                <h1 style="color: #fff; margin: 0; line-height: 1;">125</h1>
-                                <p style="color: rgba(255,255,255,0.7); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Tuppersitos acumulados</p>
-                            </div>
-                        </div>
-                        <div class="level-progress-container">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                <span style="color: #fff; font-size: 11px; font-weight: 800;">Pinche novato</span>
-                                <span style="color: rgba(255,255,255,0.7); font-size: 11px;">125 / 200 XP</span>
-                            </div>
-                            <div class="level-bar-track">
-                                <div class="level-bar-fill" style="width: 62%;"></div>
-                            </div>
-                        </div>
+                    <div class="summary-item">
+                        <i data-lucide="timer"></i>
+                        <p>Temporizadores incluidos</p>
                     </div>
-
-                    <!-- Level Tiers Horizontal -->
-                    <div class="tier-scroll-container" style="position: relative;">
-                        <h3 style="margin-left: 20px; font-size: 16px;">Tus niveles</h3>
-                        
-                        <!-- Desktop Navigation Buttons -->
-                        <button class="desktop-scroll-btn prev" onclick="scrollTiers(-1)"><i class="fas fa-chevron-left"></i></button>
-                        <button class="desktop-scroll-btn next" onclick="scrollTiers(1)"><i class="fas fa-chevron-right"></i></button>
-
-                        <div class="tier-scroll">
-                            <div class="tier-card current">
-                                <span class="tier-pts">0 - 200</span>
-                                <h4>Pinche novato</h4>
-                                <p>Acceso a recetas básicas y a la lista de compra inteligente.</p>
-                                <div class="current-label">TU NIVEL ACTUAL</div>
-                            </div>
-                            <div class="tier-card locked">
-                                <span class="tier-pts">201 - 600</span>
-                                <h4>Ayudante del chef</h4>
-                                <p>Desbloqueo de “recetas de influencers” exclusivas.</p>
-                                <i class="fas fa-lock"></i>
-                            </div>
-                            <div class="tier-card locked">
-                                <span class="tier-pts">601 - 1500</span>
-                                <h4>Chef de barrio</h4>
-                                <p>Cupones de descuento del 15% en tiendas locales.</p>
-                                <i class="fas fa-lock"></i>
-                            </div>
-                            <div class="tier-card locked">
-                                <span class="tier-pts">1501 - 3000</span>
-                                <h4>El verdadero chef</h4>
-                                <p>Prioridad en soporte técnico y opción de “beta tester” para nuevas funciones.</p>
-                                <i class="fas fa-lock"></i>
-                            </div>
-                            <div class="tier-card locked">
-                                <span class="tier-pts">+ 3000</span>
-                                <h4>Leyenda Pantry Chef</h4>
-                                <p>Regalos físicos sorpresa de marcas asociadas cada mes.</p>
-                                <i class="fas fa-lock"></i>
-                            </div>
-                        </div>
+                    <div class="summary-item">
+                        <i data-lucide="shopping-bag"></i>
+                        <p>Descuentos en tiendas locales</p>
                     </div>
+                </div>
+            </div>
+        </section>
 
-                    <!-- How to Earn Categories -->
-                    <div class="earn-container">
-                        <h3>¿Cómo ganar Tuppersitos?</h3>
-                        
-                        <div class="earn-category">
-                            <div class="cat-header"><i class="fas fa-leaf"></i> SOSTENIBILIDAD</div>
-                            <div class="earn-item">
-                                <div class="earn-info">
-                                    <h4>Caduca pronto</h4>
-                                    <p>Hacer una receta con un ingrediente que caduque pronto.</p>
-                                </div>
-                                <span class="earn-pts">+ 20</span>
-                            </div>
-                            <div class="earn-item">
-                                <div class="earn-info">
-                                    <h4>Cero desperdicio</h4>
-                                    <p>Estar una semana sin eliminar ingredientes de la despensa virtual por mal estado.</p>
-                                </div>
-                                <span class="earn-pts">+ 50</span>
-                            </div>
-                        </div>
-
-                        <div class="earn-category">
-                            <div class="cat-header"><i class="fas fa-users"></i> COMUNIDAD</div>
-                            <div class="earn-item">
-                                <div class="earn-info">
-                                    <h4>Foto de receta</h4>
-                                    <p>Sube una foto del resultado de tu plato al feed de la comunidad.</p>
-                                </div>
-                                <span class="earn-pts">+ 15</span>
-                            </div>
-                            <div class="earn-item">
-                                <div class="earn-info">
-                                    <h4>Inspirar a otros</h4>
-                                    <p>Alguien guarda tu variación de receta.</p>
-                                </div>
-                                <span class="earn-pts">+ 10</span>
-                            </div>
-                        </div>
-
-                        <div class="earn-category">
-                            <div class="cat-header"><i class="fas fa-shopping-cart"></i> CONSUMO</div>
-                            <div class="earn-item">
-                                <div class="earn-info">
-                                    <h4>Geofencing local</h4>
-                                    <p>Canjea un cupón en una tienda asociada vía geofencing.</p>
-                                </div>
-                                <span class="earn-pts">+ 30</span>
-                            </div>
-                            <div class="earn-item">
-                                <div class="earn-info">
-                                    <h4>Hábito Pantry</h4>
-                                    <p>Cocinar 7 días seguidos utilizando la app.</p>
-                                </div>
-                                <span class="earn-pts">+ 40</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="height: 100px;"></div> <!-- Bottom Padding -->
-                </section>
-
-                <!-- Screen 5: Profile (Personal Impact Hub) -->
-                <section id="screen-profile" class="screen">
-                    <div class="profile-header" style="text-align: center; margin-bottom: 30px;">
-                        <div class="avatar-container">
-                            <img src="foto-perfil.png" class="profile-avatar">
-                            <div class="level-badge" id="chef-level">Chef nivel 6</div>
-                        </div>
-                        <div class="xp-bar-container">
-                            <div class="xp-bar-progress" style="width: 50%;"></div>
-                            <span class="xp-text">750 / 1500 Tuppersitos</span>
-                        </div>
-                        <h1 style="margin-top: 15px;">Fran Rivero</h1>
-                        <p style="color: #888;">Probando recetas nuevas con Pantry Chef</p>
-                    </div>
-
-                    <!-- Sustainability Impact Dashboard -->
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <i class="fas fa-wallet" style="color: #f5d263;"></i>
-                            <h3>124€</h3>
-                            <p>Ahorrados</p>
-                        </div>
-                        <div class="stat-card">
-                            <i class="fas fa-recycle" style="color: var(--primary);"></i>
-                            <h3>14.2kg</h3>
-                            <p>Rescatados</p>
-                        </div>
-                    </div>
-
-                    <!-- Community Medals & Badges -->
-                    <div class="profile-module">
-                        <h3 style="margin-bottom: 15px;">Mis medallas</h3>
-                        <div class="badges-scroll">
-                            <div class="badge-item earned" onclick="addTuppersitos(500)">
-                                <i class="fas fa-award"></i>
-                                <span>Zero Waste Hero</span>
-                            </div>
-                            <div class="badge-item earned" onclick="addTuppersitos(500)">
-                                <i class="fas fa-seedling"></i>
-                                <span>Prep Master</span>
-                            </div>
-                            <div class="badge-item"
-                                onclick="alert('Completa 5 recetas para desbloquear esta medalla y 500 Tuppersitos.')">
-                                <i class="fas fa-globe-europe"></i>
-                                <span>Eco Global</span>
-                            </div>
-                            <div class="badge-item"
-                                onclick="alert('Compra en 3 tiendas locales para desbloquear esta medalla y 500 Tuppersitos.')">
-                                <i class="fas fa-shopping-bag"></i>
-                                <span>Local Supporter</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Dietary Preferences & Health -->
-                    <div class="profile-module">
-                        <h3 style="margin-bottom: 15px;">Mis preferencias</h3>
-                        <div class="diet-pills">
-                            <div class="diet-pill active" onclick="this.classList.toggle('active')">Vegano</div>
-                            <div class="diet-pill" onclick="this.classList.toggle('active')">Keto</div>
-                            <div class="diet-pill active" onclick="this.classList.toggle('active')">Sin gluten</div>
-                            <div class="diet-pill" onclick="this.classList.toggle('active')">Low carb</div>
-                        </div>
-                        <div class="allergy-alert">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <span>Alergia a los frutos secos</span>
-                        </div>
-                    </div>
-
-                    <!-- My Creations Portfolio -->
-                    <div class="profile-module">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                            <h3>Mis creaciones</h3>
-                            <span style="font-size: 11px; font-weight: 700; color: var(--primary);">VER TODO</span>
-                        </div>
-                        <div class="creations-grid">
-                            <div class="creation-item">
-                                <img
-                                    src="https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=300&q=80">
-                                <span class="rating">⭐ 4.8</span>
-                            </div>
-                            <div class="creation-item">
-                                <img
-                                    src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=300&q=80">
-                                <span class="rating">⭐ 5.0</span>
-                            </div>
-                            <div class="creation-item">
-                                <img
-                                    src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=300&q=80">
-                                <span class="rating">⭐ 4.5</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Account Actions -->
-                    <div class="profile-module" style="padding-bottom: 40px;">
-                        <button class="btn-secondary" onclick="showScreen('settings')"
-                            style="width: 100%; text-align: left; display: flex; justify-content: space-between;">
-                            <span>Ajustes de cuenta</span>
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
-                </section>
-
-                <!-- Screen 6: Account Settings -->
-                <section id="screen-settings" class="screen">
-                    <div class="mobile-screen-header">
-                        <div class="btn-back-small" onclick="showScreen('profile')">
-                            <i class="fas fa-chevron-left"></i>
-                        </div>
-                        <h2>Ajustes</h2>
-                    </div>
-
-                    <div class="settings-group-label">CUENTA</div>
-                    <div class="settings-group">
-                        <div class="settings-item clickable" onclick="showScreen('profile-edit')">
-                            <div class="item-icon" style="background: rgba(84, 160, 255, 0.1); color: #54a0ff;">
-                                <i class="fas fa-user-circle"></i>
-                            </div>
-                            <div class="item-label">
-                                <h4>Información personal</h4>
-                                <p>Nombre, email, teléfono</p>
-                            </div>
-                            <i class="fas fa-chevron-right" style="color: #ccc; font-size: 12px;"></i>
-                        </div>
-                        <div class="settings-item clickable">
-                            <div class="item-icon" style="background: rgba(91, 192, 142, 0.1); color: var(--primary);">
-                                <i class="fas fa-shield-alt"></i>
-                            </div>
-                            <div class="item-label">
-                                <h4>Privacidad y seguridad</h4>
-                                <p>Contraseña, visibilidad</p>
-                            </div>
-                            <i class="fas fa-chevron-right" style="color: #ccc; font-size: 12px;"></i>
-                        </div>
-                    </div>
-
-                    <div class="settings-group-label">NOTIFICACIONES</div>
-                    <div class="settings-group">
-                        <div class="settings-item">
-                            <div class="item-icon" style="background: rgba(255, 118, 117, 0.1); color: #ff7675;">
-                                <i class="fas fa-bell"></i>
-                            </div>
-                            <div class="item-label">
-                                <h4>Alertas de caducidad</h4>
-                                <p>Avisar cuando un producto caduque</p>
-                            </div>
-                            <label class="switch">
-                                <input type="checkbox" checked>
-                                <span class="slider round"></span>
-                            </label>
-                        </div>
-                        <div class="settings-item">
-                            <div class="item-icon"
-                                style="background: rgba(255, 138, 92, 0.1); color: var(--secondary);">
-                                <i class="fas fa-fire"></i>
-                            </div>
-                            <div class="item-label">
-                                <h4>Retos de la comunidad</h4>
-                                <p>Nuevas recetas y logros</p>
-                            </div>
-                            <label class="switch">
-                                <input type="checkbox" checked>
-                                <span class="slider round"></span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="settings-group-label">PREFERENCIAS</div>
-                    <div class="settings-group">
-                        <div class="settings-item">
-                            <div class="item-icon" style="background: #2d3436; color: #fff;">
-                                <i class="fas fa-moon"></i>
-                            </div>
-                            <div class="item-label">
-                                <h4>Modo Oscuro</h4>
-                                <p>Descanso visual nocturno</p>
-                            </div>
-                            <label class="switch">
-                                <input type="checkbox" id="dark-mode-toggle" onclick="toggleDarkMode()">
-                                <span class="slider round"></span>
-                            </label>
-                        </div>
-                        <div class="settings-item clickable">
-                            <div class="item-icon" style="background: #f0f0f0; color: #666;">
-                                <i class="fas fa-language"></i>
-                            </div>
-                            <div class="item-label">
-                                <h4>Idioma</h4>
-                                <p>Español (ES)</p>
-                            </div>
-                            <i class="fas fa-chevron-right" style="color: #ccc; font-size: 12px;"></i>
-                        </div>
-                    </div>
-
-                    <div class="settings-group" style="margin-top: 30px;">
-                        <button class="btn-logout" onclick="handleLogout()">
-                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                        </button>
-                    </div>
-
-                    <p style="text-align: center; font-size: 10px; color: #888; margin-top: 30px;">
-                        Pantry Chef v2.0.4 | Hecho con 🌱 para el mundo
+        <!-- Download Section -->
+        <section id="descargar" class="container download-wrapper">
+            <div class="download">
+                <div class="download-content">
+                    <h2>Descarga Pantry Chef <span>gratis</span></h2>
+                    <p>Empieza a cocinar de forma inteligente hoy mismo. Disponible para iOS y Android.
                     </p>
-                </section>
-
-                <!-- Screen 7: Profile Edit -->
-                <section id="screen-profile-edit" class="screen">
-                    <div class="mobile-screen-header">
-                        <div class="btn-back-small" onclick="showScreen('settings')">
-                            <i class="fas fa-chevron-left"></i>
-                        </div>
-                        <h2>Editar Perfil</h2>
+                    <div class="download-btns">
+                        <a href="https://mardellop.github.io/Pantry-Chef/" class="store-btn apple" target="_blank"
+                            rel="noopener noreferrer">
+                            <i data-lucide="apple"></i>
+                            <span>App Store</span>
+                        </a>
+                        <a href="https://mardellop.github.io/Pantry-Chef/" class="store-btn google" target="_blank"
+                            rel="noopener noreferrer">
+                            <i data-lucide="play"></i>
+                            <span>Google Play</span>
+                        </a>
                     </div>
-
-                    <div class="edit-form">
-                        <div class="input-group-edit">
-                            <label>Nombre Completo</label>
-                            <input type="text" id="edit-name-val" value="Fran Rivero" class="auth-input">
-                        </div>
-                        <div class="input-group-edit">
-                            <label>Email</label>
-                            <input type="email" id="edit-email-val" value="fran.rivero@gmail.com" class="auth-input">
-                        </div>
-                        <div class="input-group-edit">
-                            <label>Teléfono</label>
-                            <input type="tel" id="edit-phone-val" value="+34 123 456 789" class="auth-input">
-                        </div>
-                        <div class="input-group-edit">
-                            <label>Biografía</label>
-                            <textarea id="edit-bio-val" class="auth-input"
-                                style="height: 100px; padding-top: 15px;">Probando recetas nuevas con Pantry Chef</textarea>
-                        </div>
-
-                        <button class="btn-primary" onclick="saveProfile()" style="margin-top: 20px;">
-                            <i class="fas fa-save"></i> Guardar Cambios
-                        </button>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Navigation Bar (Bottom) -->
-            <nav class="nav-bar">
-                <div class="nav-item active" onclick="SoundEngine.navDing(); showScreen('home')">
-                    <i class="fas fa-utensils"></i>
-                    <span>Comunidad</span>
                 </div>
-                <div class="nav-item" onclick="SoundEngine.navDing(); showScreen('pantry')">
-                    <i class="fas fa-box-open"></i>
-                    <span>Despensa</span>
-                </div>
-                <div class="nav-item" onclick="SoundEngine.navDing(); showScreen('cart')">
-                    <i class="fas fa-shopping-basket"></i>
-                    <span>Carrito</span>
-                </div>
-                <div class="nav-item" onclick="SoundEngine.navDing(); showScreen('points')">
-                    <i class="fas fa-star"></i>
-                    <span>Puntos</span>
-                </div>
-                <div class="nav-item" onclick="SoundEngine.navDing(); showScreen('profile')">
-                    <i class="fas fa-user"></i>
-                    <span>Perfil</span>
-                </div>
-            </nav>
-
-            <!-- Ambient Sound Toggle Button -->
-            <div id="sound-toggle-btn" class="sound-toggle-fab" onclick="handleSoundToggle()" title="Sonidos de cocina">
-                <div class="sound-waves" id="sound-wave-anim">
-                    <span></span><span></span><span></span><span></span>
-                </div>
-                <i class="fas fa-volume-mute sound-icon-muted" id="sound-icon-muted" style="display:none;"></i>
-                <div class="sound-badge" id="sound-badge">ON</div>
-            </div>
-        </div>
-
-        <!-- FULL SCREEN COOKING MODE OVERLAY -->
-        <div id="cooking-mode-overlay">
-            <div class="cm-video-section">
-                <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80"
-                    class="cm-video-placeholder" id="cm-video-img">
-                <div class="cm-overlay-controls">
-                    <div style="display: flex; justify-content: space-between; align-items: start;">
-                        <button class="v-btn-big" onclick="closeCookingMode()"
-                            style="width: 40px; height: 40px; font-size: 16px;">
-                            <i class="fas fa-times"></i>
-                        </button>
-                        <div class="voice-status">
-                            <div class="voice-dot"></div>
-                            <span>ESCUCHANDO...</span>
-                        </div>
-                    </div>
+                <div class="download-image">
+                    <img src="logo.png" alt="App Preview">
                 </div>
             </div>
+        </section>
+        <!-- Newsletter Section -->
+        <section id="noticias" class="newsletter">
+            <div class="container">
+                <h2>Noticias y consejos</h2>
+                <p>Mantente al día con nuestra Newsletter. Recibirás las últimas tendencias culinarias, consejos y novedades de Pantry Chef.</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Tu correo electrónico" required>
+                    <button type="submit" class="btn btn-dark btn-primary">Suscribirme</button>
+                </form>
+            </div>
 
-            <div class="cm-step-content">
-                <div class="step-indicator" id="cm-step-num">PASO 2 DE 4</div>
-                <h2 id="cm-step-title" style="font-size: 22px; margin-bottom: 15px; line-height: 1.3;">Saltear las setas
-                    con la salvia</h2>
-                <p id="cm-step-desc" style="color: #666; font-size: 15px; line-height: 1.6;">Añade un chorrito de aceite
-                    y saltea a fuego medio hasta que doren. El aroma debe ser intenso.</p>
-
-                <div class="cm-timer-box">
-                    <div class="cm-timer-info">
-                        <h5>TEMPORIZADOR ACTIVO</h5>
-                        <p id="cm-timer-val">04:59</p>
+        </section>
+        <!-- Contact & Footer -->
+        <footer id="contacto">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <a href="#inicio" class="logo">
+                            <img src="logo.png" alt="Pantry Chef Logo">
+                            Pantry Chef
+                        </a>
+                        <p>Cocinando un futuro más saludable y sostenible para todos.</p>
                     </div>
-                    <i class="fas fa-stopwatch" style="font-size: 30px; opacity: 0.3;"></i>
+                    <div class="footer-col">
+                        <h4>Nuestros servicios</h4>
+                        <ul>
+                            <li><a href="#">Recetas personalizadas</a></li>
+                            <li><a href="#">Comunidad Pantry Chef</a></li>
+                            <li><a href="#">Lista de compra inteligente</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Nuestra empresa</h4>
+                        <ul>
+                        <li><a href="#nosotros">Sobre nosotros</a></li>
+                            <li><a href="#">Nuestros valores</a></li>
+                            <li><a href="#">Pantry Blog</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Contacto</h4>
+                        <ul>
+                            <li><a href="#">Sevilla, España</a></li>
+                            <li><a href="#">pantrychefmarketing@gmail.com</a></li>
+                            <li><a href="#">+34 123 45 67 89</a></li>
+                        </ul>
+                    </div>
                 </div>
-
-                <div class="cm-nav-actions">
-                    <button class="btn-cm btn-cm-prev" onclick="changeStep(-1)">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="btn-cm btn-cm-next" onclick="changeStep(1)">
-                        SIGUIENTE PASO <i class="fas fa-chevron-right"></i>
-                    </button>
+                <div class="footer-bottom">
+                    <p>&copy; 2026 Pantry Chef. Todos los derechos reservados.</p>
                 </div>
             </div>
-        </div>
-
-        <!-- Challenge Modal Detail -->
-        <div id="challenge-modal" class="challenge-modal-overlay">
-            <div class="challenge-modal-content">
-                <div class="challenge-modal-close" onclick="closeChallenge()">
-                    <i class="fas fa-times"></i>
-                </div>
-                <div class="challenge-visual">
-                    <div class="challenge-emoji" id="ch-emoji">📉</div>
-                </div>
-                <div class="challenge-body">
-                    <span class="challenge-tag" id="ch-tag">RETO SEMANAL</span>
-                    <h2 id="ch-title">Zero Waste</h2>
-                    <p id="ch-desc">Utiliza todos los ingredientes que estén a punto de caducar durante esta semana.
-                        ¡Reduce
-                        el desperdicio al mínimo!</p>
-
-                    <div class="challenge-rewards">
-                        <div class="reward-pill">
-                            <i class="fas fa-star" style="color: #f5d263;"></i>
-                            <span>+500 XP</span>
-                        </div>
-                        <div class="reward-pill">
-                            <i class="fas fa-award" style="color: var(--primary);"></i>
-                            <span>Insignia Eco</span>
-                        </div>
-                    </div>
-
-                    <div class="challenge-participants">
-                        <div class="participant-avatars">
-                            <img src="https://i.pravatar.cc/100?u=1" alt="u1">
-                            <img src="https://i.pravatar.cc/100?u=2" alt="u2">
-                            <img src="https://i.pravatar.cc/100?u=3" alt="u3">
-                            <div class="more-participants">+120</div>
-                        </div>
-                        <p>Usuarios participando ahora</p>
-                    </div>
-                </div>
-                <button class="btn-primary challenge-btn" onclick="acceptChallenge()">¡ACEPTO EL RETO!</button>
-            </div>
-        </div>
-
-        <!-- Share Dish Modal -->
-        <div id="share-dish-modal" class="challenge-modal-overlay">
-            <div class="challenge-modal-content">
-                <div class="challenge-modal-close" onclick="closeShareDish()">
-                    <i class="fas fa-times"></i>
-                </div>
-                <div class="challenge-visual" style="background: linear-gradient(135deg, #FF8A5C, #FFD25A);">
-                    <i class="fas fa-camera" style="font-size: 50px; color: #fff; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));"></i>
-                </div>
-                <div class="challenge-body">
-                    <span class="challenge-tag">COMUNIDAD PANTRY</span>
-                    <h2>Publica tu plato</h2>
-                    <p style="font-size: 13px; color: #666; line-height: 1.4;">Solo tienes que subir una foto. <b>Pantry Chef IA</b> se encargará de identificar los ingredientes, tiempo y ahorro de CO2 automáticamente.</p>
+        </footer>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Lucide icons
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
+            // Counter Animation (Suscripciones dinámicas)
+            const counter = document.getElementById('counter');
+            if (counter) {
+                const target = 10000;
+                let count = 0;
+                let lastTime = 0;
+                
+                const updateCount = (currentTime) => {
+                    if (!lastTime) lastTime = currentTime;
+                    const deltaTime = currentTime - lastTime;
                     
-                    <div class="upload-area" onclick="document.getElementById('dish-image-input').click()">
-                        <i class="fas fa-cloud-upload-alt" style="font-size: 30px; color: #FF8A5C; margin-bottom: 10px;"></i>
-                        <p style="margin: 0; font-weight: 700; font-size: 12px;">Subir foto o usar cámara</p>
-                        <input type="file" id="dish-image-input" style="display: none;" accept="image/*">
-                    </div>
-                    
-                    <div id="upload-status" style="margin-top:15px; font-size: 11px; color: var(--primary); font-weight: 800; display: none;">
-                        <i class="fas fa-spinner fa-spin"></i> ANALIZANDO PLATO CON IA...
-                    </div>
-                </div>
-                <button class="btn-primary challenge-btn" onclick="submitSharedDish()">PUBLICAR AHORA</button>
-            </div>
-        </div>
-    </div>
+                    if (count < target) {
+                        if (count < 9500) {
+                            // Sube muy rápido hasta los ~9500 para no hacer esperar demasiado
+                            count += Math.floor(Math.random() * 200) + 50; 
+                            lastTime = currentTime;
+                            window.requestAnimationFrame(updateCount);
+                        } else {
+                            // A partir de los 9500 sube poco a poco como si "se fuesen suscribiendo"
+                            if (deltaTime > 100 + Math.random() * 200) { // pausas aleatorias tipo 100-300ms
+                                count += Math.floor(Math.random() * 5) + 1; // suma de 1 a 5 usuarios
+                                lastTime = currentTime;
+                            }
+                            window.requestAnimationFrame(updateCount);
+                        }
+                        
+                        // Que no se pase del target 
+                        if (count > target) count = target;
+                        counter.innerText = '+' + Math.floor(count).toLocaleString();
+                    }
+                };
+                
+                const observer = new IntersectionObserver((entries) => {
+                    if (entries[0].isIntersecting) {
+                        window.requestAnimationFrame(updateCount);
+                        observer.unobserve(entries[0].target);
+                    }
+                }, { threshold: 0.5 });
+                observer.observe(counter);
+            }
+            // Premium Reveal on Scroll (Apple style)
+            const revealElements = document.querySelectorAll('section > .container, .value-card, .product-feature, .influencer-card, .summary-item');
+            
+            // Text Split Animation Dinámico para TODOS los textos
+            function wrapTextNodes(element) {
+                const childNodes = Array.from(element.childNodes);
+                childNodes.forEach(node => {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        const text = node.textContent;
+                        if (!text.trim()) return;
+                        
+                        const fragment = document.createDocumentFragment();
+                        // Dividimos manteniendo los espacios en blanco intactos para no romper el layout
+                        const words = text.split(/(\s+)/);
+                        
+                        words.forEach(word => {
+                            if (!word.trim()) {
+                                fragment.appendChild(document.createTextNode(word));
+                                return;
+                            }
+                            const wordWrap = document.createElement('span');
+                            wordWrap.style.display = 'inline-block';
+                            wordWrap.style.overflow = 'hidden';
+                            wordWrap.style.verticalAlign = 'bottom';
+                            wordWrap.style.paddingBottom = '0.1em'; 
+                            wordWrap.style.marginBottom = '-0.1em';
 
-    <!-- ══ Taylor Swift Music Player (The Fate of Ophelia) ══ -->
-    <div id="ts-player-wrap" style="display:none;">
-        <!-- Native Audio Element -->
-        <audio id="ts-audio-element" preload="auto">
-            <source src="ophelia.mp3" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
+                            const wordInner = document.createElement('span');
+                            wordInner.className = 'split-inner';
+                            wordInner.innerText = word;
+                            wordInner.style.display = 'inline-block';
+                            wordInner.style.transform = 'translateY(110%) rotate(4deg)';
+                            wordInner.style.opacity = '0';
+                            
+                            wordWrap.appendChild(wordInner);
+                            fragment.appendChild(wordWrap);
+                        });
+                        element.replaceChild(fragment, node);
+                    } else if (node.nodeType === Node.ELEMENT_NODE) {
+                        // Ignorar botones, iconos y svgs
+                        if (['I', 'BR', 'BUTTON', 'A', 'SVG'].includes(node.tagName)) return;
+                        if (node.classList.contains('btn') || node.classList.contains('badge')) return;
+                        wrapTextNodes(node);
+                    }
+                });
+            }
 
-        <!-- Mini player UI -->
-        <div id="ts-mini-player" class="ts-mini-player">
-            <div class="ts-album-art">
-                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/e/e6/Taylor_Swift_-_The_Life_of_a_Showgirl.png/220px-Taylor_Swift_-_The_Life_of_a_Showgirl.png"
-                     onerror="this.style.background='linear-gradient(135deg,#c0392b,#8e44ad)';this.removeAttribute('src');"
-                     alt="The Life of a Showgirl">
-                <div class="ts-vinyl-spin"></div>
-            </div>
-            <div class="ts-info">
-                <span class="ts-song-title">The Fate of Ophelia</span>
-                <span class="ts-artist">Taylor Swift (Official)</span>
-                <div class="ts-progress-bar"><div class="ts-progress-fill" id="ts-progress"></div></div>
-            </div>
-            <div class="ts-controls">
-                <button class="ts-btn" id="ts-play-btn" onclick="toggleTSPlayer()">⏸</button>
-                <button class="ts-btn ts-close-btn" onclick="closeTSPlayer()">✕</button>
-            </div>
-        </div>
-    </div>
+            const textElements = document.querySelectorAll('h1, h2, h3, p:not(footer p):not(.lock-text):not(.scroll-indicator)');
+            textElements.forEach(el => {
+                wrapTextNodes(el);
+                const inners = el.querySelectorAll('.split-inner');
+                inners.forEach((inner, idx) => {
+                    // límite de delay para no esperar eterno en párrafos largos
+                    const delay = Math.min(idx * 0.02, 1.2); 
+                    inner.style.transition = `transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s, opacity 0.8s ease ${delay}s`;
+                });
 
-    <script src="sounds.js"></script>
-    <script src="app.js"></script>
+                const textObserver = new IntersectionObserver((entries, obs) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const ins = entry.target.querySelectorAll('.split-inner');
+                            ins.forEach(inner => {
+                                inner.style.transform = 'translateY(0) rotate(0)';
+                                inner.style.opacity = '1';
+                            });
+                            obs.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+                
+                textObserver.observe(el);
+            });
+
+            // Stagger animations para elementos en grid
+            const grids = document.querySelectorAll('.values-grid, .feature-summary-grid, .influencers-grid');
+            grids.forEach(grid => {
+                Array.from(grid.children).forEach((child, index) => {
+                    child.style.transitionDelay = `${index * 0.12}s`;
+                });
+            });
+
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+            
+            revealElements.forEach(el => {
+                // Prevenir sobreescribir transición si ya la tiene
+                el.classList.add('reveal-item');
+                revealObserver.observe(el);
+            });
+            // Smooth scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        const headerOffset = 81;
+                        const elementPosition = targetElement.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // --- Apple-style Parallax Integration (feature images only now) ---
+            const parallaxContainers = document.querySelectorAll('.feature-image');
+            parallaxContainers.forEach(container => {
+                const img = container.querySelector('img');
+                if (img) {
+                    const wrapper = document.createElement('div');
+                    wrapper.style.height = '120%';
+                    wrapper.style.width = '100%';
+                    wrapper.style.position = 'relative';
+                    wrapper.style.top = '-10%';
+                    wrapper.style.willChange = 'transform';
+                    wrapper.className = 'parallax-wrapper';
+                    container.style.overflow = 'hidden';
+                    container.style.position = 'relative';
+                    container.insertBefore(wrapper, img);
+                    wrapper.appendChild(img);
+                    img.style.height = '100%';
+                    img.style.objectFit = 'cover';
+                }
+            });
+
+            // --- About Section — Reverse Scroll (same logic as gallery-section) ---
+            const aboutSection = document.querySelector('#nosotros');
+            const aboutGallery = document.querySelector('#about-gallery');
+            const aboutColsDown = aboutGallery ? aboutGallery.querySelectorAll('.about-col-down') : [];
+            const aboutColsUp   = aboutGallery ? aboutGallery.querySelectorAll('.about-col-up')   : [];
+
+            function updateAboutGallery() {
+                if (!aboutSection || !aboutGallery) return;
+                const rect = aboutSection.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+                const scrollDist = rect.height - windowHeight;
+                let progress = 0;
+
+                if (rect.top > 0) {
+                    progress = 0;           // section approaching
+                } else if (-rect.top >= scrollDist) {
+                    progress = 1;           // section fully passed
+                } else {
+                    progress = -rect.top / scrollDist; // inside sticky zone
+                }
+
+                aboutColsDown.forEach(col => {
+                    const max = Math.max(0, col.offsetHeight - aboutGallery.offsetHeight);
+                    col.style.transform = `translateY(${-max + progress * max}px)`;
+                });
+                aboutColsUp.forEach(col => {
+                    const max = Math.max(0, col.offsetHeight - aboutGallery.offsetHeight);
+                    col.style.transform = `translateY(${progress * -max}px)`;
+                });
+            }
+
+            updateAboutGallery();
+
+            const statPill = document.querySelector('.stat-pill');
+            const heroImageWrap = document.querySelector('.hero-image');
+
+            let ticking = false;
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        // Internal Image Parallax (feature images)
+                        document.querySelectorAll('.parallax-wrapper').forEach(wrapper => {
+                            const rect = wrapper.parentElement.getBoundingClientRect();
+                            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                                const yPos = (rect.top - window.innerHeight / 2) * 0.15;
+                                wrapper.style.transform = `translateY(${yPos}px)`;
+                            }
+                        });
+
+                        // About mini gallery reverse scroll
+                        if (aboutSection && aboutGallery) { updateAboutGallery(); }
+
+                        // statPill parallax eliminado por petición del usuario
+
+                        // Floating Hero Elements
+                        if (heroImageWrap) {
+                           const rect = heroImageWrap.getBoundingClientRect();
+                           if (rect.bottom > 0) {
+                               const hdtr = (rect.top - window.innerHeight / 2) * 0.08;
+                               // Ojo: sólo la capa externa para no chocar con la rotación del card
+                               heroImageWrap.style.transform = `translateY(${hdtr}px)`;
+                           }
+                        }
+
+                        // Reverse Scroll Pinned Logic
+                        const gallerySection = document.querySelector('.gallery-section');
+                        const galleryWrapper = document.querySelector('.gallery-wrapper');
+                        if (gallerySection && galleryWrapper) {
+                            const rect = gallerySection.getBoundingClientRect();
+                            const windowHeight = window.innerHeight;
+                            
+                            // Comprobar si estamos tocando o dentro de la zona de scroll (top <= 0 significa que ha tocado el techo y se ha quedado sticky)
+                            if (rect.top <= windowHeight && rect.bottom >= 0) {
+                                const scrollDist = rect.height - windowHeight;
+                                let progress = 0;
+                                
+                                if (rect.top > 0) {
+                                    progress = 0; // Se acerca
+                                } else if (-rect.top >= scrollDist) {
+                                    progress = 1; // Ya pasó
+                                } else {
+                                    progress = -rect.top / scrollDist; // Dentro de la zona sticky
+                                }
+                                
+                                const colsDown = document.querySelectorAll('.col-down');
+                                const colsUp = document.querySelectorAll('.col-up');
+                                
+                                colsDown.forEach(col => {
+                                    // De abajo (-max) a arriba (0)
+                                    const maxScroll = Math.max(0, col.offsetHeight - galleryWrapper.offsetHeight);
+                                    col.style.transform = `translateY(${-maxScroll + (progress * maxScroll)}px)`;
+                                });
+                                colsUp.forEach(col => {
+                                    // De arriba (0) a abajo (-max)
+                                    const maxScroll = Math.max(0, col.offsetHeight - galleryWrapper.offsetHeight);
+                                    col.style.transform = `translateY(${progress * -maxScroll}px)`;
+                                });
+                            }
+                        }
+
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }, { passive: true });
+        });
+    </script>
 </body>
 
 </html>
