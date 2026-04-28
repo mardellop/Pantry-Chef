@@ -160,7 +160,7 @@ body {
 .screen {
     display: none;
     width: 100%;
-    padding: 60px 20px 20px;
+    padding: 0px 20px 20px;
     animation: fadeIn 0.5s ease-out;
     box-sizing: border-box;
 }
@@ -982,8 +982,22 @@ body {
     grid-template-columns: 1fr 1fr;
     gap: 12px;
     width: 100%;
-    /* Overflow handled by parent page scroll now */
 }
+
+.pantry-category-label {
+    grid-column: span 2;
+    font-size: 11px;
+    font-weight: 800;
+    color: #8d735b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 20px 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
 
 .smart-item {
     background: #fff;
@@ -1377,6 +1391,28 @@ body {
 .fab-backdrop.active {
     display: block;
     opacity: 1;
+}
+
+/* Back Button Small */
+.btn-back-small {
+    width: 35px;
+    height: 35px;
+    background: #f0f0f0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-back-small:hover {
+    background: #e0e0e0;
+}
+
+.dark-mode .btn-back-small {
+    background: #1e1e1e;
+    color: #fff;
 }
 
 /* Settings Screen Styles */
@@ -1774,6 +1810,7 @@ input:checked+.slider:before {
 
 /* Pantry & Points scroll fix */
 #screen-pantry.active,
+#screen-pantry-results.active,
 #screen-points.active {
     display: block !important;
     height: 100%;
@@ -2234,16 +2271,16 @@ input:checked+.slider {
     flex-direction: column;
     box-sizing: border-box;
     overflow: hidden;
-    border-radius: 50px;
-    margin: 5px;
+    border-radius: 55px; /* Match phone frame */
+    margin: 0; /* Removed margin to fit perfectly */
 }
 
 .challenge-modal-content {
     background: #fff;
     width: 100%;
     height: 100%;
-    max-width: none;
-    border-radius: 45px;
+    max-width: 100%;
+    border-radius: 55px;
     box-shadow: none;
     overflow-y: auto;
     position: relative;
@@ -3954,4 +3991,116 @@ input:checked+.slider {
 
 .app-content-container.visible {
     opacity: 1;
+}
+
+/* iOS Style Notification */
+.ios-notification {
+    position: absolute;
+    top: -150px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 24px;
+    padding: 15px 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    z-index: 10000;
+    transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    display: flex;
+    flex-direction: column; /* Stack header and content vertically */
+    gap: 8px;
+    border: 0.5px solid rgba(0, 0, 0, 0.05);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.ios-notification.show {
+    top: 50px;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.ios-notif-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+.ios-notif-app-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ios-notif-icon {
+    width: 22px;
+    height: 22px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.ios-notif-app-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+}
+
+.ios-notif-time {
+    font-size: 11px;
+    color: #999;
+}
+
+.ios-notif-content {
+    width: 100%;
+}
+
+.ios-notif-content h4 {
+    font-size: 15px;
+    font-weight: 800;
+    margin-bottom: 3px;
+    color: #000;
+}
+
+.ios-notif-content p {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+.ios-notif-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+    margin-top: 10px;
+    border: 1.5px solid #eee;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Persistent Navigation Overlay */
+.page-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    z-index: 9000;
+    display: none;
+    animation: slideInFromBottom 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+@keyframes slideInFromBottom {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
 }
