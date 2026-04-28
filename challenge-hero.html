@@ -25,13 +25,13 @@
         }
 
         body {
-            background-color: #e0e0e0;
+            background-color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
-            color: var(--text);
+            color: #000;
         }
 
         /* Phone Frame */
@@ -78,6 +78,7 @@
             overflow-y: auto;
             scrollbar-width: none;
             background: #fff;
+            padding-bottom: 90px; /* Space for the navigation bar */
         }
 
         .app-container::-webkit-scrollbar {
@@ -115,7 +116,7 @@
         }
 
         h1 {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 900;
             line-height: 1.2;
             margin-bottom: 15px;
@@ -123,9 +124,10 @@
 
         .desc {
             font-size: 14px;
-            color: #444;
+            color: #000;
             margin-bottom: 25px;
             line-height: 1.5;
+            text-align: justify;
         }
 
         /* Phase Styles */
@@ -154,7 +156,8 @@
         .phase-card p {
             font-size: 13px;
             line-height: 1.4;
-            color: #333;
+            color: #000;
+            text-align: justify;
         }
 
         .rankings-box {
@@ -177,6 +180,7 @@
             font-size: 12px;
             margin-bottom: 8px;
             line-height: 1.4;
+            color: #000;
         }
 
         .rank-item span {
@@ -236,21 +240,68 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            color: #000;
+        }
+        .reward-pill i {
+            margin-right: 6px;
+        }
+
+        /* Navigation Bar (Restored for Challenge View) */
+        .nav-bar {
+            height: 80px;
+            background: #fff;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.03);
+            padding-bottom: 15px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .nav-item {
+            color: #bbb;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .nav-item.active {
+            color: #5BC08E;
+            transform: translateY(-5px);
+        }
+
+        .nav-item span {
+            font-size: 9px;
+            margin-top: 4px;
+            font-weight: 700;
+            color: #bbb; /* Explicitly grey text */
         }
     </style>
 </head>
 <body>
 
-    <div class="phone-frame">
+<div class="phone-frame">
         <div class="status-bar">
-            <span>18:42</span>
-            <div style="display: flex; gap: 5px; align-items: center;">
+            <div class="status-left">
+                <span id="current-time">00:00</span>
+            </div>
+            <div class="status-right">
                 <i class="fas fa-wifi"></i>
-                <i class="fas fa-battery-full"></i>
+                <span style="font-size: 11px; margin-right: 2px;">85%</span>
+                <i class="fas fa-battery-three-quarters"></i>
             </div>
         </div>
 
-        <a href="index.html" class="close-btn"><i class="fas fa-times"></i></a>
+
+        <a href="#" class="close-btn" onclick="event.preventDefault(); navToParent('profile');"><i class="fas fa-times"></i></a>
 
         <div class="app-container">
             <div class="challenge-hero">
@@ -258,7 +309,6 @@
             </div>
 
             <div class="content">
-                <span class="tag">DUELO SEMANAL</span>
                 <h1>Zero to hero: El duelo de la despensa</h1>
                 <p class="desc">Exprime tu despensa al máximo, sintiendo el aroma del éxito culinario en cada paso: desde la fragancia de tus verduras hasta el olor tostado de un plato bien ejecutado.</p>
 
@@ -269,26 +319,72 @@
 
                 <div class="phases-container">
                     <div class="phase-card">
-                        <h5>FASE 1: ELIGE 3 INGREDIENTES</h5>
+                        <h5>PASO 1: ELIGE 3 INGREDIENTES</h5>
                         <p>Elige los 3 primeros ingredientes que veas en tu despensa. Sin trampas. Si incluyes uno difícil puedes ganar más puntos.</p>
                     </div>
                     <div class="phase-card">
-                        <h5>FASE 2: USA LA APP DE PANTRY CHEF</h5>
+                        <h5>PASO 2: USA LA APP</h5>
                         <p>Introduce los 3 ingredientes en la app. Prohibido usar más ingredientes extras, excepto sal, agua, aceite y pimienta.</p>
                     </div>
                     <div class="phase-card">
-                        <h5>FASE 3: PUBLICA UN POST EN INSTAGRAM</h5>
+                        <h5>PASO 3: PUBLICA UN CARRUSEL EN INSTAGRAM</h5>
                         <p>Publica tu proceso: Haz una foto de los ingredientes usados, otro que enseñe la receta que ha generado Pantry Chef y, finalmente, otra imagen que muestre el resultado del plato. Es importante que uses el hashtag #PantryHero.</p>
                     </div>
                 </div>
 
-                <a href="index.html" class="btn-accept">¡ACEPTO EL RETO!</a>
+                <a href="#" class="btn-accept" onclick="event.preventDefault(); navToParent('profile');">¡ACEPTO EL RETO!</a>
                 
-                <p style="margin-top: 30px; color: #bbb; font-size: 11px;">Pantry Chef App challenge v2.0</p>
                 <div style="height: 40px;"></div>
             </div>
         </div>
+
+        <!-- Navigation Bar (Bottom) -->
+        <nav class="nav-bar">
+            <div class="nav-item" onclick="navToParent('home')">
+                <i class="fas fa-utensils"></i>
+                <span>Comunidad</span>
+            </div>
+            <div class="nav-item" onclick="navToParent('pantry')">
+                <i class="fas fa-box-open"></i>
+                <span>Despensa</span>
+            </div>
+            <div class="nav-item" onclick="navToParent('cart')">
+                <i class="fas fa-shopping-basket"></i>
+                <span>Carrito</span>
+            </div>
+            <div class="nav-item" onclick="navToParent('points')">
+                <i class="fas fa-star"></i>
+                <span>Puntos</span>
+            </div>
+            <div class="nav-item" onclick="navToParent('profile')">
+                <i class="fas fa-user"></i>
+                <span>Perfil</span>
+            </div>
+        </nav>
     </div>
 
+    <script>
+        function navToParent(screen) {
+            console.log("Navigating to parent screen:", screen);
+            try {
+                const parentWin = window.parent || window.top;
+                if (parentWin && typeof parentWin.showScreen === 'function') {
+                    // Trigger sound in parent
+                    if (parentWin.SoundEngine) parentWin.SoundEngine.navDing();
+                    // Navigate parent
+                    parentWin.showScreen(screen);
+                    // Close overlay
+                    if (typeof parentWin.closePageOverlay === 'function') {
+                        parentWin.closePageOverlay();
+                    }
+                } else {
+                    window.location.href = 'index.html';
+                }
+            } catch (e) {
+                console.error("Navigation failed:", e);
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
 </body>
 </html>
