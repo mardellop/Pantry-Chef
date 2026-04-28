@@ -8,8 +8,8 @@ const SoundEngine = (() => {
     let masterGain = null;
     let ambientNodes = [];
     let ambientActive = false;
-    let ambientVolume = 0.35;
-    let uiVolume = 0.7;
+    let ambientVolume = 0.1;
+    let uiVolume = 0.3;
 
     // Lazy-init AudioContext on first user interaction
     function getCtx() {
@@ -137,7 +137,7 @@ const SoundEngine = (() => {
 
         // Haptic Feedback for the ingredient tick (Increased for better feel)
         if ('vibrate' in navigator) {
-            navigator.vibrate([40, 60, 40]);
+            navigator.vibrate(15); 
         }
     }
 
@@ -450,14 +450,7 @@ const SoundEngine = (() => {
     }
 
     /**
-     * Lo-Fi Cooking Ambient — Gentle pulsing patterns for focus and relaxation.
-     */
-    let lofiNodes = [];
-    let lofiActive = false;
-
-    /**
      * Zen Cooking Ambient — Inspired by Shakuhachi flute and deep meditation pads.
-     * Replaces the former Lo-Fi for a deeper emotional connection.
      */
     let zenNodes = [];
     let zenActive = false;
@@ -468,111 +461,24 @@ const SoundEngine = (() => {
         const ac = getCtx();
         const masterZen = createGain(0);
         
-        // 1. Deep Earth Pad (Warm, organic floor)
-        const padG = createGain(0.08); // Subtle
+        // Simplified zen logic for restoration
+        const padG = createGain(0.08);
         const pad = ac.createOscillator();
         pad.type = 'sine';
-        pad.frequency.value = 55.00; // A1
-        const padLFO = ac.createOscillator();
-        padLFO.frequency.value = 0.1;
-        const padLFOG = ac.createGain();
-        padLFOG.gain.value = 0.03;
-        padLFO.connect(padLFOG);
-        padLFOG.connect(padG.gain);
+        pad.frequency.value = 55.00;
         pad.connect(padG); padG.connect(masterZen);
-        pad.start(); padLFO.start();
-
-        // 2. Instrumental Plucks (Nylon Guitar / Koto / Guzheng)
-        const zenScale = [196.00, 220.00, 261.63, 293.66, 329.63, 392.00, 440.00]; // G, A, C, D, E pentatonic
-        const pluckInterval = setInterval(() => {
-            if (!zenActive) { clearInterval(pluckInterval); return; }
-            const now = ac.currentTime;
-            const freq = zenScale[Math.floor(Math.random() * zenScale.length)];
-
-            // String Logic
-            const stringG = ac.createGain();
-            const stringOsc = ac.createOscillator();
-            stringOsc.type = 'triangle'; // Warmer than sine for strings
-            stringOsc.frequency.setValueAtTime(freq, now);
-            
-            // Soft low-pass to make it sound like nylon, not a beep
-            const filter = ac.createBiquadFilter();
-            filter.type = 'lowpass';
-            filter.frequency.value = 1200;
-            filter.Q.value = 2;
-
-            stringOsc.connect(filter);
-            filter.connect(stringG);
-            stringG.connect(masterZen);
-
-            stringG.gain.setValueAtTime(0, now);
-            stringG.gain.linearRampToValueAtTime(0.12 * uiVolume, now + 0.02);
-            stringG.gain.exponentialRampToValueAtTime(0.001, now + 4);
-            
-            stringOsc.start(now);
-            stringOsc.stop(now + 4.5);
-
-            // Occasional high sparkle (Higher Octave)
-            if (Math.random() > 0.7) {
-                const bellG = ac.createGain();
-                const bellOsc = ac.createOscillator();
-                bellOsc.type = 'sine';
-                bellOsc.frequency.value = freq * 2;
-                bellOsc.connect(bellG); bellG.connect(masterZen);
-                bellG.gain.setValueAtTime(0, now + 0.1);
-                bellG.gain.linearRampToValueAtTime(0.04, now + 0.12);
-                bellG.gain.exponentialRampToValueAtTime(0.001, now + 2);
-                bellOsc.start(now + 0.1); bellOsc.stop(now + 2.5);
-            }
-        }, 5000); // Relaxed timing
-
-        // 3. Subtle Forest Elements (Soft birds and water)
-        const natureG = createGain(0.02);
-        const nBuf = createNoiseBuffer(4);
-        const nSrc = ac.createBufferSource();
-        nSrc.buffer = nBuf; nSrc.loop = true;
-        const nFilter = ac.createBiquadFilter();
-        nFilter.type = 'lowpass'; nFilter.frequency.value = 400;
-        nSrc.connect(nFilter); nFilter.connect(natureG); natureG.connect(masterZen);
-        nSrc.start();
-
-        // Generative bird chirp (very sparse)
-        const birdInterval = setInterval(() => {
-            if (!zenActive) { clearInterval(birdInterval); return; }
-            const now = ac.currentTime;
-            const bG = ac.createGain();
-            const bOsc = ac.createOscillator();
-            bOsc.type = 'sine';
-            const startF = 3000 + Math.random() * 2000;
-            bOsc.frequency.setValueAtTime(startF, now);
-            bOsc.frequency.exponentialRampToValueAtTime(startF + 1000, now + 0.1);
-            bOsc.connect(bG); bG.connect(masterZen);
-            bG.gain.setValueAtTime(0, now);
-            bG.gain.linearRampToValueAtTime(0.02, now + 0.05);
-            bG.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
-            bOsc.start(now); bOsc.stop(now + 0.2);
-        }, 12000);
+        pad.start();
 
         masterZen.connect(masterGain);
-        masterZen.gain.linearRampToValueAtTime(1.0, ac.currentTime + 4);
-
-        zenNodes = [pad, padLFO, nSrc, masterZen];
-        zenNodes._intervals = [pluckInterval, birdInterval];
+        masterZen.gain.linearRampToValueAtTime(1.0, ac.currentTime + 2);
+        zenNodes = [pad, masterZen];
     }
 
     function stopZen() {
         if (!zenActive) return;
         zenActive = false;
-        if (zenNodes._intervals) zenNodes._intervals.forEach(i => clearInterval(i));
-        
-        const ac = getCtx();
-        const m = zenNodes[zenNodes.length-1];
-        if (m && m.gain) m.gain.linearRampToValueAtTime(0.001, ac.currentTime + 2.5);
-
-        setTimeout(() => {
-            zenNodes.forEach(n => { try { n.stop(); n.disconnect(); } catch(e){} });
-            zenNodes = [];
-        }, 2800);
+        zenNodes.forEach(n => { try { n.stop(); n.disconnect(); } catch(e){} });
+        zenNodes = [];
     }
 
     /**
@@ -581,76 +487,36 @@ const SoundEngine = (() => {
     function startVentilation() {
         const ac = getCtx();
         const g = createGain(ambientVolume * 0.2);
-
         const osc1 = createOscillator('sawtooth', 58, g);
-        const osc2 = createOscillator('sine', 62, g);
-
-        // gentle tremolo
-        const lfo = ac.createOscillator();
-        lfo.type = 'sine';
-        lfo.frequency.value = 0.3;
-        const lfoG = ac.createGain();
-        lfoG.gain.value = 0.06;
-        lfo.connect(lfoG);
-        lfoG.connect(g.gain);
-
-        osc1.start(); osc2.start(); lfo.start();
-        return [osc1, osc2, lfo, g];
+        osc1.start();
+        return [osc1, g];
     }
 
-    /**
-     * Start the full ambient kitchen soundscape.
-     */
     function startAmbient() {
         if (ambientActive) return;
         ambientActive = true;
         getCtx();
-
         const boiling = startBoiling();
         const sizzling = startSizzling();
         const chopping = startChopping();
         const ventilation = startVentilation();
-
         ambientNodes = [boiling, sizzling, chopping, ventilation].flat();
         ambientNodes._chopInterval = chopping._chopInterval;
-
-        console.log('🍳 Ambient kitchen sounds started');
     }
 
-    /**
-     * Stop ambient gradually.
-     */
     function stopAmbient() {
         if (!ambientActive) return;
         ambientActive = false;
-
         if (ambientNodes._chopInterval) clearInterval(ambientNodes._chopInterval);
-
-        // Fade out master gain
-        if (masterGain) {
-            masterGain.gain.setValueAtTime(masterGain.gain.value, ctx.currentTime);
-            masterGain.gain.linearRampToValueAtTime(0.001, ctx.currentTime + 1.5);
-        }
-
-        setTimeout(() => {
-            ambientNodes.forEach(node => {
-                try {
-                    if (node && node.stop) node.stop();
-                    if (node && node.disconnect) node.disconnect();
-                } catch (e) { /* already stopped */ }
-            });
-            ambientNodes = [];
-            if (masterGain && ctx) {
-                masterGain.gain.setValueAtTime(1.0, ctx.currentTime);
-            }
-        }, 1600);
-
-        console.log('🔇 Ambient sounds stopped');
+        ambientNodes.forEach(node => {
+            try {
+                if (node && node.stop) node.stop();
+                if (node && node.disconnect) node.disconnect();
+            } catch (e) {}
+        });
+        ambientNodes = [];
     }
 
-    /**
-     * Toggle ambient sound on/off.
-     */
     function toggleAmbient() {
         if (ambientActive) {
             stopAmbient();
@@ -661,9 +527,7 @@ const SoundEngine = (() => {
         }
     }
 
-    // ── Public API ────────────────────────────────────────────
     return {
-        // UI sounds
         click: playClick,
         confirm: playConfirm,
         back: playBack,
@@ -675,15 +539,11 @@ const SoundEngine = (() => {
         navDing: playTimerDing,
         startZen,
         stopZen,
-
-        // Ambient
         startAmbient,
         stopAmbient,
         toggleAmbient,
         isAmbientActive: () => ambientActive,
-
-        // Volume controls
-        setAmbientVolume: (v) => { ambientVolume = Math.max(0, Math.min(1, v)); },
-        setUIVolume: (v) => { uiVolume = Math.max(0, Math.min(1, v)); },
+        setAmbientVolume: (v) => { ambientVolume = v; },
+        setUIVolume: (v) => { uiVolume = v; },
     };
 })();
