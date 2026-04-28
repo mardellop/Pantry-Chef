@@ -24,7 +24,7 @@
         }
 
         body {
-            background-color: #e0e0e0;
+            background-color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -57,7 +57,7 @@
             align-items: center;
             font-size: 14px;
             font-weight: 700;
-            color: #fff;
+            color: #000;
             position: absolute;
             top: 0;
             width: 100%;
@@ -77,6 +77,7 @@
             overflow-y: auto;
             scrollbar-width: none;
             background: #fff;
+            padding-bottom: 90px; /* Space for the navigation bar */
         }
 
         .app-container::-webkit-scrollbar {
@@ -117,6 +118,7 @@
             border-radius: 25px;
             padding: 25px;
             box-shadow: 0 -10px 20px rgba(0,0,0,0.05);
+	    text-align: justify;
         }
 
         h1 {
@@ -133,7 +135,8 @@
             color: #666;
             font-size: 12px;
             font-weight: 700;
-        }
+	    text-align: left;        
+}
 
         .meta i {
             color: var(--primary);
@@ -166,6 +169,7 @@
             border-radius: 12px;
             font-weight: 600;
             font-size: 14px;
+	    text-align: left;
         }
 
         .steps {
@@ -214,7 +218,7 @@
             right: 20px;
             width: 36px;
             height: 36px;
-            background: rgba(255,255,255,0.2);
+            background: #d24313;
             backdrop-filter: blur(10px);
             border-radius: 50%;
             display: flex;
@@ -245,6 +249,44 @@
             margin-bottom: 10px;
             line-height: 1.6;
         }
+
+        /* Navigation Bar (Restored for Recipe View) */
+        .nav-bar {
+            height: 80px;
+            background: #fff;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.03);
+            padding-bottom: 15px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .nav-item {
+            color: #bbb;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .nav-item.active {
+            color: #d24313;
+            transform: translateY(-5px);
+        }
+
+        .nav-item span {
+            font-size: 9px;
+            margin-top: 4px;
+            font-weight: 700;
+        }
     </style>
 </head>
 <body>
@@ -258,7 +300,7 @@
             </div>
         </div>
 
-        <a href="index.html" class="close-btn"><i class="fas fa-times"></i></a>
+        <a href="#" class="close-btn" onclick="event.preventDefault(); navToParent('profile');"><i class="fas fa-times"></i></a>
 
         <div class="app-container">
             <div class="hero">
@@ -305,14 +347,57 @@
                             <p>Enfría 2h para un resultado refrescante. Sirve con huevo duro y taquitos de jamón.</p>
                         </div>
                     </div>
-                    
-                    <div style="margin-top: 30px; padding-top: 15px; border-top: 1px solid #eee; text-align: center; color: #bbb; font-size: 11px;">
-                        Pantry Chef app
-                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Navigation Bar (Bottom) -->
+        <nav class="nav-bar">
+            <div class="nav-item" onclick="navToParent('home')">
+                <i class="fas fa-utensils"></i>
+                <span>Comunidad</span>
+            </div>
+            <div class="nav-item" onclick="navToParent('pantry')">
+                <i class="fas fa-box-open"></i>
+                <span>Despensa</span>
+            </div>
+            <div class="nav-item" onclick="navToParent('cart')">
+                <i class="fas fa-shopping-basket"></i>
+                <span>Carrito</span>
+            </div>
+            <div class="nav-item" onclick="navToParent('points')">
+                <i class="fas fa-star"></i>
+                <span>Puntos</span>
+            </div>
+            <div class="nav-item" onclick="navToParent('profile')">
+                <i class="fas fa-user"></i>
+                <span>Perfil</span>
+            </div>
+        </nav>
     </div>
 
+    <script>
+        function navToParent(screen) {
+            console.log("Navigating to parent screen:", screen);
+            try {
+                const parentWin = window.parent || window.top;
+                if (parentWin && typeof parentWin.showScreen === 'function') {
+                    // Trigger sound in parent
+                    if (parentWin.SoundEngine) parentWin.SoundEngine.navDing();
+                    // Navigate parent
+                    parentWin.showScreen(screen);
+                    // Close overlay
+                    if (typeof parentWin.closePageOverlay === 'function') {
+                        parentWin.closePageOverlay();
+                    }
+                } else {
+                    window.location.href = 'index.html';
+                }
+            } catch (e) {
+                console.error("Navigation failed:", e);
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
 </body>
 </html>
