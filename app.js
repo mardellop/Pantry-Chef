@@ -1,3 +1,4 @@
+
 // --- Pantry Chef: UI & Logic Engine (v2.0 Prep Edition) ---
 
 let net; // Global placeholder for AI Model (TensorFlow.js)
@@ -79,15 +80,6 @@ function showHeatNotification() {
     notifImg.src = 'salmorejo-cordobes.png';
     notifImg.style.display = 'block';
 
-    // Forced styles to ensure visibility (bypassing potentially broken CSS)
-    notif.style.zIndex = '100000';
-    notif.style.position = 'absolute';
-    notif.style.left = '50%';
-    notif.style.transform = 'translateX(-50%)';
-    notif.style.top = '40px';
-    notif.style.opacity = '1';
-    notif.style.display = 'block';
-
     // Show notification (class still added for transitions)
     notif.classList.add('show');
     
@@ -98,91 +90,520 @@ function showHeatNotification() {
     notif.onclick = (e) => {
         e.stopPropagation();
         console.log("Notificación pinchada, abriendo salmorejo.html");
-        window.location.href = 'salmorejo.html';
+        openPage('salmorejo.html');
         notif.classList.remove('show');
     };
 
     // Auto hide after 8 seconds
     setTimeout(() => {
         notif.classList.remove('show');
-        notif.style.top = '-300px';
-        notif.style.opacity = '0';
     }, 8000);
 }
 
-// Mock Database for Recipes (would be an API in prod)
+// --- Base de Datos de Recetas Pantry Chef ---
 const recipesDB = {
+    // TOMATE
+    'Salmorejo cordobés': {
+        image: 'salmorejo-cordobes.png',
+        time: 15, difficulty: 'Muy fácil', servings: 4,
+        ingredients: ['1 kg de tomates maduros', '200 g de pan de hogaza', '100 ml de AOVE', '1 diente de ajo', 'Sal', 'Vinagre de Jerez', 'Huevo duro y jamón'],
+        utensils: ['Batidora', 'Colador fino', 'Bol'],
+        steps: ['Tritura los tomates con el pan remojado, ajo y aceite.', 'Pasa por un colador, ajusta sal y vinagre.', 'Enfría 30 min y sirve con huevo y jamón.']
+    },
+    'Ensalada caprese': {
+        image: 'ensalada-caprese.jpg',
+        time: 10, difficulty: 'Muy fácil', servings: 2,
+        ingredients: ['2 tomates grandes', '2 bolas de mozzarella fresca', 'Albahaca fresca', 'AOVE', 'Sal en escamas', 'Pimienta'],
+        utensils: ['Cuchillo', 'Plato'],
+        steps: ['Corta tomate y mozzarella en rodajas.', 'Alterna rodajas en un plato con albahaca.', 'Aliña con aceite, sal y pimiento.']
+    },
+    'Pan con tomate': {
+        image: 'pan-con-tomate.jpg',
+        time: 5, difficulty: 'Muy fácil', servings: 2,
+        ingredients: ['2 rebanadas de pan', '1 tomate maduro', '1/2 diente de ajo', 'AOVE', 'Sal'],
+        utensils: ['Tostadora', 'Cuchillo'],
+        steps: ['Tuesta el pan hasta que esté dorado.', 'Frota el ajo por la superficie.', 'Restriega el tomate, añade sal y aceite.']
+    },
+    'Huevos con tomate': {
+        image: 'huevos-con-tomate.jpg',
+        time: 15, difficulty: 'Muy fácil', servings: 2,
+        ingredients: ['4 huevos', '400 g de tomate picado', '1/2 cebolla', '1 diente de ajo', '1/2 pimiento verde', 'AOVE', 'Sal', 'Pimienta'],
+        utensils: ['Sartén', 'Tapa'],
+        steps: ['Sofríe cebolla y tomate 8 min.', 'Casca los huevos encima y tapa.', 'Cocina a fuego medio y sirve con pan.']
+    },
+    'Pollo al tomate': {
+        image: 'pollo-al-tomate.jpg',
+        time: 35, difficulty: 'Media', servings: 2,
+        ingredients: ['500 g de pollo', '400 g de tomate', '1 cebolla', '2 dientes de ajo', '1 pimiento rojo', 'AOVE', 'Sal', 'Pimienta'],
+        utensils: ['Cazuela', 'Cuchillo'],
+        steps: ['Dora el pollo salpimentado.', 'Añade tomate, cebolla y ajo. Rehoga 5 min.', 'Cocina tapado 20 min a fuego bajo.']
+    },
+    'Pasta al pomodoro': {
+        image: 'pasta-al-pomodoro.jpg',
+        time: 20, difficulty: 'fácil', servings: 2,
+        ingredients: ['200 g de pasta', '400 g de tomate triturado', '2 dientes de ajo', '1/2 cebolla', 'AOVE', 'Albahaca fresca', 'Sal'],
+        utensils: ['Olla', 'Sartén'],
+        steps: ['Cuece la pasta según instrucciones.', 'Sofríe ajo y tomate 10 min.', 'Mezcla y sirve con albahaca y aceite.']
+    },
+    'Pisto manchego': {
+        image: 'pisto-manchego.jpg',
+        time: 30, difficulty: 'fácil', servings: 3,
+        ingredients: ['2 pimientos verdes', '1 pimiento rojo', '1 cebolla', '500 g de tomate', '2 dientes de ajo', '3 huevos (opcional)', 'AOVE', 'Sal'],
+        utensils: ['Sartén grande', 'Espátula'],
+        steps: ['Sofríe cebolla y pimiento 10 min.', 'Añade tomate y ajo. Cocina destapado.', 'Sazona y sirve (con huevos fritos si quieres).']
+    },
+
+    // AGUACATE
+    'Guacamole casero': {
+        image: 'guacamole-casero.jpg',
+        time: 10, difficulty: 'Muy fácil', servings: 4,
+        ingredients: ['3 aguacates maduros', '1 tomate pequeño', '1/2 cebolla', '1/2 limón', 'Cilantro', 'Sal', 'Pimienta', 'Nachos'],
+        utensils: ['Bol', 'Tenedor'],
+        steps: ['Aplasta los aguacates en un bol.', 'Añade tomate, cebolla y limón.', 'Sazona y sirve con nachos.']
+    },
+    'Tostada de aguacate': {
+        image: 'tostada-de-aguacate.jpg',
+        time: 10, difficulty: 'Muy fácil', servings: 1,
+        ingredients: ['1 rebanada de pan', '1/2 aguacate', '1/2 tomate', 'Limón', 'Sésamo', 'AOVE', 'Sal', 'Pimienta'],
+        utensils: ['Tostadora', 'Tenedor'],
+        steps: ['Tuesta el pan dorado.', 'Aplasta aguacate con limón y unta.', 'Añade tomate, sésamo y aceite.']
+    },
+    'Ensalada de aguacate y tomate': {
+        image: 'ensalada-de-aguacate-y-tomate.jpg',
+        time: 10, difficulty: 'Muy fácil', servings: 2,
+        ingredients: ['2 aguacates', '2 tomates', '1/4 cebolla morada', 'Limón', 'AOVE', 'Sal', 'Cilantro'],
+        utensils: ['Cuchillo', 'Bol'],
+        steps: ['Corta aguacate y tomate en dados.', 'Añade cebolla picada y mezcla.', 'Aliña con limón, aceite, sal y cilantro.']
+    },
+    'Aguacate con huevo al horno': {
+        image: 'aguacate-con-huevo-al-horno',
+        time: 22, difficulty: 'fácil', servings: 2,
+        ingredients: ['2 aguacates', '4 huevos pequeños', 'Salsa picante', 'Sal', 'Pimienta', 'Tomate'],
+        utensils: ['Bandeja horno', 'Cuchara'],
+        steps: ['Quita el hueso del aguacate y amplía hueco.', 'Casca un huevo dentro, salpimenta y pon salsa.', 'Hornea 15-18 min a 200°C.']
+    },
+    'Bowl de aguacate y espinacas': {
+        image: 'bowl-de-aguacate-y-espinacas.jpg',
+        time: 10, difficulty: 'Muy fácil', servings: 2,
+        ingredients: ['1 aguacate', '200 g espinacas baby', '10 tomates cherry', 'Pipas girasol', 'Limón', 'AOVE', 'Sal'],
+        utensils: ['Bol'],
+        steps: ['Lava espinacas y ponlas de base.', 'Añade aguacate y tomate cherry.', 'Aliña con limón, aceite y pipas.']
+    },
+
+    // ESPINACAS
+    'Espinacas al ajillo': {
+        image: 'espinacas-al-ajillo.jpg',
+        time: 10, difficulty: 'Muy fácil', servings: 2,
+        ingredients: ['500 g espinacas', '3 dientes de ajo', '1/2 cebolla', 'AOVE', 'Sal', 'Limón', 'Nuez moscada'],
+        utensils: ['Sartén'],
+        steps: ['Dora los ajos laminados en aceite.', 'Añade espinacas hasta que reduzcan.', 'Sazona con sal, limón y nuez moscada.']
+    },
+    'Revuelto de espinacas y huevo': {
+        image: 'revuelto-de-espinacas-y-huevo.jpg',
+        time: 12, difficulty: 'Muy fácil', servings: 2,
+        ingredients: ['300 g espinacas', '4 huevos', '2 dientes de ajo', '50 g queso rallado', '1/2 cebolla', 'AOVE', 'Sal'],
+        utensils: ['Sartén', 'Bol'],
+        steps: ['Saltea espinacas con ajo 3 min.', 'Bate huevos con sal y vierte.', 'Remueve a fuego bajo, añade queso y sirve.']
+    },
+    'Crema de espinacas': {
+        image: 'crema-de-espinacas.jpg',
+        time: 20, difficulty: 'fácil', servings: 3,
+        ingredients: ['500 g espinacas', '1 cebolla', '2 dientes de ajo', '750 ml caldo vegetal', '50 g queso', 'AOVE', 'Sal'],
+        utensils: ['Olla', 'Batidora'],
+        steps: ['Pocha cebolla y ajo.', 'Añade espinacas y caldo. Hierve 10 min.', 'Tritura hasta obtener crema y pon queso.']
+    },
+    'Pasta con espinacas y queso': {
+        image: 'pasta-con-espinacas-y-queso.jpg',
+        time: 20, difficulty: 'fácil', servings: 2,
+        ingredients: ['200 g pasta', '200 g espinacas', '60 g queso rallado', '2 dientes de ajo', 'AOVE', 'Sal'],
+        utensils: ['Olla', 'Sartén'],
+        steps: ['Cuece pasta (reserva agua).', 'Saltea espinacas con ajo y añade pasta.', 'Añade queso y agua de cocción. Mezcla.']
+    },
+
+    // CEBOLLA
+    'Sopa de cebolla gratinada': {
+        image: 'sopa-de-cebolla-gratinada.jpg',
+        time: 40, difficulty: 'fácil', servings: 3,
+        ingredients: ['4 cebollas', '1L caldo verduras', '60 g mantequilla', '1 diente de ajo', '4 rebanadas pan', '100 g queso'],
+        utensils: ['Olla', 'Horno'],
+        steps: ['Carameliza cebolla 25 min.', 'Añade caldo y cocina 10 min.', 'Sirve con pan y queso gratinado.']
+    },
+    'Tortilla con cebolla': {
+        image: 'tortilla-con-cebolla.jpg',
+        time: 25, difficulty: 'fácil', servings: 2,
+        ingredients: ['4 huevos', '2 cebollas', '50 g queso', '1/2 pimiento', 'AOVE', 'Sal'],
+        utensils: ['Sartén'],
+        steps: ['Pocha cebolla dulce y translúcida.', 'Bate huevos y mezcla con cebolla.', 'Cuaja a fuego medio-bajo por ambos lados.']
+    },
+    'Pollo encebollado': {
+        image: 'pollo-encebollado.jpg',
+        time: 35, difficulty: 'Media', servings: 2,
+        ingredients: ['2 pechugas pollo', '3 cebollas', '2 dientes de ajo', '1/2 pimiento', '100 ml vino blanco', 'AOVE', 'Sal'],
+        utensils: ['Sartén con tapa'],
+        steps: ['Dora el pollo y retira.', 'Pocha cebolla en juliana.', 'Vuelve a poner pollo, vino y cocina tapado.']
+    },
+
+    // AJO
+    'Sopa de ajo castellana': {
+        image: 'sopa-de-ajo-castellana.jpg',
+        time: 20, difficulty: 'fácil', servings: 2,
+        ingredients: ['6 dientes ajo', '150 g pan duro', '2 huevos', '1L caldo', 'Pimentón', 'AOVE', 'Sal'],
+        utensils: ['Cazuela'],
+        steps: ['Fríe ajos y pan dorado.', 'Añade caldo, pimentón y sal. Cocina 10 min.', 'Casca huevos, tapa y cuaja 3 min.']
+    },
+    'Pan de ajo casero': {
+        image: 'pan-de-ajo-casero.jpg',
+        time: 15, difficulty: 'Muy fácil', servings: 4,
+        ingredients: ['1 baguette', '3 dientes ajo', '60 g mantequilla', '50 g queso', 'Perejil', 'Sal'],
+        utensils: ['Horno'],
+        steps: ['Mezcla mantequilla, ajo, sal y perejil.', 'Unta en rebanadas de pan.', 'Hornea 10 min a 200°C.']
+    },
+    'Pasta aglio e olio': {
+        image: 'pasta-aglio-e-olio.jpg',
+        time: 15, difficulty: 'fácil', servings: 2,
+        ingredients: ['200 g pasta', '5 dientes ajo', '1 guindilla', '60 ml AOVE', 'Queso parmesano', 'Sal'],
+        utensils: ['Olla', 'Sartén'],
+        steps: ['Cuece pasta al dente (reserva agua).', 'Dora ajo con guindilla en aceite.', 'Mezcla pasta con aceite y agua. Sirve con queso.']
+    },
+    'Pollo al ajillo': {
+        image: 'pollo-al-ajillo.jpg',
+        time: 30, difficulty: 'fácil', servings: 2,
+        ingredients: ['500 g pollo', '8 dientes ajo', '100 ml vino blanco', '1/2 cebolla', '1 tomate', 'AOVE', 'Sal'],
+        utensils: ['Sartén'],
+        steps: ['Dora el pollo en aceite caliente.', 'Añade ajo y vino blanco. Evapora.', 'Cocina tapado 15 min.']
+    },
+
+    // PIMIENTO
+    'Pimientos asados al horno': {
+        image: 'pimientos-asados-al-horno.jpg',
+        time: 40, difficulty: 'Muy fácil', servings: 4,
+        ingredients: ['3 pimientos', '2 dientes ajo', '1 tomate', 'AOVE', 'Vinagre', 'Sal'],
+        utensils: ['Horno'],
+        steps: ['Hornea pimientos con aceite y sal 35 min.', 'Pela calientes y corta en tiras.', 'Aliña con ajo, vinagre y aceite.']
+    },
+    'Revuelto de pimientos': {
+        image: 'revuelto-de-pimientos.jpg',
+        time: 15, difficulty: 'Muy fácil', servings: 2,
+        ingredients: ['3 huevos', '2 pimientos', '1/2 cebolla', '1 diente ajo', '1 tomate pequeño', 'AOVE', 'Sal'],
+        utensils: ['Sartén'],
+        steps: ['Sofríe pimiento y cebolla.', 'Bate huevos con sal y vierte.', 'Remueve a fuego bajo hasta que cuaje.']
+    },
+    'Pollo con pimientos al horno': {
+        image: 'pollo-con-pimientos-al-horno.jpg',
+        time: 45, difficulty: 'Media', servings: 3,
+        ingredients: ['500 g pollo', '2 pimientos', '1 cebolla', '2 dientes ajo', '1 tomate', 'AOVE', 'Sal', 'Pimentón', 'Orégano'],
+        utensils: ['Horno'],
+        steps: ['Dora pollo con sal, pimentón y orégano.', 'Añade verduras y remueve.', 'Hornea a 180°C hasta que esté hecho.']
+    },
+    'Arroz salteado con pimientos': {
+        image: 'arroz-salteado-con-pimientos.jpg',
+        time: 25, difficulty: 'fácil', servings: 2,
+        ingredients: ['160 g arroz', '2 pimientos', '1/2 cebolla', '1 diente ajo', '1 tomate pequeño', 'AOVE', 'Sal', 'Pimienta'],
+        utensils: ['Olla', 'Sartén'],
+        steps: ['Cuece arroz y reserva.', 'Saltea pimientos con cebolla y ajo.', 'Mezcla arroz con verduras y sazona.']
+    },
+
+    // HUEVOS
+    'Tortilla francesa': {
+        image: 'tortilla-francesa.jpg',
+        time: 8, difficulty: 'Muy fácil', servings: 1,
+        ingredients: ['3 huevos', '30 g queso', 'Tomate cherry', 'AOVE', 'Sal', 'Pimienta'],
+        utensils: ['Sartén'],
+        steps: ['Bate huevos con sal y pimienta.', 'Vierte en sartén y mueve suave.', 'Dobla cuando esté casi cuajada.']
+    },
+    'Huevos rotos': {
+        image: 'huevos-rotos.jpg',
+        time: 10, difficulty: 'Muy fácil', servings: 1,
+        ingredients: ['2 huevos', 'Leche', '1 rebanada pan grande', '30 g queso', 'Sal', 'AOVE'],
+        utensils: ['Sartén'],
+        steps: ['Bate huevos con leche y sal.', 'Cocina a fuego muy bajo removiendo.', 'Sirve sobre tostada con queso.']
+    },
+    'French toast con canela': {
+        image: 'french-toast-con-canela.jpg',
+        time: 15, difficulty: 'Muy fácil', servings: 2,
+        ingredients: ['4 rebanadas pan', '2 huevos', '150 ml leche', '1 cda azúcar', 'Mantequilla', 'Canela'],
+        utensils: ['Sartén'],
+        steps: ['Mezcla huevos, leche, canela y azúcar.', 'Empapa el pan en la mezcla.', 'Dora en mantequilla por ambos lados.']
+    },
+
+    // POLLO
+    'Pollo a la plancha con limón': {
+        image: 'pollo-a-la-plancha-con-limon.jpg',
+        time: 15, difficulty: 'Muy fácil', servings: 2,
+        ingredients: ['2 pechugas pollo', '1 limón', '2 dientes ajo', '1/2 cebolla', 'AOVE', 'Sal', 'Orégano'],
+        utensils: ['Plancha'],
+        steps: ['Marina pollo con limón, ajo y especias.', 'Cocina en plancha 7 min por lado.', 'Reposa 2 min antes de servir.']
+    },
+    'Pasta con pollo y verduras': {
+        image: 'pasta-con-pollo-y-verduras.jpg',
+        time: 25, difficulty: 'fácil', servings: 2,
+        ingredients: ['200 g pasta', '1 pechuga pollo', '1 tomate', '1/2 pimiento', '1/2 cebolla', '1 diente ajo', 'AOVE', 'Sal'],
+        utensils: ['Olla', 'Sartén'],
+        steps: ['Cuece pasta al dente.', 'Saltea pollo con ajo, cebolla y pimiento.', 'Mezcla pasta con pollo y tomate.']
+    },
+    'Pollo gratinado con queso': {
+        image: 'pollo-gratinado-con-queso.jpg',
+        time: 30, difficulty: 'fácil', servings: 2,
+        ingredients: ['2 pechugas pollo', '100 g queso fundir', '1 tomate', '1/2 cebolla', 'AOVE', 'Sal', 'Pimienta'],
+        utensils: ['Sartén', 'Horno'],
+        steps: ['Dora pechugas en sartén.', 'Cubre con queso en bandeja horno.', 'Gratina a 220°C hasta que burbujee.']
+    },
+
+    // PAN
+    'Sandwich crujiente de queso': {
+        image: 'sandwich-crujiente-de-queso.jpg',
+        time: 10, difficulty: 'Muy fácil', servings: 1,
+        ingredients: ['2 rebanadas pan molde', '4 láminas queso', 'Mantequilla', 'Tomate', '1 huevo'],
+        utensils: ['Sartén'],
+        steps: ['Pon queso entre rebanadas.', 'Unta mantequilla por fuera.', 'Dora en sartén 4 min por lado.']
+    },
+
+    // QUESO
+    'Macarrones con queso': {
+        image: 'macarrones-con-queso.jpg',
+        time: 20, difficulty: 'fácil', servings: 2,
+        ingredients: ['200 g pasta', '150 g queso cheddar', '25 g mantequilla', '25 g harina', '300 ml leche', 'Ajo en polvo'],
+        utensils: ['Olla', 'Sartén'],
+        steps: ['Cuece pasta al dente.', 'Prepara bechamel con queso.', 'Mezcla y gratina si lo deseas.']
+    },
+    'Risotto de queso': {
+        image: 'risotto-de-queso.jpg',
+        time: 30, difficulty: 'Media', servings: 2,
+        ingredients: ['160 g arroz arborio', '40 g mantequilla', '80 g parmesano', '1/2 cebolla', '600 ml caldo'],
+        utensils: ['Cazuela'],
+        steps: ['Sofríe cebolla y tuesta arroz.', 'Añade caldo cazo a cazo removiendo.', 'Añade parmesano y mantequilla al final.']
+    },
+
+    // PASTA
+    'Espaguetis a la carbonara': {
+        image: 'espaguetis-a-la-carbonara.jpg',
+        time: 20, difficulty: 'Media', servings: 2,
+        ingredients: ['200 g espaguetis', '3 yemas huevo', '60 g parmesano', 'Pimienta negra', 'Sal'],
+        utensils: ['Olla', 'Bol'],
+        steps: ['Cuece pasta al dente (reserva agua).', 'Bate yemas con queso y pimienta.', 'Mezcla pasta con crema fuera del fuego.']
+    },
+    'Pasta con parmesano': {
+        image: 'pasta-con-parmesano.jpg',
+        time: 15, difficulty: 'Muy fácil', servings: 2,
+        ingredients: ['200 g pasta', '50 g parmesano', '30 g mantequilla', '1 diente ajo', 'Sal'],
+        utensils: ['Olla'],
+        steps: ['Cuece pasta al dente.', 'Escurre (reserva un poco de agua).', 'Mezcla con mantequilla, queso y agua.']
+    },
+    'Pasta napolitana': {
+        image: 'pasta-napolitana.jpg',
+        time: 20, difficulty: 'fácil', servings: 2,
+        ingredients: ['200 g pasta', '400 g tomate triturado', '2 dientes ajo', '1/2 cebolla', 'Albahaca', 'AOVE', 'Sal'],
+        utensils: ['Olla', 'Sartén'],
+        steps: ['Cuece pasta. Sofríe ajo.', 'Añade tomate y sazona 8 min.', 'Mezcla pasta con salsa y albahaca.']
+    },
+
+    // ARROZ
+    'Arroz blanco perfecto': {
+        image: 'arroz-blanco-perfecto.jpg',
+        time: 20, difficulty: 'Muy fácil', servings: 2,
+        ingredients: ['160 g arroz largo', '1 diente ajo', 'Cebolla', 'Agua (x2)', 'Sal'],
+        utensils: ['Olla'],
+        steps: ['Lava el arroz bajo el grifo.', 'Hierve agua con sal y echa arroz.', 'Cocina tapado 15 min y reposa 5.']
+    },
+    'Arroz con tomate': {
+        image: 'arroz-con-tomate.jpg',
+        time: 25, difficulty: 'fácil', servings: 2,
+        ingredients: ['160 g arroz', '300 g tomate triturado', '1/2 cebolla', '1 diente ajo', '400 ml caldo', 'AOVE', 'Sal'],
+        utensils: ['Olla'],
+        steps: ['Sofríe cebolla y ajo.', 'Añade tomate y arroz. Remueve.', 'Cubre con caldo y cocina lento tapado.']
+    },
+    'Arroz con espinacas': {
+        image: 'arroz-con-espinacas.jpg',
+        time: 25, difficulty: 'fácil', servings: 2,
+        ingredients: ['160 g arroz', '200 g espinacas', '1/2 cebolla', '2 dientes ajo', '400 ml caldo', 'AOVE', 'Sal'],
+        utensils: ['Olla'],
+        steps: ['Sofríe cebolla y ajo.', 'Añade arroz y caldo. Cocina 15 min.', 'Incorpora espinacas los últimos 3 min.']
+    },
+    'Arroz frito con huevo': {
+        image: 'arroz-frito-con-huevo.jpg',
+        time: 20, difficulty: 'fácil', servings: 2,
+        ingredients: ['160 g arroz cocido', '2 huevos', '1/2 pimiento', '1/2 cebolla', '1 diente ajo', 'Aceite sésamo', 'Sal'],
+        utensils: ['Wok/Sartén'],
+        steps: ['Usa arroz cocido seco.', 'Saltea verduras a fuego alto.', 'Añade arroz y huevos. Mezcla rápido.']
+    },
+    'Arroz con pollo': {
+        image: 'arroz-con-pollo.jpg',
+        time: 30, difficulty: 'Media', servings: 2,
+        ingredients: ['160 g arroz', '300 g pollo', '1 cebolla', '2 dientes ajo', '1 pimiento', '1 tomate', '400 ml caldo pollo', 'Azafrán'],
+        utensils: ['Cazuela'],
+        steps: ['Dora pollo con ajo y cebolla.', 'Añade arroz y caldo caliente.', 'Cocina tapado 18 min y reposa 5.']
+    },
     'Pasta con setas y salvia': {
         image: 'https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80',
-        authorImg: 'https://i.pravatar.cc/150?u=carlos',
-        time: 12, // minutes
-        ingredients: ['200g Pasta', '100g Setas', 'Hojas de salvia', 'Aceite de oliva', 'Ajo'],
-        utensils: ['Olla grande', 'SartÃ©n', 'Escurridor'],
+        time: 12, difficulty: 'Fácil', servings: 2,
+        ingredients: ['200g pasta', '150g setas variadas', 'Hojas de salvia fresca', '2 dientes de ajo', 'AOVE', 'Sal y pimienta'],
+        utensils: ['Olla', 'Sartén grande'],
         steps: ['Hervir agua y cocer pasta hasta que esté perfectamente al dente.', 'Saltear setas carnosas con ajo y salvia hasta sentir su sabor profundo y umami y el aroma herbáceo.', 'Mezclar la pasta con las setas, permitiendo que el calor libere todo el perfume de la salvia en una textura sedosa.', 'Servir caliente y disfrutar del contraste de sabores.']
-    },
-    'Pasta PrimavIA': { // Fallback for differing names
-        image: 'https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80',
-        authorImg: 'https://i.pravatar.cc/150?u=carlos',
-        time: 12,
-        ingredients: ['200g Pasta', 'Verduras Varias', 'Aceite', 'Queso'],
-        utensils: ['Olla', 'SartÃ©n'],
-        steps: ['Cocer la pasta al dente para una mordida perfecta.', 'Saltear las verduras frescas hasta que estén ligeramente crujientes, con un chorrito de aceite que realce su sabor natural.', 'Mezclar todo y servir con un toque de queso inhalando su fragancia salada y disfrutando de su textura fundente.']
     },
     'Vegan Bowl': {
         image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
-        authorImg: 'https://i.pravatar.cc/150?u=ana',
-        time: 20,
-        ingredients: ['Tofu marinado', 'Huevos de codorniz', 'Edamame', 'Tomates cherry', 'MaÃ­z dulce', 'Pepino', 'Lechuga', 'Cebollino fresco'],
-        utensils: ['Bol', 'Cuchillo'],
-        steps: ['Pon una base de lechuga refrescante en el fondo del bowl.', 'Ve colocando cada ingrediente disfrutando de la textura firme y sabor terroso del tofu marinado.', 'AÃ±ade el resto de vegetales para un festín de frescor crujiente.', 'Espolvorea cebollino picado, soltando su aroma punzante y sabor vibrante al cortarlo.']
+        time: 25, difficulty: 'Media', servings: 1,
+        ingredients: ['Garbanzos cocidos', 'Espinacas frescas', 'Tomates cherry', 'Aguacate', 'Semillas de sésamo', 'Aliño de limón y tahini'],
+        utensils: ['Bol grande', 'Cuchillo'],
+        steps: ['Pon una base de lechuga refrescante en el fondo del bowl.', 'Ve colocando cada ingrediente disfrutando de la textura firme y sabor terroso del tofu marinado.', 'Añade el resto de vegetales para un festín de frescor crujiente.', 'Espolvorea cebollino picado, soltando su aroma punzante y sabor vibrante al cortarlo.']
     },
-    'Tostada de aguacate': {
-        image: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=800&q=80',
-        authorImg: 'https://i.pravatar.cc/150?u=marta',
-        time: 10,
-        ingredients: ['Pan integral', '1 Aguacate', 'Semillas', 'LimÃ³n', 'Sal al gusto', 'Pimienta al gusto'],
-        utensils: ['Tostadora', 'Cuchillo'],
-        steps: ['Tuesta el pan hasta lograr un contraste crujiente e irresistible.', 'Chafar el aguacate con limón para liberar su cremosidad refrescante y frescura cítrica.', 'Untar generosamente y decorar con semillas para un toque extra de textura.']
-    },
-    'Buddha Bowl': {
+    'Ensalada de Quinoa': {
         image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80',
-        authorImg: 'https://i.pravatar.cc/150?u=green',
-        time: 25,
-        ingredients: ['1 Aguacate', 'Garbanzos', 'Boniato', 'RÃ¡bano', 'Tomates cherry', 'Pimiento amarillo', 'Col lombarda'],
-        utensils: ['Cuchillo', 'Bol grande'],
-        steps: ['Pon una base de brotes tiernos y refrescantes.', 'Corta el aguacate sintiendo su textura cremosa y suave sabor.', 'Siente el contraste crujiente de los garbanzos tostados al añadirlos al bowl.', 'La mezcla de texturas, de lo tierno a lo crocante, será un festival para tu paladar.']
+        time: 40, difficulty: 'Media', servings: 2,
+        ingredients: ['1 taza de quinoa', 'Pimiento rojo', 'Cebolla morada', 'Pepino', 'Perejil fresco', 'Zumo de limón'],
+        utensils: ['Olla pequeña', 'Colador', 'Ensaladera'],
+        steps: ['Enjuaga y cuece la quinoa durante 15 min.', 'Pica finamente las verduras.', 'Mezcla todo cuando la quinoa esté fría.']
     },
     'Espaguetis con salsa pomodoro': {
         image: 'https://images.unsplash.com/photo-1551892374-ecf8754cf8b0?auto=format&fit=crop&w=800&q=80',
-        authorImg: 'https://i.pravatar.cc/150?u=veggie',
-        time: 15,
-        ingredients: ['Espaguetis (preferiblemente de sÃ©samo o de grano duro)', 'Tomates maduros', '1 diente de ajo', 'Aceite de oliva virgen extra', 'Sal', 'Albahaca fresca', 'Queso parmesano o pecorino rallado (opcional)'],
-        utensils: ['Olla grande', 'SartÃ©n amplia', 'Colador'],
-        steps: ['Prepara una salsa pomodoro de sabor dulce y ácido con una textura aterciopelada que acaricie la pasta.', 'Cocer los espaguetis al dente para mantener esa firmeza característica y una mordida perfecta.', 'Mantequillar con el agua de cocción para una terminación cremosa, brillante y fundente.']
+        time: 15, difficulty: 'Fácil', servings: 2,
+        ingredients: ['250g espaguetis', '400g tomate natural triturado', 'Albahaca fresca', '1 cebolla', 'Queso parmesano (opcional)'],
+        utensils: ['Olla', 'Sartén'],
+        steps: ['Prepara la salsa sofriendo la cebolla y el tomate.', 'Cuece la pasta.', 'Combina y añade albahaca fresca al final.']
     },
     'Freakshake de chocolate': {
         image: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80',
-        authorImg: 'https://i.pravatar.cc/150?u=sweet',
-        time: 5,
-        ingredients: ['Leche', '3 bolas de helado de chocolate', 'Sirope de chocolate', 'Chocolate fundido o Nutella (para decorar)', 'Nata montada (opcional)', '1 Barrita de chocolate (opcional)', 'Cacao en polvo'],
-        utensils: ['Batidora', 'Tarro de cristal'],
-        steps: ['Funde chocolate para una textura líquida y pecaminosa.', 'Bate hasta conseguir un batido denso, cremoso y de dulzor intenso.', 'La nata montada aporta una ligereza aérea en contraste con el chocolate fundido.', 'El cacao en polvo añade un toque final de amargor sofisticado.']
+        time: 10, difficulty: 'Fácil', servings: 1,
+        ingredients: ['Leche', 'Cacao puro', 'Plátano congelado', 'Nata montada', 'Sirope de chocolate', 'Virutas de chocolate'],
+        utensils: ['Batidora de vaso', 'Vaso alto'],
+        steps: ['Funde chocolate para una textura líquida y pecaminosa.', 'Bate hasta conseguir un batido denso, cremoso y de dulzor intenso.', 'La nata montada aporta una ligereza aérea en contraste con el chocolate fundido.', ' El cacao en polvo añade un toque final de amargor sofisticado.']
     },
-    'Sopa de Lentejas': {
-        image: 'https://images.unsplash.com/photo-1547592166-23acbe346499?auto=format&fit=crop&w=800&q=80',
-        authorImg: 'https://i.pravatar.cc/150?u=comfort',
-        time: 45,
-        ingredients: ['Lentejas', 'Zanahoria', 'Cebolla', 'Caldo de Verduras', 'Laurel'],
-        utensils: ['Olla Express', 'Cuchara'],
-        steps: ['Sofreír verduras para una base de sabor profundo y textura suave.', 'Cocer las lentejas hasta que estén tiernas y la sopa tenga una consistencia reconfortante y espesa.', 'El laurel infunde un sabor amaderado sutil que completa este plato hogareño de sabor intenso.']
+    'Pasta PrimavIA': {
+        image: 'https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80',
+        time: 20, difficulty: 'Fácil', servings: 2,
+        ingredients: ['Pasta de trigo integral', 'Verduras de temporada', 'Ajo', 'Aceite de oliva virgen extra'],
+        utensils: ['Olla', 'Sartén'],
+        steps: ['Hierve la pasta.', 'Saltea las verduras con ajo.', 'Mezcla y disfruta de una comida saludable.']
     }
 };
+
+// Mapeo de ingredientes a recetas para la lógica de selección
+const ingredientToRecipes = {
+    'Tomate': ['Salmorejo cordobés', 'Ensalada caprese', 'Pan con tomate', 'Huevos con tomate', 'Pollo al tomate', 'Pasta al pomodoro', 'Pisto manchego'],
+    'Aguacate': ['Guacamole casero', 'Tostada de aguacate', 'Ensalada de aguacate y tomate', 'Aguacate con huevo al horno', 'Bowl de aguacate y espinacas'],
+    'Espinacas': ['Espinacas al ajillo', 'Revuelto de espinacas y huevo', 'Crema de espinacas', 'Pasta con espinacas y queso'],
+    'Cebolla': ['Sopa de cebolla gratinada', 'Tortilla con cebolla', 'Pollo encebollado'],
+    'Ajo': ['Sopa de ajo castellana', 'Pan de ajo casero', 'Pasta aglio e olio', 'Pollo al ajillo'],
+    'Pimiento': ['Pimientos asados al horno', 'Revuelto de pimientos', 'Pollo con pimientos al horno', 'Arroz salteado con pimientos'],
+    'Huevos': ['Tortilla francesa', 'Huevos rotos', 'French toast con canela'],
+    'Pollo': ['Pollo a la plancha con limón', 'Pasta con pollo y verduras', 'Pollo gratinado con queso'],
+    'Pan': ['Sandwich crujiente de queso', 'Pan con tomate', 'Pan de ajo casero', 'French toast con canela'],
+    'Queso': ['Macarrones con queso', 'Risotto de queso', 'Ensalada caprese', 'Pasta con espinacas y queso', 'Sandwich crujiente de queso', 'Pollo gratinado con queso'],
+    'Pasta': ['Pasta al pomodoro', 'Pasta con espinacas y queso', 'Pasta aglio e olio', 'Pasta con pollo y verduras', 'Macarrones con queso', 'Espaguetis a la carbonara', 'Pasta con parmesano', 'Pasta napolitana'],
+    'Arroz': ['Arroz con tomate', 'Arroz con espinacas', 'Arroz frito con huevo', 'Arroz con pollo', 'Risotto de queso', 'Arroz blanco perfecto']
+};
+
+async function generateSmartRecipe() {
+    SoundEngine.magic();
+    const activeItems = Array.from(document.querySelectorAll('.smart-item.active')).map(el => {
+        // Normalizar nombre (quitar saltos de línea y espacios extra)
+        let name = el.querySelector('.name').innerText.replace(/\s+/g, ' ').trim();
+        return {
+            name: name,
+            icon: el.querySelector('.icon').innerText
+        };
+    });
+
+    if (activeItems.length === 0) {
+        alert("¡Eh, Chef! Selecciona al menos un ingrediente para hacer magia. ✨");
+        return;
+    }
+
+
+    const overlay = document.getElementById('scan-overlay');
+    const t1 = document.getElementById('thought-1');
+    const t2 = document.getElementById('thought-2');
+    const t3 = document.getElementById('thought-3');
+    const status = document.getElementById('scanning-status');
+
+    if (overlay) overlay.style.display = 'flex';
+
+    status.innerText = "RAZONAMIENTO IA";
+    t1.innerHTML = `<i class="fas fa-microchip"></i> Buscando las mejores opciones para: ${activeItems.map(i => i.name).join(', ')}`;
+    t2.innerText = "";
+    t3.innerText = "";
+
+    setTimeout(() => {
+        t2.innerHTML = `<i class="fas fa-magic"></i> Cruzando datos de sabor y sostenibilidad...`;
+        
+        setTimeout(() => {
+            // Lógica de búsqueda de TODAS las recetas posibles
+            let allMatches = [];
+            
+            activeItems.forEach(item => {
+                let name = item.name;
+                if (name.includes('garbanzos')) name = 'Arroz';
+                const possible = ingredientToRecipes[name] || [];
+                allMatches = [...allMatches, ...possible];
+            });
+
+            // Eliminar duplicados
+            allMatches = [...new Set(allMatches)];
+            
+            if (allMatches.length === 0) {
+                allMatches = ['Arroz blanco perfecto'];
+            }
+
+            t3.innerHTML = `¡HEMOS ENCONTRADO ${allMatches.length} RECETAS!`;
+
+            setTimeout(() => {
+                if (overlay) overlay.style.display = 'none';
+                
+                // Poblar la pantalla de resultados
+                const resultsList = document.getElementById('possible-recipes-list');
+                const countEl = document.getElementById('results-count');
+                
+                if (resultsList && countEl) {
+                    resultsList.innerHTML = '';
+                    countEl.innerText = allMatches.length;
+                    
+                    allMatches.forEach(recipeTitle => {
+                        const data = recipesDB[recipeTitle];
+                        if (!data) return;
+                        
+                        const card = document.createElement('div');
+                        card.className = 'dish-card';
+                        card.style.cursor = 'pointer';
+                        card.onclick = () => openRecipeDetail(recipeTitle, 'Chef IA', data.difficulty, 'pantry-results');
+                        
+                        card.innerHTML = `
+                            <div class="dish-media" style="height: 140px;">
+                                <img src="${data.image}" alt="${recipeTitle}">
+                            </div>
+                            <div class="dish-content" style="padding: 15px;">
+                                <h2 style="font-size: 16px; margin-bottom: 5px;">${recipeTitle}</h2>
+                                <div class="dish-meta">
+                                    <span><i class="fas fa-signal"></i> ${data.difficulty}</span>
+                                    <span><i class="fas fa-fire"></i> ${data.time} min</span>
+                                </div>
+                            </div>
+                        `;
+                        resultsList.appendChild(card);
+                        keyFrameFadeIn(card);
+                    });
+                }
+                
+                showScreen('pantry-results');
+            }, 1200);
+        }, 1500);
+    }, 1200);
+}
 
 let currentRecipeTime = 0;
 let timerInterval;
 
-function openRecipeDetail(title, author, difficulty) {
+function openRecipeDetail(title, author, difficulty, fromScreen = 'home') {
     SoundEngine.confirm();
+    
+    // Update back button
+    const backBtn = document.getElementById('recipe-back-btn');
+    if (backBtn) {
+        backBtn.onclick = (e) => {
+            e.stopPropagation();
+            showScreen(fromScreen);
+        };
+    }
+
     const data = recipesDB[title] || recipesDB['Pasta PrimavIA']; // Fallback
 
     // Populate Data
@@ -275,7 +696,7 @@ function startCooking() {
             btn.style.background = 'var(--primary)';
             btn.innerHTML = `<i class="fas fa-check"></i> Â¡LISTO!`;
             btn.disabled = false;
-            alert("â° Â¡Tiempo terminado! Â¡A disfrutar!");
+            alert("â ° Â¡Tiempo terminado! Â¡A disfrutar!");
         }
         timeLeft--;
     };
@@ -286,7 +707,7 @@ function startCooking() {
 }
 
 function syncWithPantry() {
-    alert("ð Sincronizando con 'La Despensa'...\n\nHecho: Se han eliminado de la lista 2 artÃ­culos que ya tienes. Se han actualizado las cantidades necesarias para tus recetas de la semana.");
+    alert("ðŸ”„ Sincronizando con 'La Despensa'...\n\nHecho: Se han eliminado de la lista 2 artÃ­culos que ya tienes. Se han actualizado las cantidades necesarias para tus recetas de la semana.");
 }
 
 function calculateOptimizedRoute() {
@@ -303,14 +724,14 @@ function closeRoute() {
 }
 
 function openStore(name) {
-    alert(`ðª Abriendo Marketplace de ${name}...\n\nAquÃ­ puedes ver el pasillo exacto de cada producto para ahorrar tiempo.`);
+    alert(`Abriendo Marketplace de ${name}...\n\nAquí­ puedes ver el pasillo exacto de cada producto para ahorrar tiempo.`);
 }
 
 function openChallenge(name) {
     SoundEngine.click();
     
     if (name === 'Zero to Hero') {
-        window.location.href = 'challenge-hero.html';
+        openPage('challenge-hero.html');
         return;
     }
 
@@ -321,11 +742,10 @@ function openChallenge(name) {
     const tag = document.getElementById('ch-tag');
 
     if (name === 'Pantry Party') {
-        title.innerText = "Pantry Party";
-        desc.innerText = "Â¡Cocina con amigos! Comparte una receta usando solo ingredientes bÃ¡sicos y gana puntos de comunidad dobles.";
-        emoji.innerText = "ðŸ¥³";
-        tag.innerText = "EVENTO ESPECIAL";
-    } else if (name === 'Zero Waste Week') {
+        window.open('https://lp.constantcontactpages.com/ev/reg/zha446j', '_blank');
+        return;
+    }
+ else if (name === 'Zero Waste Week') {
         title.innerText = "Zero Waste Week";
         desc.innerText = "Utiliza todos los ingredientes a punto de caducar de tu despensa esta semana. Â¡Reduce el desperdicio al mÃ­nimo!";
         emoji.innerText = "ðŸ“‰";
@@ -374,7 +794,7 @@ function nextStep() {
         currentStep++;
         updateStepper();
     } else {
-        alert("ð Â¡Plato completado! Has ahorrado 0.4kg de CO2. Â¡Comparte tu logro!");
+        alert("ðŸŽ‰ Â¡Plato completado! Has ahorrado 0.4kg de CO2. Â¡Comparte tu logro!");
     }
 }
 
@@ -436,80 +856,13 @@ function simulateVoiceInput() {
     toggleFABMenu();
     const voiceInput = prompt("Dile a Pantry Chef quÃ© has comprado (ej: 'He comprado 2 kilos de manzanas y un cartÃ³n de leche'):");
     if (voiceInput) {
-        alert("Procesando nota de voz con NLP... ðï¸\n\nIdentificado: Manzanas (14 dÃ­as), Leche (7 dÃ­as).");
-        addPantryItem("Manzanas", "ð", "14d");
-        addPantryItem("Leche", "ð¥", "7d");
+        alert("Procesando nota de voz con NLP... ðŸŽ™ï¸ \n\nIdentificado: Manzanas (14 dÃ­as), Leche (7 dÃ­as).");
+        addPantryItem("Manzanas", "ðŸ Ž", "14d");
+        addPantryItem("Leche", "ðŸ¥›", "7d");
         updateEcoScore(0.5); // Feedback de ahorro
     }
 }
 
-async function generateSmartRecipe() {
-    SoundEngine.magic();
-    const activeItems = Array.from(document.querySelectorAll('.smart-item.active')).map(el => {
-        return {
-            name: el.querySelector('.name').innerText,
-            icon: el.querySelector('.icon').innerText,
-            isUrgent: el.querySelector('.expiry-tag').classList.contains('urgent')
-        };
-    });
-
-    if (activeItems.length === 0) {
-        alert("Â¡Eh, Chef! Selecciona al menos un ingrediente para hacer magia. â¨");
-        return;
-    }
-
-    const overlay = document.getElementById('scan-overlay');
-    const t1 = document.getElementById('thought-1');
-    const t2 = document.getElementById('thought-2');
-    const t3 = document.getElementById('thought-3');
-    const status = document.getElementById('scanning-status');
-    const preview = document.getElementById('scanned-preview');
-
-    if (preview) preview.style.display = 'none';
-    if (overlay) overlay.style.display = 'flex';
-
-    status.innerText = "RAZONAMIENTO IA";
-    t1.innerHTML = `<i class="fas fa-microchip"></i> Analizando combinaciones para: ${activeItems.map(i => i.name).join(', ')}`;
-    t2.innerText = "";
-    t3.innerText = "";
-
-    setTimeout(() => {
-        t2.innerHTML = `<i class="fas fa-magic"></i> Optimizando recetas para reducir desperdicio...`;
-        setTimeout(() => {
-            const urgentNames = activeItems.filter(i => i.isUrgent).map(i => i.name);
-            t3.innerHTML = `Â¡RECETA GENERADA! Prioridad: ${urgentNames.length > 0 ? urgentNames[0] : activeItems[0].name}`;
-
-            setTimeout(() => {
-                if (overlay) overlay.style.display = 'none';
-                if (preview) preview.style.display = 'block'; // Reset for future scans
-
-                // Intelligence for dynamic naming
-                const mainIng = activeItems[0].name;
-                const recipeTitle = `Receta con ${mainIng}`;
-
-                // Inject new recipe into DB
-                recipesDB[recipeTitle] = {
-                    image: 'magic_recipe.jpg',
-                    authorImg: 'https://i.pravatar.cc/150?u=aichef',
-                    time: 20,
-                    ingredients: activeItems.map(i => `${i.icon} ${i.name}`).concat(['Salsa de la casa', 'Especias']),
-                    utensils: ['Wok o sartÃ©n grande', 'Cuchara de madera', 'Bol'],
-                    steps: [
-                        `Prepara tu área de trabajo y lava los ingredientes: ${activeItems.map(i => i.name).join(', ')}.`,
-                        `Saltea los ingredientes a fuego alto con un chorrito de aceite hasta que el aroma empiece a caramelizar y llenar la cocina.`,
-                        `Incorpora el resto de ingredientes uno a uno, notando cómo cambian los matices del perfume del plato.`,
-                        `Añade la salsa de la casa y deja que reduzca 2 minutos mientras disfrutas del olor a especias calientes.`,
-                        `Sirve inmediatamente inhalando el delicioso aroma final y disfruta.`
-                    ]
-                };
-
-                // Show the beautiful detail view
-                openRecipeDetail(recipeTitle, 'Chef IA Antigravity', 'Intermedio');
-                updateEcoScore(0.5); // Bonus for magic cooking
-            }, 1200);
-        }, 1500);
-    }, 1200);
-}
 
 function updateEcoScore(kg) {
     const scoreEl = document.getElementById('eco-score');
@@ -893,24 +1246,24 @@ setInterval(updateBothClocks, 1000);
 function handleSoundToggle() {
     var btn   = document.getElementById('sound-toggle-btn');
     var badge = document.getElementById('sound-badge');
-    var isNowOn = SoundEngine.toggleAmbient();
-
-    // Toggle Taylor Swift music alongside ambient sounds
-    initTSAudio();
-    if (tsAudio) {
-        if (isNowOn) {
-            tsAudio.play().catch(e => console.warn("Music play blocked:", e));
-        } else {
-            tsAudio.pause();
-        }
+    
+    // Stop any ambient sounds if they were playing
+    if (SoundEngine.isAmbientActive()) {
+        SoundEngine.stopAmbient();
     }
 
-    if (isNowOn) {
-        btn.classList.remove('muted');
-        if (badge) badge.textContent = 'ON';
-    } else {
-        btn.classList.add('muted');
-        if (badge) badge.textContent = 'OFF';
+    // Toggle Taylor Swift music only
+    initTSAudio();
+    if (tsAudio) {
+        if (tsAudio.paused) {
+            tsAudio.play().catch(e => console.warn("Music play blocked:", e));
+            btn.classList.remove('muted');
+            if (badge) badge.textContent = 'ON';
+        } else {
+            tsAudio.pause();
+            btn.classList.add('muted');
+            if (badge) badge.textContent = 'OFF';
+        }
     }
 }
 
@@ -935,6 +1288,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 var tsAudio = null;
 var tsProgressInterval = null;
+var tsCurrentIndex = 0;
+const tsPlaylist = [
+    { title: "The Fate of Ophelia", src: "ophelia.mp3" },
+    { title: "Opalite", src: "opalite.mp3" }
+];
 
 function initTSAudio() {
     if (!tsAudio) {
@@ -959,7 +1317,11 @@ function initTSAudio() {
                 stopTSProgress();
             });
             tsAudio.addEventListener('ended', function() {
-                closeTSPlayer();
+                tsCurrentIndex++;
+                if (tsCurrentIndex >= tsPlaylist.length) {
+                    tsCurrentIndex = 0; // Loop back to the beginning
+                }
+                loadAndPlayTSPlaylist(tsCurrentIndex);
             });
         }
     }
@@ -967,13 +1329,41 @@ function initTSAudio() {
 
 function startTaylorSwiftSong() {
     initTSAudio();
-    // Native music player UI is now hidden per user request
     if (tsAudio) {
         tsAudio.muted = false;
-        tsAudio.volume = 0.05; // Much lower volume per user request
+        tsAudio.volume = 0.05;
         console.log("Starting background music...");
-        tsAudio.play();
+        
+        // Ensure the correct song is loaded for the current index
+        const song = tsPlaylist[tsCurrentIndex];
+        if (!tsAudio.src.includes(song.src)) {
+            loadAndPlayTSPlaylist(tsCurrentIndex);
+        } else {
+            // Update UI title just in case
+            const titleEl = document.querySelector('.ts-song-title');
+            if (titleEl) titleEl.textContent = song.title;
+            tsAudio.play();
+        }
     }
+}
+
+function loadAndPlayTSPlaylist(index) {
+    initTSAudio();
+    if (!tsAudio) return;
+    
+    tsCurrentIndex = index;
+    const song = tsPlaylist[tsCurrentIndex];
+    
+    // Update Source
+    tsAudio.src = song.src;
+    tsAudio.load();
+    tsAudio.play().catch(e => console.warn("Auto-play blocked:", e));
+    
+    // Update UI Metadata
+    const titleEl = document.querySelector('.ts-song-title');
+    if (titleEl) titleEl.textContent = song.title;
+    
+    console.log("Playing next song in playlist:", song.title);
 }
 
 function toggleTSPlayer() {
@@ -1030,6 +1420,7 @@ function showIOSNotification(title, message, delay = 0, duration = 5500) {
     setTimeout(() => {
         SoundEngine.ding(); // Reproducir sonido corto
         const notif = document.getElementById('ios-notification');
+        notif.onclick = null; // Reset click handler
         document.getElementById('ios-notif-title').innerText = title;
         document.getElementById('ios-notif-msg').innerText = message;
         
@@ -1052,7 +1443,7 @@ function showScreen(screenId) {
     document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
     const navItems = document.querySelectorAll('.nav-item');
     if (screenId === 'home') navItems[0].classList.add('active');
-    if (screenId === 'pantry') navItems[1].classList.add('active');
+    if (screenId === 'pantry' || screenId === 'pantry-results') navItems[1].classList.add('active');
     if (screenId === 'cart') navItems[2].classList.add('active');
     if (screenId === 'points') navItems[3].classList.add('active');
     if (screenId === 'profile' || screenId === 'settings' || screenId === 'profile-edit') navItems[4].classList.add('active');
@@ -1217,6 +1608,38 @@ function scrollTiers(direction) {
             behavior: 'smooth'
         });
         SoundEngine.tick();
+    }
+}
+
+// --- 16. PERSISTENT NAVIGATION (MUSIC PERSISTENCE) ---
+
+function openPage(url) {
+    const overlay = document.getElementById('page-overlay');
+    const iframe = document.getElementById('page-iframe');
+    if (overlay && iframe) {
+        iframe.src = url;
+        overlay.style.display = 'block';
+        
+        // Listener to detect if the iframe tries to go back to index.html
+        iframe.onload = function() {
+            try {
+                if (iframe.contentWindow.location.href.includes('index.html')) {
+                    closePageOverlay();
+                }
+            } catch (e) {
+                // Cross-origin issues (not expected here, but for robustness)
+                console.warn("Iframe navigation check blocked:", e);
+            }
+        };
+    }
+}
+
+function closePageOverlay() {
+    const overlay = document.getElementById('page-overlay');
+    const iframe = document.getElementById('page-iframe');
+    if (overlay && iframe) {
+        overlay.style.display = 'none';
+        iframe.src = '';
     }
 }
 
